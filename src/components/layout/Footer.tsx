@@ -1,0 +1,166 @@
+import Link from "next/link";
+import { SITE } from "@/lib/constants";
+import {
+  metasilicateCategoryLink,
+  metasilicateGradeLinks,
+  sodiumSilicateLink,
+  applicationLinks,
+  guideLinks,
+} from "@/lib/internal-links";
+
+export function Footer() {
+  return (
+    <footer className="border-t border-[#E2E6EA] bg-[#071F3F] text-blue-100">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+          <div>
+            <h3 className="text-lg font-bold text-white">{SITE.name}</h3>
+            <p className="mt-2 text-sm leading-relaxed text-blue-200/80">
+              {SITE.company}
+            </p>
+            <p className="mt-2 text-sm text-blue-200/60">
+              Factory-direct sodium metasilicate manufacturer in Shandong, China.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Products
+            </h4>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link
+                  href={metasilicateCategoryLink.href}
+                  className="text-sm text-white font-medium hover:text-blue-100"
+                >
+                  Sodium Metasilicate ★
+                </Link>
+              </li>
+              {metasilicateGradeLinks.map((link) => (
+                <li key={link.href} className="pl-3">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-blue-200/80 hover:text-white"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="pt-2">
+                <Link
+                  href={sodiumSilicateLink.href}
+                  className="text-sm text-blue-200/80 hover:text-white"
+                >
+                  {sodiumSilicateLink.label}
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Applications
+            </h4>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link href="/applications" className="text-sm text-white font-medium hover:text-blue-100">
+                  All Applications
+                </Link>
+              </li>
+              {applicationLinks.map((link) => (
+                <li key={link.href} className="pl-3">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-blue-200/80 hover:text-white"
+                  >
+                    {link.label.replace("Sodium Metasilicate for the ", "").replace("Sodium Metasilicate for ", "")}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Guides
+            </h4>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link href="/guides" className="text-sm text-white font-medium hover:text-blue-100">
+                  All Guides
+                </Link>
+              </li>
+              {guideLinks.map((link) => (
+                <li key={link.href} className="pl-3">
+                  <Link
+                    href={link.href}
+                    className="text-sm text-blue-200/80 hover:text-white"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Company
+            </h4>
+            <ul className="mt-3 space-y-2">
+              <li>
+                <Link href="/about" className="text-sm text-blue-200/80 hover:text-white">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/factory" className="text-sm text-blue-200/80 hover:text-white">
+                  Factory
+                </Link>
+              </li>
+              <li>
+                <Link href="/blog" className="text-sm text-blue-200/80 hover:text-white">
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/faq" className="text-sm text-blue-200/80 hover:text-white">
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+              Contact
+            </h4>
+            <ul className="mt-3 space-y-2 text-sm text-blue-200/80">
+              <li>
+                <a href={`mailto:${SITE.email}`} className="hover:text-white">
+                  {SITE.email}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`https://wa.me/${SITE.whatsapp.replace(/[^0-9]/g, "")}`}
+                  className="hover:text-white"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  WhatsApp: {SITE.whatsapp}
+                </a>
+              </li>
+              <li>{SITE.location}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-10 border-t border-blue-800/50 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-xs text-blue-200/50">
+          <p>© {new Date().getFullYear()} {SITE.company}. All rights reserved.</p>
+          <p>Formerly: {SITE.formerCompany}</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
