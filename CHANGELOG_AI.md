@@ -34,6 +34,117 @@ Records **every AI-assisted change** to this repository. Update this file after 
 
 ## Entries
 
+### 2026-06-18 — Factory trust 3-layer image strategy
+
+- **Task:** ad-hoc
+- **Review:** pending
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/trust/image-strategy.ts` | created — REAL_ASSETS, AI_PLACEHOLDERS, FUTURE_REAL layers |
+| `src/components/trust/TrustImageMapper.tsx` | created — TrustImage component + category resolver |
+| `src/components/trust/FactoryImageGallery.tsx` | modified — TrustImageMapper integration |
+| `src/components/trust/FactoryProofGallery.tsx` | modified — TrustImageMapper integration |
+| `src/app/factory/page.tsx` | modified — Factory Proof Layer section |
+| `src/content/trust.ts` | modified — re-exports from image-strategy |
+| `public/images/factory/sodium-metasilicate-factory-*.jpg` | renamed — lgwjg legacy assets |
+| `public/images/factory/sodium-metasilicate-ai-*.jpg` | created — AI industrial placeholders |
+| `public/images/factory/.gitkeep` | updated — 3-layer filename docs |
+| `seo/images/trust-image-naming.md` | updated — new naming convention |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+**Summary:** Scalable factory trust image system with real lgwjg.com assets as priority 1, AI-generated industrial placeholders as priority 2 fallback, and reserved future-real slots. TrustImageMapper tracks source internally without visible AI labels in UI.
+
+---
+
+### 2026-06-18 — Lead generation system optimized for conversion tracking and RFQ growth
+
+- **Task:** Ad-hoc (Lead Generation & Conversion Optimization)
+- **Review:** awaiting_review
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/analytics.ts` | Added trackWhatsAppClick, trackEmailClick, trackCtaClick; dev console logging |
+| `src/components/analytics/TrackedLinks.tsx` | Created — reusable tracked mailto/WhatsApp/CTA link components |
+| `src/components/layout/PersistentCTA.tsx` | Wired centralized tracking with location labels |
+| `src/components/layout/Footer.tsx` | Uses FooterContact for tracked links |
+| `src/components/layout/FooterContact.tsx` | Created — tracked footer email/WhatsApp |
+| `src/components/layout/FastContactBar.tsx` | Client component with CTA and email tracking |
+| `src/components/layout/PageCTAs.tsx` | Extracted client component with CTA tracking |
+| `src/components/layout/PageHeader.tsx` | Re-exports PageCTAs from dedicated module |
+| `src/components/conversion/ProductConversionSections.tsx` | StrongCTA uses TrackedCtaLink |
+| `src/components/forms/InquiryForm.tsx` | Hidden source from pathname context; always submitted |
+| `src/components/contact/ContactDirectLinks.tsx` | Created — tracked contact sidebar links |
+| `src/components/products/MetasilicateCategoryPage.tsx` | StrongCTA after buyer-decision and grades sections |
+| `src/app/contact/page.tsx` | ContactDirectLinks with tracking |
+| `src/app/applications/page.tsx` | Added PageCTAs |
+| `src/app/guides/page.tsx` | Added PageCTAs |
+| `seo/leads/lead-tracking.md` | Created — lead tracking schema and GA4 event reference |
+
+**Summary:** Extended analytics helpers and wired conversion tracking across all RFQ touchpoints. Form submissions now carry source attribution; money page and index pages have stronger CTA coverage for SEO traffic conversion.
+
+---
+
+### 2026-06-18 — SEO indexing system optimized for fast Google crawling
+
+- **Task:** Ad-hoc (SEO Indexing Optimization)
+- **Review:** awaiting_review
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/app/sitemap.ts` | Added applications; priority tiers (money page 1.0, guides 0.8, apps 0.6) |
+| `src/app/applications/page.tsx` | Removed noIndex |
+| `src/app/applications/[slug]/page.tsx` | Removed noIndex |
+| `src/app/blog/page.tsx` | Added noIndex |
+| `src/app/blog/[slug]/page.tsx` | Added noIndex |
+| `src/app/factory/page.tsx` | Added noIndex |
+| `src/app/about/page.tsx` | Added ProductFunnelBanner |
+| `src/app/contact/page.tsx` | Added ProductFunnelBanner |
+| `src/app/faq/page.tsx` | Added ProductFunnelBanner |
+| `src/lib/seo-funnel.ts` | Updated applications layer comment |
+| `seo/google-indexing-guide.md` | Created — Search Console submission guide |
+| `AI_REVIEW.md` | SEO indexing review entry |
+
+**Summary:** Indexable pages limited to homepage, products, guides, applications, about, contact, FAQ. Sitemap and robots aligned; internal links funnel all indexable pages to `/products/sodium-metasilicate`.
+
+---
+
+### 2026-06-18 — Factory trust system integrated using legacy assets from LGWJG
+
+- **Task:** Ad-hoc (Trust Factory System Rebuild)
+- **Review:** awaiting_review
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/content/factory-trust.ts` | created — structured trust sections + gallery metadata |
+| `src/components/trust/FactoryTrustSystem.tsx` | created — 4-section trust system with CTAs |
+| `src/components/trust/FactoryImageGallery.tsx` | created — 5-category factory image gallery |
+| `src/app/factory/page.tsx` | rewritten — hero, overview, trust, gallery, QC, export |
+| `src/app/page.tsx` | FactoryTrustSystem replaces FactoryTrustSection |
+| `src/components/products/MetasilicateCategoryPage.tsx` | new trust system + gallery on money page |
+| `src/app/applications/[slug]/page.tsx` | FactoryTrustSystem integrated |
+| `src/app/guides/[slug]/page.tsx` | FactoryTrustSystem light variant |
+| `src/components/seo/JsonLd.tsx` | OrganizationSchema capacity + manufacturing type |
+| `src/content/trust.ts` | factoryProofImages delegates to factory-trust |
+| `src/components/trust/FactoryProofGallery.tsx` | wrapper around FactoryImageGallery |
+| `public/images/factory/*.jpg` | 5 legacy LGWJG factory images (SEO filenames) |
+
+**Summary:** Factory trust system integrated using legacy assets from LGWJG and new structured trust layer implemented. Every trust section includes Request Quotation / Sample / COA CTAs.
+
+---
+
 ### 2026-06-18 — WhatsApp contact updated to +86 18562682380
 
 - **Task:** Ad-hoc

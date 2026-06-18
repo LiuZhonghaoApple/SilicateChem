@@ -165,7 +165,7 @@ export const sodiumMetasilicateCategory = {
     {
       question: "Can you provide COA and TDS?",
       answer:
-        "Yes. Certificate of Analysis per batch/shipment. TDS and MSDS available on request via our contact form or at info@silicatechem.com.",
+        `Yes. Certificate of Analysis per batch/shipment. TDS and MSDS available on request via our contact form or at ${SITE.email}.`,
     },
   ] as FAQItem[],
   seo: SEO_KEYWORDS.sodiumMetasilicate,

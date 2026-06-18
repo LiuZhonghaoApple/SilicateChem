@@ -24,6 +24,94 @@ Cursor's implementation summaries after each major task. **Review this file befo
 
 ## Pending Reviews
 
+### Factory trust image strategy — 3-layer system — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** awaiting_review
+
+#### Summary
+
+Upgraded factory trust system with a scalable 3-layer image strategy: **REAL_ASSETS** (lgwjg.com legacy photos, renamed), **AI_PLACEHOLDERS** (industrial fallback visuals), and **FUTURE_REAL** (reserved aerial slot). `TrustImageMapper` resolves images per category with priority fallback and tracks source via `data-image-source` (no visible AI label in UI). AI placeholder alt text uses "Illustrative" prefix — never misrepresented as real photography.
+
+#### Files changed
+
+| File | Action |
+|------|--------|
+| `src/lib/trust/image-strategy.ts` | created — 3-layer types, assets, resolver |
+| `src/components/trust/TrustImageMapper.tsx` | created — `TrustImage` + `getTrustImageForCategory` |
+| `src/components/trust/FactoryImageGallery.tsx` | modified — uses TrustImageMapper |
+| `src/components/trust/FactoryProofGallery.tsx` | modified — uses TrustImageMapper |
+| `src/app/factory/page.tsx` | modified — Factory Proof Layer section |
+| `src/content/trust.ts` | modified — delegates to image-strategy |
+| `public/images/factory/*.jpg` | renamed real assets + 5 AI placeholders |
+| `public/images/factory/.gitkeep` | updated — layer documentation |
+| `seo/images/trust-image-naming.md` | updated — 3-layer naming rules |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+#### Build Result
+
+Not run — `npm` unavailable in agent environment. Linter clean on trust files.
+
+#### Remaining Issues
+
+- AI placeholder JPGs are ~2 MB each — consider compression before production deploy
+- Layer 3 aerial photo (`sodium-metasilicate-factory-aerial.jpg`) still reserved
+
+---
+
+### Lead generation & conversion optimization — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** awaiting_review
+
+#### Summary
+
+Lead generation system optimized for conversion tracking and RFQ growth. Extended `analytics.ts` with `trackWhatsAppClick`, `trackEmailClick`, and `trackCtaClick` helpers (GA4/GTM + dev console fallback). Wired tracking into PersistentCTA, Footer, FastContactBar, PageCTAs, StrongCTA, and contact page. InquiryForm now always sends hidden `source` from URL or pathname context. Added StrongCTA blocks after buyer-decision and grades sections on money page. Added PageCTAs to applications/guides index pages. Created `seo/leads/lead-tracking.md`.
+
+#### Files changed
+
+`src/lib/analytics.ts`, `src/components/analytics/TrackedLinks.tsx`, `src/components/layout/PersistentCTA.tsx`, `src/components/layout/Footer.tsx`, `src/components/layout/FooterContact.tsx`, `src/components/layout/FastContactBar.tsx`, `src/components/layout/PageCTAs.tsx`, `src/components/layout/PageHeader.tsx`, `src/components/conversion/ProductConversionSections.tsx`, `src/components/forms/InquiryForm.tsx`, `src/components/contact/ContactDirectLinks.tsx`, `src/components/products/MetasilicateCategoryPage.tsx`, `src/app/contact/page.tsx`, `src/app/applications/page.tsx`, `src/app/guides/page.tsx`, `seo/leads/lead-tracking.md`
+
+#### Issues
+
+None identified. Build/lint should be verified.
+
+#### Open questions
+
+- Set `NEXT_PUBLIC_GA4_ID` / `NEXT_PUBLIC_GTM_ID` in production to activate external tracking.
+
+---
+
+### SEO indexing optimization — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** awaiting_review
+
+#### Summary
+
+SEO indexing system optimized for fast Google crawling. Applications are now indexable and included in sitemap (priority 0.6). Blog and factory set to `noindex`. Sitemap priorities updated: money page 1.0, guides 0.8, applications 0.6. Internal linking strengthened on about/contact/faq via `ProductFunnelBanner`. Created `seo/google-indexing-guide.md`.
+
+#### Files changed
+
+`src/app/sitemap.ts`, `src/app/applications/page.tsx`, `src/app/applications/[slug]/page.tsx`, `src/app/blog/page.tsx`, `src/app/blog/[slug]/page.tsx`, `src/app/factory/page.tsx`, `src/app/about/page.tsx`, `src/app/contact/page.tsx`, `src/app/faq/page.tsx`, `src/lib/seo-funnel.ts`, `seo/google-indexing-guide.md`
+
+---
+
+### Factory trust system rebuild — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** awaiting_review
+
+#### Summary
+
+Factory trust system integrated using legacy assets from LGWJG and new structured trust layer implemented. Added `FactoryTrustSystem` (4-section capability/infrastructure/export/QC model with CTAs), `FactoryImageGallery` (5 SEO-named images in `/public/images/factory/`), rewrote `/factory` page, and integrated across homepage, money page, applications, and guides. OrganizationSchema enhanced with Shandong location, production capacity, and manufacturing type.
+
+#### Files changed
+
+`src/content/factory-trust.ts`, `src/components/trust/FactoryTrustSystem.tsx`, `src/components/trust/FactoryImageGallery.tsx`, `src/app/factory/page.tsx`, `src/app/page.tsx`, `src/components/products/MetasilicateCategoryPage.tsx`, `src/app/applications/[slug]/page.tsx`, `src/app/guides/[slug]/page.tsx`, `src/components/seo/JsonLd.tsx`, `src/content/trust.ts`, `src/components/trust/FactoryProofGallery.tsx`, `public/images/factory/*.jpg`
+
+---
+
 ### WhatsApp contact update — Ad-hoc
 
 - **Date:** 2026-06-18

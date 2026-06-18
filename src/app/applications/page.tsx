@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PageHeader } from "@/components/layout/PageHeader";
+import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { industryApplications } from "@/content/applications/industries";
@@ -13,7 +13,6 @@ export const metadata = createMetadata({
   description:
     "Industry use cases for sodium metasilicate. Mid-funnel pages linking to factory-direct quotation.",
   path: "/applications",
-  noIndex: true,
 });
 
 export default function ApplicationsIndexPage() {
@@ -53,6 +52,7 @@ export default function ApplicationsIndexPage() {
           </Link>
         </div>
         <ProductFunnelBanner className="mt-8" />
+        <PageCTAs className="mt-8" />
       </Section>
     </>
   );

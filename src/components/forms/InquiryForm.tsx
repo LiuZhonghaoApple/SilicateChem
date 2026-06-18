@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
 import { trackInquiryByType } from "@/lib/analytics";
+import { getRfqContext } from "@/lib/page-rfq-context";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -19,11 +20,12 @@ export function InquiryForm({
   const [state, setState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
+  const ctx = getRfqContext(pathname);
   const product =
     defaultProduct ?? searchParams.get("product") ?? "";
   const requestType =
     defaultRequestType ?? searchParams.get("type") ?? "quote";
-  const source = searchParams.get("source") ?? "";
+  const source = searchParams.get("source") ?? ctx.source ?? pathname;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -90,7 +92,7 @@ export function InquiryForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {source ? <input type="hidden" name="source" value={source} /> : null}
+      <input type="hidden" name="source" value={source} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>

@@ -26,10 +26,28 @@ export function OrganizationSchema() {
         email: SITE.email,
         address: {
           "@type": "PostalAddress",
+          addressLocality: "Shandong",
           addressRegion: "Shandong",
           addressCountry: "CN",
         },
         description: SITE.description,
+        additionalProperty: [
+          {
+            "@type": "PropertyValue",
+            name: "productionCapacity",
+            value: SITE.capacity,
+          },
+          {
+            "@type": "PropertyValue",
+            name: "manufacturingType",
+            value: "Chemical manufacturer",
+          },
+        ],
+        knowsAbout: [
+          "Sodium metasilicate manufacturing",
+          "Industrial chemical production",
+          "Export packaging and documentation",
+        ],
         sameAs: [],
       }}
     />

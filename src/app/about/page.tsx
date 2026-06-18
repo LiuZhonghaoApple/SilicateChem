@@ -1,6 +1,7 @@
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
 import { company } from "@/content/company";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
@@ -60,7 +61,8 @@ export default function AboutPage() {
             </li>
           ))}
         </ul>
-        <PageCTAs className="mt-10" />
+        <ProductFunnelBanner className="mt-10" />
+        <PageCTAs className="mt-6" />
       </Section>
     </>
   );

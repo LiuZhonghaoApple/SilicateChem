@@ -36,32 +36,8 @@ export const factoryTrustPillars = [
   },
 ] as const;
 
-export const factoryProofImages = [
-  {
-    filename: "production-line.jpg",
-    alt: "Sodium metasilicate production line at Shandong manufacturing facility",
-    caption: "Production Line",
-    description: "Granulation and drying equipment for sodium metasilicate grades.",
-  },
-  {
-    filename: "lab-qc.jpg",
-    alt: "Laboratory QC testing for sodium metasilicate batch specifications",
-    caption: "Laboratory QC",
-    description: "Batch testing for SiO₂, Na₂O, iron, and color before export release.",
-  },
-  {
-    filename: "packaging.jpg",
-    alt: "Sodium metasilicate packaging and warehouse storage at China factory",
-    caption: "Packaging & Warehouse",
-    description: "Bagged and palletized stock ready for container loading.",
-  },
-  {
-    filename: "export-loading.jpg",
-    alt: "Sodium metasilicate export container loading at Shandong port logistics",
-    caption: "Export Loading",
-    description: "FCL container loading with export documentation for international buyers.",
-  },
-] as const;
+/** @deprecated Use GALLERY_CATEGORIES + getTrustImageForCategory from @/lib/trust/image-strategy */
+export { GALLERY_CATEGORIES as factoryProofCategories, REAL_ASSETS as factoryProofImages } from "@/lib/trust/image-strategy";
 
 export const buyerConfidencePoints = [
   {

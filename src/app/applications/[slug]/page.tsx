@@ -14,7 +14,7 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { StrongCTA } from "@/components/conversion/ProductConversionSections";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
-import { FactoryTrustSection } from "@/components/trust/FactoryTrustSection";
+import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -31,7 +31,6 @@ export async function generateMetadata({ params }: Props) {
     title: app.metaTitle,
     description: app.metaDescription,
     path: `/applications/${app.slug}`,
-    noIndex: true,
   });
 }
 
@@ -117,8 +116,8 @@ export default async function ApplicationPage({ params }: Props) {
           <FunnelLinksSidebar />
         </div>
       </Section>
-      <Section>
-        <FactoryTrustSection variant="compact" />
+      <Section background="grey">
+        <FactoryTrustSystem variant="full" product={product} />
       </Section>
       <Section background="grey">
         <div className="max-w-xl mx-auto">

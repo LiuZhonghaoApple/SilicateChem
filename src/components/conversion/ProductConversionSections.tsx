@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import { TrackedCtaLink } from "@/components/analytics/TrackedLinks";
 import type { Product } from "@/types";
 
 type StrongCTAProps = {
@@ -23,15 +25,33 @@ export function StrongCTA({ product, light = false, className = "" }: StrongCTAP
 
   return (
     <div className={`flex flex-wrap gap-3 ${className}`}>
-      <Link href={`/contact?type=quote${q}`} className={quote}>
+      <TrackedCtaLink
+        href={`/contact?type=quote${q}`}
+        ctaType="quote"
+        location="strong_cta"
+        product={product}
+        className={quote}
+      >
         Request Quotation
-      </Link>
-      <Link href={`/contact?type=sample${q}`} className={sample}>
+      </TrackedCtaLink>
+      <TrackedCtaLink
+        href={`/contact?type=sample${q}`}
+        ctaType="sample"
+        location="strong_cta"
+        product={product}
+        className={sample}
+      >
         Request Sample
-      </Link>
-      <Link href={`/contact?type=tds${q}`} className={docs}>
+      </TrackedCtaLink>
+      <TrackedCtaLink
+        href={`/contact?type=tds${q}`}
+        ctaType="tds"
+        location="strong_cta"
+        product={product}
+        className={docs}
+      >
         Get COA / MSDS / TDS
-      </Link>
+      </TrackedCtaLink>
     </div>
   );
 }

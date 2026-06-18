@@ -15,7 +15,7 @@ export const MONEY_PAGES = [
   "/products/sodium-silicate",
 ] as const;
 
-/** Layer 2 — mid-funnel (no independent ranking; push to product hub) */
+/** Layer 2 — mid-funnel industry use cases (indexable; push to product hub) */
 export const APPLICATION_SLUGS = [
   "detergent-industry",
   "water-treatment",

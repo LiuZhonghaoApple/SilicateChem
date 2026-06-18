@@ -4,26 +4,23 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { SITE } from "@/lib/constants";
-import {
-  trackRfqSubmit,
-  trackSampleRequest,
-  trackTdsDownload,
-} from "@/lib/analytics";
+import { trackCtaClick } from "@/lib/analytics";
+import { TrackedMailto, TrackedWhatsApp } from "@/components/analytics/TrackedLinks";
 import { getRfqContext, rfqContactHref } from "@/lib/page-rfq-context";
 
-function trackCtaClick(
+function onCtaClick(
   type: "quote" | "sample" | "tds",
   pathname: string,
-  ctx: ReturnType<typeof getRfqContext>
+  ctx: ReturnType<typeof getRfqContext>,
+  location: string
 ) {
-  const params = {
+  trackCtaClick({
+    ctaType: type,
     pagePath: pathname,
     pageSource: ctx.source ?? pathname,
     productInterest: ctx.product,
-  };
-  if (type === "sample") trackSampleRequest(params);
-  else if (type === "tds") trackTdsDownload(params);
-  else trackRfqSubmit({ ...params, inquiryType: "quote" });
+    location,
+  });
 }
 
 export function StickyQuoteBar() {
@@ -35,33 +32,32 @@ export function StickyQuoteBar() {
       <div className="mx-auto flex max-w-6xl gap-2 md:gap-3">
         <Link
           href={rfqContactHref("quote", ctx)}
-          onClick={() => trackCtaClick("quote", pathname, ctx)}
+          onClick={() => onCtaClick("quote", pathname, ctx, "sticky_bar")}
           className="flex-1 rounded bg-white py-2.5 text-center text-sm font-bold text-[#0B2D5B] md:flex-none md:px-6"
         >
           Request Quote
         </Link>
         <Link
           href={rfqContactHref("sample", ctx)}
-          onClick={() => trackCtaClick("sample", pathname, ctx)}
+          onClick={() => onCtaClick("sample", pathname, ctx, "sticky_bar")}
           className="hidden sm:block flex-1 rounded bg-[#2E7D9A] py-2.5 text-center text-sm font-bold text-white md:flex-none md:px-5"
         >
           Request Sample
         </Link>
         <Link
           href={rfqContactHref("tds", ctx)}
-          onClick={() => trackCtaClick("tds", pathname, ctx)}
+          onClick={() => onCtaClick("tds", pathname, ctx, "sticky_bar")}
           className="hidden md:block flex-1 rounded border border-white/80 py-2.5 text-center text-sm font-bold text-white md:flex-none md:px-5 hover:bg-white/10"
         >
           Get COA / MSDS / TDS
         </Link>
-        <a
-          href={`https://wa.me/${SITE.whatsapp.replace(/[^0-9]/g, "")}`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <TrackedWhatsApp
+          phone={SITE.whatsapp}
+          location="sticky_bar"
           className="flex-1 rounded bg-[#2E7D9A] py-2.5 text-center text-sm font-bold text-white sm:hidden"
         >
           WhatsApp
-        </a>
+        </TrackedWhatsApp>
       </div>
     </div>
   );
@@ -82,7 +78,7 @@ export function FloatingContactWidget() {
             <li>
               <Link
                 href={rfqContactHref("quote", ctx)}
-                onClick={() => trackCtaClick("quote", pathname, ctx)}
+                onClick={() => onCtaClick("quote", pathname, ctx, "floating_widget")}
                 className="text-[#2E7D9A] hover:underline font-medium"
               >
                 Request Quotation →
@@ -91,7 +87,7 @@ export function FloatingContactWidget() {
             <li>
               <Link
                 href={rfqContactHref("sample", ctx)}
-                onClick={() => trackCtaClick("sample", pathname, ctx)}
+                onClick={() => onCtaClick("sample", pathname, ctx, "floating_widget")}
                 className="text-[#2E7D9A] hover:underline font-medium"
               >
                 Request Sample →
@@ -100,16 +96,16 @@ export function FloatingContactWidget() {
             <li>
               <Link
                 href={rfqContactHref("tds", ctx)}
-                onClick={() => trackCtaClick("tds", pathname, ctx)}
+                onClick={() => onCtaClick("tds", pathname, ctx, "floating_widget")}
                 className="text-[#2E7D9A] hover:underline font-medium"
               >
                 Get COA / MSDS / TDS →
               </Link>
             </li>
             <li>
-              <a href={`mailto:${SITE.email}`} className="text-[#5A6570] hover:underline">
+              <TrackedMailto email={SITE.email} location="floating_widget" className="text-[#5A6570] hover:underline">
                 {SITE.email}
-              </a>
+              </TrackedMailto>
             </li>
           </ul>
         </div>

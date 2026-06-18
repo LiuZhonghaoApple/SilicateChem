@@ -7,7 +7,12 @@ export type AnalyticsEvent =
   | "rfq_submit"
   | "sample_request"
   | "tds_download"
-  | "page_view_by_source";
+  | "page_view_by_source"
+  | "whatsapp_click"
+  | "email_click"
+  | "cta_click";
+
+export type CtaType = "quote" | "sample" | "tds" | "contact";
 
 export type InquiryType = "quote" | "sample" | "tds" | "contact";
 
@@ -33,6 +38,14 @@ declare global {
 export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
+const IS_DEV = process.env.NODE_ENV === "development";
+
+function logDev(event: string, payload: Record<string, unknown>): void {
+  if (IS_DEV) {
+    console.log(`[analytics] ${event}`, payload);
+  }
+}
+
 export function pushDataLayer(payload: DataLayerPayload): void {
   if (typeof window === "undefined") return;
   window.dataLayer = window.dataLayer ?? [];
@@ -56,8 +69,18 @@ function emit(event: AnalyticsEvent, payload: Omit<DataLayerPayload, "event">): 
     product_interest: payload.product_interest,
     inquiry_type: payload.inquiry_type,
     funnel_layer: payload.funnel_layer,
+    event_category: payload.event_category,
+    event_label: payload.event_label,
   });
+  logDev(event, full as unknown as Record<string, unknown>);
 }
+
+export type ContactTrackingParams = {
+  pagePath: string;
+  pageSource?: string;
+  productInterest?: string;
+  location?: string;
+};
 
 export function inferFunnelLayer(path: string): DataLayerPayload["funnel_layer"] {
   if (path === "/products/sodium-metasilicate" || path.startsWith("/products/")) {
@@ -125,6 +148,57 @@ export function trackTdsDownload(params: {
     funnel_layer: inferFunnelLayer(params.pagePath),
     event_category: "conversion",
     event_label: "tds_msds_coa",
+  });
+}
+
+export function trackWhatsAppClick(params: ContactTrackingParams): void {
+  emit("whatsapp_click", {
+    page_path: params.pagePath,
+    page_source: params.pageSource ?? params.pagePath,
+    product_interest: params.productInterest,
+    funnel_layer: inferFunnelLayer(params.pagePath),
+    event_category: "engagement",
+    event_label: params.location ?? "whatsapp",
+  });
+}
+
+export function trackEmailClick(params: ContactTrackingParams): void {
+  emit("email_click", {
+    page_path: params.pagePath,
+    page_source: params.pageSource ?? params.pagePath,
+    product_interest: params.productInterest,
+    funnel_layer: inferFunnelLayer(params.pagePath),
+    event_category: "engagement",
+    event_label: params.location ?? "mailto",
+  });
+}
+
+/** Track CTA button clicks (quote, sample, TDS, contact) and mirror conversion events */
+export function trackCtaClick(params: ContactTrackingParams & { ctaType: CtaType }): void {
+  const { ctaType, pagePath, pageSource, productInterest, location } = params;
+  const tracking = { pagePath, pageSource, productInterest };
+
+  emit("cta_click", {
+    page_path: pagePath,
+    page_source: pageSource ?? pagePath,
+    product_interest: productInterest,
+    inquiry_type: ctaType,
+    funnel_layer: inferFunnelLayer(pagePath),
+    event_category: "conversion",
+    event_label: location ? `${ctaType}:${location}` : ctaType,
+  });
+
+  if (ctaType === "sample") {
+    trackSampleRequest(tracking);
+    return;
+  }
+  if (ctaType === "tds") {
+    trackTdsDownload(tracking);
+    return;
+  }
+  trackRfqSubmit({
+    ...tracking,
+    inquiryType: ctaType === "contact" ? "contact" : "quote",
   });
 }
 

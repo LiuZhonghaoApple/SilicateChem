@@ -11,6 +11,7 @@ export const metadata = createMetadata({
   description:
     "Supporting notes for B2B buyers. Primary quotation on the sodium metasilicate manufacturer page.",
   path: "/blog",
+  noIndex: true,
 });
 
 export default function BlogPage() {

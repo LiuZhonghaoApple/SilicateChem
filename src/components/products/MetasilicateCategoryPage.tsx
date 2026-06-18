@@ -7,9 +7,8 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { FAQSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
-import { FactoryTrustSection } from "@/components/trust/FactoryTrustSection";
-import { FactoryProofGallery } from "@/components/trust/FactoryProofGallery";
-import { BuyerConfidenceBlock } from "@/components/trust/BuyerConfidenceBlock";
+import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
+import { FactoryImageGallery } from "@/components/trust/FactoryImageGallery";
 import { IndustryApplicationsSummary } from "@/components/trust/IndustryApplicationsSummary";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { SITE } from "@/lib/constants";
@@ -98,6 +97,7 @@ export function MetasilicateCategoryPage() {
             </div>
           ))}
         </dl>
+        <StrongCTA product={cat.inquiryProductName} className="mt-8" />
       </Section>
 
       <Section>
@@ -122,17 +122,20 @@ export function MetasilicateCategoryPage() {
             </Link>
           ))}
         </div>
+        <StrongCTA product={cat.inquiryProductName} className="mt-8" />
       </Section>
 
       <Section background="grey">
         <SectionHeader
           title="Factory & Trust Verification"
-          subtitle="Final conversion page — production capability, factory proof, and buyer confidence before RFQ."
+          subtitle="Production capability, on-site proof, and export documentation before RFQ."
         />
         <div className="space-y-12">
-          <FactoryTrustSection showHeader={false} showMoneyPageLink={false} />
-          <FactoryProofGallery showHeader showMoneyPageLink={false} />
-          <BuyerConfidenceBlock showMoneyPageLink={false} />
+          <FactoryTrustSystem
+            showHeader={false}
+            product={cat.inquiryProductName}
+          />
+          <FactoryImageGallery product={cat.inquiryProductName} />
           <IndustryApplicationsSummary />
         </div>
         <StrongCTA product={cat.inquiryProductName} className="mt-10" />

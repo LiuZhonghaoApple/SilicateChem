@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PageHeader } from "@/components/layout/PageHeader";
+import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { intentGuides } from "@/content/guides/intent-pages";
@@ -52,6 +52,7 @@ export default function GuidesIndexPage() {
           ))}
         </div>
         <ProductFunnelBanner className="mt-10" />
+        <PageCTAs className="mt-8" />
       </Section>
     </>
   );

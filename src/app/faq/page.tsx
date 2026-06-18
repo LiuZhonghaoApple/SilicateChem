@@ -2,6 +2,7 @@ import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { FAQSchema, BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
+import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
 import { faqItems } from "@/content/faq";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
@@ -51,7 +52,8 @@ export default function FAQPage() {
           </div>
           <InternalProductLinks title="Product Pages" />
         </div>
-        <PageCTAs className="mt-10" />
+        <ProductFunnelBanner className="mt-10" />
+        <PageCTAs className="mt-6" />
       </Section>
     </>
   );

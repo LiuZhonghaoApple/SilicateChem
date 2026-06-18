@@ -6,7 +6,7 @@ import { FAQBlock, ProductFunnelBanner } from "@/components/seo/FunnelSections";
 import { FunnelLinksSidebar } from "@/components/seo/FunnelLinks";
 import { StrongCTA } from "@/components/conversion/ProductConversionSections";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
-import { TrustReinforcementBlock } from "@/components/trust/TrustReinforcementBlock";
+import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { intentGuides, getIntentGuideBySlug } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { SITE } from "@/lib/constants";
@@ -80,7 +80,7 @@ export default async function GuidePage({ params }: Props) {
               <h2 className="text-xl font-bold text-[#0B2D5B] mb-4">FAQ</h2>
               <FAQBlock items={guide.faq} />
             </div>
-            <TrustReinforcementBlock />
+            <FactoryTrustSystem variant="light" product={product} showHeader={false} />
             <ProductFunnelBanner />
             <StrongCTA product={product} />
           </div>

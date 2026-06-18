@@ -1,7 +1,18 @@
-# Factory photos — replace before launch
+# Factory trust images — 3-layer strategy (see src/lib/trust/image-strategy.ts)
 #
-# Required:
-#   production-line.jpg       (granulation / production equipment)
-#   laboratory-qc.jpg         (quality control / testing)
-#   packaging-warehouse.jpg   (bagging, palletizing, warehouse)
-#   aerial.jpg                (optional — factory overview)
+# Layer 1 — Real assets (lgwjg.com legacy, renamed):
+#   sodium-metasilicate-factory-production.jpg
+#   sodium-metasilicate-factory-lab.jpg
+#   sodium-metasilicate-factory-warehouse.jpg
+#   sodium-metasilicate-factory-packaging.jpg
+#   sodium-metasilicate-factory-shipping.jpg
+#
+# Layer 2 — AI placeholders (fallback when real asset unavailable):
+#   sodium-metasilicate-ai-production.jpg
+#   sodium-metasilicate-ai-lab.jpg
+#   sodium-metasilicate-ai-warehouse.jpg
+#   sodium-metasilicate-ai-packaging.jpg
+#   sodium-metasilicate-ai-shipping.jpg
+#
+# Layer 3 — Future real (drop in when photographed):
+#   sodium-metasilicate-factory-aerial.jpg

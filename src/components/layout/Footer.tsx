@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/constants";
+import { FooterContact } from "@/components/layout/FooterContact";
 import {
   metasilicateCategoryLink,
   metasilicateGradeLinks,
@@ -136,22 +137,7 @@ export function Footer() {
               Contact
             </h4>
             <ul className="mt-3 space-y-2 text-sm text-blue-200/80">
-              <li>
-                <a href={`mailto:${SITE.email}`} className="hover:text-white">
-                  {SITE.email}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`https://wa.me/${SITE.whatsapp.replace(/[^0-9]/g, "")}`}
-                  className="hover:text-white"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  WhatsApp: {SITE.whatsapp}
-                </a>
-              </li>
-              <li>{SITE.location}</li>
+              <FooterContact />
             </ul>
           </div>
         </div>

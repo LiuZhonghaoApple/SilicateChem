@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props) {
     title: post.title,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
+    noIndex: true,
   });
 }
 

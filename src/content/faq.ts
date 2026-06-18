@@ -1,4 +1,5 @@
 import type { FAQItem } from "@/types";
+import { SITE } from "@/lib/constants";
 
 export const faqItems: FAQItem[] = [
   {
@@ -29,7 +30,7 @@ export const faqItems: FAQItem[] = [
   {
     question: "Can you provide TDS and MSDS documents?",
     answer:
-      "Yes. Technical Data Sheets (TDS) and Material Safety Data Sheets (MSDS) are available for all product grades. Submit a request through our contact form or email info@silicatechem.com.",
+      `Yes. Technical Data Sheets (TDS) and Material Safety Data Sheets (MSDS) are available for all product grades. Submit a request through our contact form or email ${SITE.email}.`,
   },
   {
     question: "What purity and color consistency can we expect?",

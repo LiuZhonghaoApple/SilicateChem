@@ -4,7 +4,7 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
 import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
-import { FactoryTrustSection } from "@/components/trust/FactoryTrustSection";
+import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { products } from "@/content/products";
 import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
@@ -65,7 +65,7 @@ export default function HomePage() {
       </Section>
 
       <Section background="grey">
-        <FactoryTrustSection />
+        <FactoryTrustSystem product={cat.inquiryProductName} />
       </Section>
 
       <Section>
