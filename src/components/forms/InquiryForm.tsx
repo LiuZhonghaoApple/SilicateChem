@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
-import { trackInquiryByType } from "@/lib/analytics";
+import { inquiryTypeFromRequestType, trackLead } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
 
 type FormState = "idle" | "submitting" | "success" | "error";
+
+const EMAIL_DELIVERY_FAILED_MSG =
+  "Email delivery failed. Please contact us via WhatsApp or info@silicatechem.com";
 
 export function InquiryForm({
   defaultProduct,
@@ -47,17 +50,20 @@ export function InquiryForm({
 
       const result = await res.json();
 
-      if (!res.ok) {
-        setErrorMsg(result.error ?? "Submission failed. Please try again.");
+      if (!res.ok || result.emailDelivered === false) {
+        setErrorMsg(
+          res.status === 503 || result.emailDelivered === false
+            ? EMAIL_DELIVERY_FAILED_MSG
+            : (result.error ?? "Submission failed. Please try again.")
+        );
         setState("error");
         return;
       }
 
-      trackInquiryByType({
-        requestType: submittedRequestType,
-        pagePath: pathname,
-        pageSource: source || pathname,
-        productInterest: submittedProduct || undefined,
+      trackLead({
+        page: pathname,
+        product: submittedProduct || undefined,
+        inquiry_type: inquiryTypeFromRequestType(submittedRequestType),
       });
 
       setState("success");

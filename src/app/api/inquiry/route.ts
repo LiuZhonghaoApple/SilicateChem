@@ -5,12 +5,26 @@ import { inquirySchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
-async function sendInquiryEmail(lead: ReturnType<typeof buildStructuredLead>): Promise<boolean> {
+type EmailSendResult =
+  | { ok: true }
+  | { ok: false; reason: "missing_config" | "resend_error"; detail?: string };
+
+async function sendInquiryEmail(
+  lead: ReturnType<typeof buildStructuredLead>
+): Promise<EmailSendResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.INQUIRY_TO_EMAIL ?? SITE.email;
   const from = process.env.INQUIRY_FROM_EMAIL ?? SITE.email;
 
-  if (!apiKey || !to || !from) return false;
+  if (!apiKey) {
+    console.error("[INQUIRY] RESEND_API_KEY not configured — email skipped");
+    return { ok: false, reason: "missing_config" };
+  }
+
+  if (!to || !from) {
+    console.error("[INQUIRY] INQUIRY_TO_EMAIL or INQUIRY_FROM_EMAIL not configured");
+    return { ok: false, reason: "missing_config" };
+  }
 
   const subject = `[SilicateChem] ${lead.classification.inquiryType.toUpperCase()} — ${lead.contact.company}`;
   const text = [
@@ -48,11 +62,12 @@ async function sendInquiryEmail(lead: ReturnType<typeof buildStructuredLead>): P
   });
 
   if (!res.ok) {
-    console.error("[INQUIRY] Resend error:", await res.text());
-    return false;
+    const detail = await res.text();
+    console.error("[INQUIRY] Resend error:", detail);
+    return { ok: false, reason: "resend_error", detail };
   }
 
-  return true;
+  return { ok: true };
 }
 
 export async function POST(request: Request) {
@@ -74,13 +89,30 @@ export async function POST(request: Request) {
 
     console.log("[INQUIRY]", JSON.stringify(lead, null, 2));
 
-    const emailed = await sendInquiryEmail(lead);
+    const emailResult = await sendInquiryEmail(lead);
+
+    if (!emailResult.ok) {
+      const logDetail =
+        emailResult.reason === "missing_config"
+          ? "RESEND_API_KEY or inquiry email addresses not set"
+          : emailResult.detail ?? "Resend API rejected the send";
+
+      console.error("[INQUIRY] Email delivery failed:", logDetail);
+
+      return NextResponse.json(
+        {
+          error:
+            "Email delivery failed. Please contact us via WhatsApp or info@silicatechem.com",
+          emailDelivered: false,
+        },
+        { status: 503 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      message: emailed
-        ? "Inquiry received — our sales team will respond shortly."
-        : "Inquiry received",
+      emailDelivered: true,
+      message: "Inquiry received — our sales team will respond shortly.",
     });
   } catch (error) {
     console.error("[INQUIRY] Failed to process inquiry:", error);
