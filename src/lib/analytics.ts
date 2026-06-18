@@ -202,6 +202,20 @@ export function trackCtaClick(params: ContactTrackingParams & { ctaType: CtaType
   });
 }
 
+export function inquiryTypeFromRequestType(requestType?: string): string {
+  if (!requestType) return "quote";
+
+  const normalized = requestType.toLowerCase();
+
+  if (normalized.includes("sample")) return "sample";
+  if (normalized.includes("tds")) return "tds";
+  if (normalized.includes("msds")) return "msds";
+  if (normalized.includes("coa")) return "coa";
+  if (normalized.includes("document")) return "document";
+
+  return "quote";
+}
+
 /** Map inquiry form requestType to analytics event */
 export function trackInquiryByType(params: {
   requestType: string;
