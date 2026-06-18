@@ -60,8 +60,8 @@ Submit these first in Search Console → URL Inspection → Request indexing:
 ## 5. Lead Capture
 
 - [ ] Set `RESEND_API_KEY` and wire email in `src/app/api/inquiry/route.ts`
-- [ ] Set `INQUIRY_TO_EMAIL=sales@silicatechem.com`
-- [ ] Replace placeholder WhatsApp number in `src/lib/constants.ts`
+- [ ] Set `INQUIRY_TO_EMAIL=info@silicatechem.com`
+- [x] WhatsApp number set in `src/lib/constants.ts` (`+86 18562682380`)
 - [ ] Test RFQ form end-to-end on production
 - [ ] Verify `[LEAD]` structured logs or email delivery
 - [ ] Lead schema reference: `seo/leads/lead-schema.md`

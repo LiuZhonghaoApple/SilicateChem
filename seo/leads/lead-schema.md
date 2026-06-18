@@ -16,7 +16,7 @@ Structured lead object produced by `POST /api/inquiry` via `buildStructuredLead(
   "submittedAt": "2026-06-18T12:00:00.000Z",
   "contact": {
     "name": "Jane Buyer",
-    "email": "buyer@example.com",
+    "email": "buyer@importer-co.com",
     "company": "Example Detergent Co.",
     "country": "Germany"
   },

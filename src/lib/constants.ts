@@ -6,8 +6,8 @@ export const SITE = {
   tagline: "Sodium Metasilicate Manufacturer in China",
   description:
     "Factory-direct sodium metasilicate manufacturer in Shandong, China. High purity granules, anhydrous, and pentahydrate for detergent, water treatment, and industrial chemical buyers.",
-  email: "sales@silicatechem.com",
-  whatsapp: "+86-000-0000-0000",
+  email: "info@silicatechem.com",
+  whatsapp: "+86 18562682380",
   location: "Shandong, China",
   capacity: "100,000+ Tons",
 } as const;

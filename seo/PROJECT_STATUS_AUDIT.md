@@ -101,8 +101,8 @@ The **SEO RFQ system architecture is implemented** across four funnel layers (mo
 | Page copy (products, guides, applications) | ✔ Real B2B content |
 | Product/factory photos | ❌ Placeholder only (`public/images/` has logo + `.gitkeep`) |
 | Factory proof gallery images | ⚠ UI + alt text ready; files missing |
-| Contact email | ⚠ `sales@silicatechem.com` — verify live |
-| WhatsApp | ❌ Placeholder `+86-000-0000-0000` |
+| Contact email | ⚠ `info@silicatechem.com` — verify live |
+| WhatsApp | ✔ `+86 18562682380` — `https://wa.me/8618562682380` |
 | MSDS (site + `seo/pdfs/`) | ⚠ Draft template — not certified |
 | Off-site marketplace profiles | ❌ Not created (documented in `seo/backlinks/`) |
 
@@ -329,11 +329,10 @@ The **SEO RFQ system architecture is implemented** across four funnel layers (mo
 ### ❌ Must fix before launch
 
 1. Run and pass `npm run build` locally
-2. Replace placeholder WhatsApp number
-3. Wire inquiry email delivery (Resend or SMTP)
-4. Add real factory/product images to `public/images/`
-5. Replace OG image with 1200×630 branded asset
-6. Commission certified MSDS before external distribution
+2. Wire inquiry email delivery (Resend or SMTP)
+3. Add real factory/product images to `public/images/`
+4. Replace OG image with 1200×630 branded asset
+5. Commission certified MSDS before external distribution
 
 ### ⚠ Should fix soon after launch
 

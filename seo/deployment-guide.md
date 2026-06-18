@@ -59,8 +59,8 @@ Add for **Production** (and Preview if desired):
 |----------|----------|-----------------|
 | `NEXT_PUBLIC_SITE_URL` | **Yes** | `https://silicatechem.com` |
 | `RESEND_API_KEY` | Recommended | `re_...` from [resend.com](https://resend.com) |
-| `INQUIRY_TO_EMAIL` | Recommended | `sales@silicatechem.com` |
-| `INQUIRY_FROM_EMAIL` | Recommended | Verified sender, e.g. `inquiries@silicatechem.com` |
+| `INQUIRY_TO_EMAIL` | Recommended | `info@silicatechem.com` |
+| `INQUIRY_FROM_EMAIL` | Recommended | `info@silicatechem.com` |
 | `NEXT_PUBLIC_GA4_ID` | Optional | `G-XXXXXXXXXX` |
 | `NEXT_PUBLIC_GTM_ID` | Optional | `GTM-XXXXXXX` |
 | `SMTP_HOST` | Optional | Only if not using Resend |

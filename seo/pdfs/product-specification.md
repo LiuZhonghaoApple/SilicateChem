@@ -16,7 +16,7 @@ date: 2026-06-18
 | **Manufacturer** | Shandong Zhongzhi Chemical Technology Co., Ltd. |
 | **Brand** | SilicateChem |
 | **Website** | https://silicatechem.com/products/sodium-metasilicate |
-| **Email** | sales@silicatechem.com |
+| **Email** | info@silicatechem.com |
 | **Location** | Shandong, China |
 | **Document No.** | SPEC-SMS-001 |
 | **Revision** | 1.0 |
@@ -164,7 +164,7 @@ This specification defines typical quality parameters, packaging, and supply con
 
 | Contact | Detail |
 |---------|--------|
-| Email | sales@silicatechem.com |
+| Email | info@silicatechem.com |
 | Company | Shandong Zhongzhi Chemical Technology Co., Ltd. |
 | Brand | SilicateChem |
 | Location | Shandong, China |
@@ -173,4 +173,4 @@ This specification defines typical quality parameters, packaging, and supply con
 
 *This Product Specification is provided for B2B industrial use only. Information is believed to be accurate at the date of issue. Shandong Zhongzhi Chemical Technology Co., Ltd. makes no warranty, express or implied, beyond that stated in the sales contract and accompanying COA.*
 
-*Shandong Zhongzhi Chemical Technology Co., Ltd. | SilicateChem | https://silicatechem.com/products/sodium-metasilicate | sales@silicatechem.com*
+*Shandong Zhongzhi Chemical Technology Co., Ltd. | SilicateChem | https://silicatechem.com/products/sodium-metasilicate | info@silicatechem.com*

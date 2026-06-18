@@ -16,7 +16,7 @@ date: 2026-06-18
 | **Manufacturer** | Shandong Zhongzhi Chemical Technology Co., Ltd. |
 | **Brand** | SilicateChem |
 | **Website** | https://silicatechem.com/products/sodium-metasilicate |
-| **Email** | sales@silicatechem.com |
+| **Email** | info@silicatechem.com |
 | **Location** | Shandong, China |
 | **Document No.** | TDS-SMS-001 |
 | **Revision** | 1.0 |
@@ -155,7 +155,7 @@ Palletized and stretch-wrapped for export shipment. Marking per buyer requiremen
 
 **Quotation and specifications:** https://silicatechem.com/products/sodium-metasilicate
 
-**Contact:** sales@silicatechem.com
+**Contact:** info@silicatechem.com
 
 ---
 

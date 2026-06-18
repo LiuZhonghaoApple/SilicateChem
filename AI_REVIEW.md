@@ -24,6 +24,32 @@ Cursor's implementation summaries after each major task. **Review this file befo
 
 ## Pending Reviews
 
+### WhatsApp contact update — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** complete
+
+#### Summary
+
+Updated business WhatsApp to **+86 18562682380** in `SITE.whatsapp` (`src/lib/constants.ts`). All `wa.me` links derive digits via `SITE.whatsapp.replace(/[^0-9]/g, "")` → `https://wa.me/8618562682380` in Footer, contact page, and sticky CTA bar.
+
+---
+
+### Email configuration update — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** complete
+
+#### Summary
+
+Unified all business contact and inquiry delivery addresses to **info@silicatechem.com**. Central `SITE.email` drives Footer, contact page, mailto links, and OrganizationSchema. `.env.example` sets `INQUIRY_TO_EMAIL` and `INQUIRY_FROM_EMAIL` to info@. Inquiry API defaults to `SITE.email` when env vars are unset.
+
+#### Files updated
+
+`src/lib/constants.ts`, `src/app/api/inquiry/route.ts`, `.env.example`, `src/app/contact/page.tsx`, `src/content/faq.ts`, `src/content/sodium-metasilicate-category.ts`, SEO docs and PDF templates under `seo/`.
+
+---
+
 ### REVIEW-012: Deployment Preparation — TASK-012
 
 - **Date:** 2026-06-18
@@ -43,7 +69,7 @@ Completed deployment preparation for silicatechem.com. **Production build passes
 #### Remaining Blockers
 
 - Configure Resend + production env vars on Vercel before live lead email
-- Replace placeholder factory/product photos and WhatsApp number
+- Replace placeholder factory/product photos
 - Replace OG SVG with 1200×630 JPG/PNG for best social previews
 - Human reviews REVIEW-006–011 still pending
 
@@ -110,8 +136,7 @@ Events: `rfq_submit`, `sample_request`, `tds_download`, `page_view_by_source`
 1. Set `NEXT_PUBLIC_GA4_ID` / `NEXT_PUBLIC_GTM_ID` in production
 2. Wire Resend email for leads
 3. Replace placeholder images with real factory photography
-4. Replace WhatsApp placeholder
-5. Deploy domain + submit sitemap in Search Console
+4. Deploy domain + submit sitemap in Search Console
 6. Run `npm run build` locally to verify
 
 ---
@@ -343,7 +368,7 @@ Not run — linter clean on all trust-related files.
 
 - Factory proof images are placeholders until real photos added to `public/images/factory/`
 - `npm run build` not verified in this session
-- Placeholder contact details (email, WhatsApp) still need real values before launch
+- Placeholder factory images still need real photos before launch (email and WhatsApp contact are configured)
 
 #### How to Run Locally
 
@@ -591,15 +616,13 @@ npm start
 
 - `npm install` / `npm run build` **not verified** in the Cursor agent environment (Node.js not available). Run locally to confirm.
 - Product and factory images are placeholders; add real photos to `public/images/` before launch.
-- WhatsApp number is a placeholder (`+86-000-0000-0000`).
+- WhatsApp: `+86 18562682380` (`https://wa.me/8618562682380`).
 - Inquiry email delivery requires `RESEND_API_KEY` (or SMTP) configuration in production; dev mode logs to server console only.
 
 #### Open Questions
 
 - Should real product/factory images be added before first deploy?
 - Confirm production email recipient and Resend domain setup.
-- Any certifications (ISO, etc.) to add to Factory/About pages?
-- Replace placeholder WhatsApp number when available?
 
 #### Reviewer Feedback
 

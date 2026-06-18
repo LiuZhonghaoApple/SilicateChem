@@ -7,8 +7,8 @@ export const runtime = "nodejs";
 
 async function sendInquiryEmail(lead: ReturnType<typeof buildStructuredLead>): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.INQUIRY_TO_EMAIL;
-  const from = process.env.INQUIRY_FROM_EMAIL;
+  const to = process.env.INQUIRY_TO_EMAIL ?? SITE.email;
+  const from = process.env.INQUIRY_FROM_EMAIL ?? SITE.email;
 
   if (!apiKey || !to || !from) return false;
 

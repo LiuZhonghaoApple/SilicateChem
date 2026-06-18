@@ -34,6 +34,53 @@ Records **every AI-assisted change** to this repository. Update this file after 
 
 ## Entries
 
+### 2026-06-18 — WhatsApp contact updated to +86 18562682380
+
+- **Task:** Ad-hoc
+- **Review:** —
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/constants.ts` | `SITE.whatsapp` → +86 18562682380 |
+| `seo/PROJECT_STATUS_AUDIT.md` | WhatsApp status updated |
+| `seo/launch-checklist.md` | WhatsApp checklist marked done |
+| `AI_REVIEW.md` | WhatsApp update note |
+
+**Summary:** Centralized WhatsApp number in `SITE.whatsapp`. Footer, contact page, and sticky CTA use `https://wa.me/8618562682380` via existing link helpers.
+
+---
+
+### 2026-06-18 — Email system updated to info@silicatechem.com
+
+- **Task:** Ad-hoc
+- **Review:** —
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/constants.ts` | `SITE.email` → info@silicatechem.com |
+| `src/app/api/inquiry/route.ts` | Default to `SITE.email` for to/from when env unset |
+| `.env.example` | `INQUIRY_TO_EMAIL` / `INQUIRY_FROM_EMAIL` → info@ |
+| `src/app/contact/page.tsx` | Meta description email |
+| `src/content/faq.ts` | FAQ answer email |
+| `src/content/sodium-metasilicate-category.ts` | FAQ answer email |
+| `seo/backlinks/backlink-strategy.md` | Contact email |
+| `seo/deployment-guide.md` | Env var examples |
+| `seo/launch-checklist.md` | Inquiry email checklist |
+| `seo/pdfs/*.md` | Company contact email |
+| `seo/PROJECT_STATUS_AUDIT.md` | Contact email reference |
+| `seo/leads/lead-schema.md` | Sample buyer email (not business address) |
+| `AI_REVIEW.md` | Email update note |
+
+**Summary:** Replaced all business contact addresses (previously sales@silicatechem.com and Resend placeholder) with info@silicatechem.com across app, API config, and documentation.
+
+---
+
 ### 2026-06-18 — TASK-012: Deployment preparation
 
 - **Task:** TASK-012

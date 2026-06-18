@@ -35,7 +35,7 @@ Low-cost SEO backlink system for **Shandong Zhongzhi Chemical Technology Co., Lt
 - Primary product: Sodium metasilicate (granules, anhydrous, pentahydrate)
 - Location: Shandong, China
 - Capacity: 100,000+ tons annual
-- Contact: sales@silicatechem.com
+- Contact: info@silicatechem.com
 
 ### Tier 2 — Chemical & Industrial Directories
 
@@ -136,7 +136,7 @@ Include in the **header or footer** of each PDF:
 ```
 Shandong Zhongzhi Chemical Technology Co., Ltd. | SilicateChem
 https://silicatechem.com/products/sodium-metasilicate
-sales@silicatechem.com
+info@silicatechem.com
 ```
 
 ### Upload targets for PDFs

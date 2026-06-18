@@ -23,7 +23,7 @@ date: 2026-06-18
 | **Address** | Shandong, China |
 | **Website** | https://silicatechem.com/products/sodium-metasilicate |
 | **Emergency phone** | _[Insert 24-hour emergency contact]_ |
-| **Email** | sales@silicatechem.com |
+| **Email** | info@silicatechem.com |
 | **Document No.** | MSDS-SMS-001 |
 | **Revision** | DRAFT |
 | **Date** | 2026-06-18 |
@@ -46,7 +46,7 @@ Industrial and professional use only. Alkaline builder in detergents, cleaning c
 
 Shandong Zhongzhi Chemical Technology Co., Ltd. (SilicateChem)  
 Shandong, China  
-sales@silicatechem.com  
+info@silicatechem.com  
 https://silicatechem.com
 
 ### 1.4 Emergency telephone number
@@ -240,4 +240,4 @@ Regulatory status varies by country and end use. Buyer is responsible for compli
 
 ---
 
-*DRAFT TEMPLATE — Shandong Zhongzhi Chemical Technology Co., Ltd. | SilicateChem | sales@silicatechem.com*
+*DRAFT TEMPLATE — Shandong Zhongzhi Chemical Technology Co., Ltd. | SilicateChem | info@silicatechem.com*
