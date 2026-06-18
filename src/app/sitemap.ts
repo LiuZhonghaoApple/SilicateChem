@@ -6,12 +6,13 @@ import { SITE } from "@/lib/constants";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
 import { MONEY_PAGES } from "@/lib/seo-funnel";
 
-/** Indexable static pages — blog/factory excluded (noindex). */
+/** Indexable static pages — blog excluded (noindex). */
 const INDEXABLE_STATIC = [
   "",
   "/about",
   "/contact",
   "/faq",
+  "/factory",
   "/products",
   "/guides",
   "/applications",
@@ -26,7 +27,8 @@ function priorityForPath(path: string): number {
   if (path === "/guides") return 0.75;
   if (path.startsWith("/applications/")) return 0.6;
   if (path === "/applications") return 0.65;
-  if (path === "/about" || path === "/contact" || path === "/faq") return 0.7;
+  if (path === "/about" || path === "/contact" || path === "/faq" || path === "/factory")
+    return 0.7;
   return 0.6;
 }
 

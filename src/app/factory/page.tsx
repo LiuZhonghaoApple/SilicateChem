@@ -16,7 +16,6 @@ export const metadata = createMetadata({
   description:
     "100,000+ ton sodium metasilicate production facility in Shandong, China. Granulation, drying, QC testing, export packaging, and global shipping.",
   path: "/factory",
-  noIndex: true,
 });
 
 export default function FactoryPage() {

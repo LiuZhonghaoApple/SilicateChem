@@ -24,6 +24,30 @@ Cursor's implementation summaries after each major task. **Review this file befo
 
 ## Pending Reviews
 
+### Factory noindex removal — Ad-hoc
+
+- **Date:** 2026-06-18
+- **Status:** awaiting_review
+
+#### Summary
+
+Removed unintended `noindex` from `/factory` after Google Search Console reported the page as excluded. Factory and all money pages (homepage, products, guides, applications, about, contact, FAQ) verified indexable. Blog index and posts retain `noIndex: true`. Sitemap updated to include `/factory` at priority 0.7. Full audit documented in `seo/NOINDEX_AUDIT.md`.
+
+#### Files changed
+
+| File | Action |
+|------|--------|
+| `src/app/factory/page.tsx` | modified — removed `noIndex: true` |
+| `src/app/sitemap.ts` | modified — added `/factory` to indexable static pages |
+| `seo/NOINDEX_AUDIT.md` | created — route-by-route noindex audit |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+#### Issues
+
+None. Only `/factory` had unintended noindex; applications were already indexable.
+
+---
+
 ### Factory trust image strategy — 3-layer system — Ad-hoc
 
 - **Date:** 2026-06-18

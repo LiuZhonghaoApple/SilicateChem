@@ -34,6 +34,25 @@ Records **every AI-assisted change** to this repository. Update this file after 
 
 ## Entries
 
+### 2026-06-18 — Factory noindex removed; money pages verified indexable
+
+- **Task:** ad-hoc (GSC noindex fix)
+- **Review:** pending
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/app/factory/page.tsx` | modified — removed `noIndex: true` |
+| `src/app/sitemap.ts` | modified — added `/factory` (priority 0.7) |
+| `seo/NOINDEX_AUDIT.md` | created — full noindex route audit |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+**Summary:** Google Search Console flagged `/factory` as excluded by noindex. Removed page-level `noIndex: true` (only `/factory` was affected). Verified all money pages indexable; blog remains noindex. Sitemap now includes `/factory`.
+
+---
+
 ### 2026-06-18 — Factory trust 3-layer image strategy
 
 - **Task:** ad-hoc
