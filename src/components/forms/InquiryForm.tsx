@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
-import { inquiryTypeFromRequestType, trackLead } from "@/lib/analytics";
+import { trackInquiryByType } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
 
 type FormState = "idle" | "submitting" | "success" | "error";
@@ -60,10 +60,11 @@ export function InquiryForm({
         return;
       }
 
-      trackLead({
-        page: pathname,
-        product: submittedProduct || undefined,
-        inquiry_type: inquiryTypeFromRequestType(submittedRequestType),
+      trackInquiryByType({
+        requestType: submittedRequestType,
+        pagePath: pathname,
+        pageSource: source || pathname,
+        productInterest: submittedProduct || undefined,
       });
 
       setState("success");
