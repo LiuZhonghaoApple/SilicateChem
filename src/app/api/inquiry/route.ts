@@ -14,7 +14,8 @@ async function sendInquiryEmail(
 ): Promise<EmailSendResult> {
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.INQUIRY_TO_EMAIL ?? SITE.email;
-  const from = process.env.INQUIRY_FROM_EMAIL ?? SITE.email;
+  const fromAddress = process.env.INQUIRY_FROM_EMAIL ?? "inquiry@silicatechem.com";
+  const from = `SilicateChem Inquiry <${fromAddress}>`;
 
   if (!apiKey) {
     console.error("[INQUIRY] RESEND_API_KEY not configured — email skipped");
