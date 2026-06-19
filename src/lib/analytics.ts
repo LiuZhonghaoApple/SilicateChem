@@ -36,6 +36,8 @@ declare global {
 }
 
 export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
+export const GA4_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA4_ID || "G-R7W0MMX4SW";
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 const IS_DEV = process.env.NODE_ENV === "development";

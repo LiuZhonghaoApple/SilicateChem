@@ -1,4 +1,4 @@
-import { GA4_ID, GTM_ID } from "@/lib/analytics";
+import { GA4_MEASUREMENT_ID, GTM_ID } from "@/lib/analytics";
 import Script from "next/script";
 
 /** Loads GTM container and/or GA4 gtag when env IDs are set. */
@@ -25,15 +25,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </noscript>
         </>
       ) : null}
-      {GA4_ID ? (
+      {GA4_MEASUREMENT_ID ? (
         <>
           <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`}
             strategy="afterInteractive"
           />
           <Script id="ga4-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());gtag('config','${GA4_ID}',{send_page_view:false});`}
+gtag('js',new Date());gtag('config','${GA4_MEASUREMENT_ID}',{send_page_view:false});`}
           </Script>
         </>
       ) : null}
