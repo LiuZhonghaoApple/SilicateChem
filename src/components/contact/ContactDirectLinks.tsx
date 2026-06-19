@@ -8,13 +8,13 @@ export function ContactDirectLinks() {
     <ul className="mt-4 space-y-3 text-sm text-[#5A6570]">
       <li>
         <span className="block text-xs font-semibold uppercase text-[#0B2D5B]">Email</span>
-        <TrackedMailto email={SITE.email} className="hover:text-[#2E7D9A]">
+        <TrackedMailto email={SITE.email} location="contact_page" className="hover:text-[#2E7D9A]">
           {SITE.email}
         </TrackedMailto>
       </li>
       <li>
         <span className="block text-xs font-semibold uppercase text-[#0B2D5B]">WhatsApp</span>
-        <TrackedWhatsApp phone={SITE.whatsapp} className="hover:text-[#2E7D9A]">
+        <TrackedWhatsApp phone={SITE.whatsapp} location="contact_page" className="hover:text-[#2E7D9A]">
           {SITE.whatsapp}
         </TrackedWhatsApp>
       </li>

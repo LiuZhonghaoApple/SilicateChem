@@ -4,29 +4,49 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import {
-  ctaNameForType,
   trackCtaClick,
   trackEmailClick,
-  trackWhatsappClick,
+  trackWhatsAppClick,
   type CtaType,
 } from "@/lib/analytics";
+import { getRfqContext } from "@/lib/page-rfq-context";
+
+function usePageTracking(location?: string) {
+  const pathname = usePathname();
+  const ctx = getRfqContext(pathname);
+  return {
+    pathname,
+    pageSource: ctx.source ?? pathname,
+    productInterest: ctx.product,
+    location,
+  };
+}
 
 export function TrackedMailto({
   email,
   children,
   className,
+  location = "mailto",
 }: {
   email: string;
   children: ReactNode;
   className?: string;
+  location?: string;
 }) {
-  const pathname = usePathname();
+  const { pathname, pageSource, productInterest } = usePageTracking(location);
 
   return (
     <a
       href={`mailto:${email}`}
       className={className}
-      onClick={() => trackEmailClick({ page: pathname })}
+      onClick={() =>
+        trackEmailClick({
+          pagePath: pathname,
+          pageSource,
+          productInterest,
+          location,
+        })
+      }
     >
       {children}
     </a>
@@ -37,12 +57,14 @@ export function TrackedWhatsApp({
   phone,
   children,
   className,
+  location = "whatsapp",
 }: {
   phone: string;
   children: ReactNode;
   className?: string;
+  location?: string;
 }) {
-  const pathname = usePathname();
+  const { pathname, pageSource, productInterest } = usePageTracking(location);
   const digits = phone.replace(/[^0-9]/g, "");
 
   return (
@@ -51,7 +73,14 @@ export function TrackedWhatsApp({
       className={className}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() => trackWhatsappClick({ page: pathname })}
+      onClick={() =>
+        trackWhatsAppClick({
+          pagePath: pathname,
+          pageSource,
+          productInterest,
+          location,
+        })
+      }
     >
       {children}
     </a>
@@ -64,28 +93,31 @@ export function TrackedCtaLink({
   children,
   className,
   location,
-  onClick,
+  product,
 }: {
   href: string;
   ctaType: CtaType;
   children: ReactNode;
   className?: string;
   location?: string;
-  onClick?: () => void;
+  product?: string;
 }) {
   const pathname = usePathname();
+  const ctx = getRfqContext(pathname);
 
   return (
     <Link
       href={href}
       className={className}
-      onClick={() => {
+      onClick={() =>
         trackCtaClick({
-          page: pathname,
-          cta_name: ctaNameForType(ctaType, location),
-        });
-        onClick?.();
-      }}
+          ctaType,
+          pagePath: pathname,
+          pageSource: ctx.source ?? pathname,
+          productInterest: product ?? ctx.product,
+          location,
+        })
+      }
     >
       {children}
     </Link>
