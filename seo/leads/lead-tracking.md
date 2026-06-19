@@ -71,50 +71,54 @@ Set by `src/lib/page-rfq-context.ts` on global CTAs and passed as hidden `source
 | `/blog/{slug}` | `blog-{slug}` | blog |
 | Other (e.g. `/contact`) | pathname fallback | other |
 
-## GA4 / GTM Events
+## GA4 Events
 
-Implemented in `src/lib/analytics.ts`. Events push to `window.dataLayer` (GTM) and `gtag` (GA4) when env IDs are set. In development, events also log to the browser console as `[analytics] {event}`.
+Implemented in `src/lib/analytics.ts`. Events send via `gtag` when `GA4_MEASUREMENT_ID` is set (`NEXT_PUBLIC_GA4_ID` or default `G-R7W0MMX4SW`). In development, events also log to the browser console as `[analytics] {event}`.
+
+SPA page views use `PageViewTracker` with `send_page_view: false` in the initial gtag config to avoid double-counting.
 
 ### Conversion Events
 
 | Event | Trigger | Key params |
 |-------|---------|------------|
-| `rfq_submit` | Quote or contact form submit / CTA | `page_path`, `page_source`, `product_interest`, `inquiry_type` |
-| `sample_request` | Sample CTA or form `requestType=sample` | same |
-| `tds_download` | TDS/MSDS/COA CTA or form `requestType=tds` | same |
-| `cta_click` | Any tracked CTA button click | `inquiry_type`, `event_label` (includes location) |
+| `generate_lead` | Inquiry form **successful** submit only | `page`, `product`, `inquiry_type` |
+| `cta_click` | Tracked CTA button/link click | `page`, `cta_name` |
+
+**Note:** CTA clicks do **not** fire `generate_lead`. Only a completed form submission does.
 
 ### Engagement Events
 
 | Event | Trigger | Key params |
 |-------|---------|------------|
-| `whatsapp_click` | WhatsApp link click | `page_path`, `page_source`, `product_interest`, `event_label` (location) |
-| `email_click` | `mailto:` link click | same |
-| `page_view_by_source` | Route change (`PageViewTracker`) | `page_path`, `funnel_layer` |
+| `whatsapp_click` | WhatsApp link click | `page` |
+| `email_click` | `mailto:` link click | `page` |
+| `page_view` | Route change (`PageViewTracker`, all routes) | `page_path`, `page_location` |
 
-### CTA Locations (`event_label` suffix)
+### CTA names (`cta_name`)
 
-Tracked via `location` param in `trackCtaClick`, `trackWhatsAppClick`, `trackEmailClick`:
+Built by `ctaNameForType(type, location?)`:
 
-- `sticky_bar` — bottom persistent quote bar
-- `floating_widget` — mobile/desktop floating contact widget
-- `footer` — footer contact links
-- `fast_contact_bar` — top fast contact strip
-- `page_ctas` — `PageCTAs` component blocks
-- `strong_cta` — `StrongCTA` component blocks
-- `contact_page` — direct contact sidebar
+| CTA type | Base `cta_name` |
+|----------|-----------------|
+| Quote | `request_quote` |
+| Sample | `request_sample` |
+| TDS/MSDS | `get_tds` |
+| Contact | `contact_factory` |
+
+With location prefix: e.g. `request_quote:sticky_bar`, `request_quote:header`, `get_tds:page_ctas`.
+
+Common locations: `sticky_bar`, `floating_widget`, `footer`, `fast_contact_bar`, `page_ctas`, `strong_cta`, `header`, `header_mobile`, `contact_page`.
 
 ## Environment Variables
 
 | Variable | Purpose |
 |----------|---------|
-| `NEXT_PUBLIC_GA4_ID` | Google Analytics 4 measurement ID (e.g. `G-XXXXXXXX`) |
-| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container ID (e.g. `GTM-XXXXXXX`) |
+| `NEXT_PUBLIC_GA4_ID` | Google Analytics 4 measurement ID — production: `G-R7W0MMX4SW` (silicatechem.com) |
 | `RESEND_API_KEY` | Optional — sends lead email via Resend |
 | `INQUIRY_TO_EMAIL` | Lead delivery inbox (defaults to `SITE.email`) |
 | `INQUIRY_FROM_EMAIL` | Sender address for inquiry emails |
 
-When GA4/GTM IDs are unset, analytics helpers no-op for external tracking but still log in development.
+When GA4 ID is unset at build time, code still defaults to `G-R7W0MMX4SW`. GTM is no longer required for analytics (GA4-direct only).
 
 ## API Route
 
@@ -127,21 +131,24 @@ When GA4/GTM IDs are unset, analytics helpers no-op for external tracking but st
 
 ## Inquiry Type Mapping
 
-| Form `requestType` | Lead `classification.inquiryType` | Analytics event |
-|--------------------|-----------------------------------|-----------------|
-| `quote` | `quote` | `rfq_submit` |
-| `sample` | `sample` | `sample_request` |
-| `tds` | `msds_tds` | `tds_download` |
-| `contact` | `contact` | `rfq_submit` |
+| Form `requestType` | Lead `classification.inquiryType` | GA4 `inquiry_type` on `generate_lead` |
+|--------------------|-----------------------------------|---------------------------------------|
+| `quote` | `quote` | `quote` |
+| `sample` | `sample` | `sample` |
+| `tds` | `msds_tds` | `tds` |
+| `contact` | `contact` | `contact` |
 
 ## Components Wired for Tracking
 
 | Component | Events |
 |-----------|--------|
-| `InquiryForm` | `trackInquiryByType` on success |
+| `InquiryForm` | `generate_lead` on success |
 | `PersistentCTA` (sticky + floating) | `cta_click`, `whatsapp_click`, `email_click` |
+| `Header` | `cta_click` (Request Quote desktop + mobile) |
 | `Footer` / `FooterContact` | `whatsapp_click`, `email_click` |
 | `FastContactBar` | `cta_click`, `email_click` |
 | `PageCTAs` | `cta_click` |
 | `StrongCTA` | `cta_click` |
 | `ContactDirectLinks` | `whatsapp_click`, `email_click` |
+
+See [`../GA4_SETUP.md`](../GA4_SETUP.md) for Realtime verification steps.

@@ -7,12 +7,12 @@ export function FooterContact() {
   return (
     <>
       <li>
-        <TrackedMailto email={SITE.email} location="footer" className="hover:text-white">
+        <TrackedMailto email={SITE.email} className="hover:text-white">
           {SITE.email}
         </TrackedMailto>
       </li>
       <li>
-        <TrackedWhatsApp phone={SITE.whatsapp} location="footer" className="hover:text-white">
+        <TrackedWhatsApp phone={SITE.whatsapp} className="hover:text-white">
           WhatsApp: {SITE.whatsapp}
         </TrackedWhatsApp>
       </li>

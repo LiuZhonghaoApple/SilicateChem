@@ -24,6 +24,150 @@ Cursor's implementation summaries after each major task. **Review this file befo
 
 ## Pending Reviews
 
+### REVIEW-011C: GA4 final production verification (documentation)
+
+- **Date:** 2026-06-18
+- **Task:** GA4 final verification audit (no code changes)
+- **Status:** awaiting_review
+
+#### Summary
+
+Production verification audit for GA4 `G-R7W0MMX4SW`. `curl` confirms live HTML at `www.silicatechem.com` includes gtag preload/init with correct measurement ID. Code wiring (AnalyticsScripts, PageViewTracker, conversion events) verified. **Score: 4 PASS, 2 WARNING, 0 BLOCKER.** Production GA4 readiness: **Partial** — scripts deployed; Realtime + conversion admin marking still manual.
+
+#### Deliverable
+
+| File | Action |
+|------|--------|
+| `seo/GA4_VERIFICATION.md` | created — checklist, production fetch, manual Realtime procedure |
+
+#### Remaining manual steps
+
+1. Confirm events in GA4 Realtime (see `seo/GA4_VERIFICATION.md`)
+2. Mark `generate_lead` as conversion in GA4 Admin
+3. Optionally set `NEXT_PUBLIC_GA4_ID` explicitly in Vercel Production
+
+---
+
+### REVIEW-011: GA4 conversion tracking implementation
+
+- **Date:** 2026-06-19
+- **Task:** REVIEW-011
+- **Status:** awaiting_review
+
+#### Summary
+
+Implemented GA4-direct analytics for silicatechem.com with measurement ID `G-R7W0MMX4SW`. Loads gtag.js globally via `next/script` (`afterInteractive`) with `send_page_view: false`; `PageViewTracker` fires `page_view` on every App Router route change. Refactored `src/lib/analytics.ts` with `trackLead`, `trackWhatsappClick`, `trackEmailClick`, `trackCtaClick`, and `trackPageView`. Removed GTM/dataLayer dependency and old events (`rfq_submit`, `sample_request`, `tds_download`, `page_view_by_source`). CTA clicks fire `cta_click` only; `generate_lead` fires on successful inquiry form submit only (no double-counting). Wired Header Request Quote via `TrackedCtaLink`. Added `seo/GA4_SETUP.md`.
+
+#### Files changed
+
+| File | Action |
+|------|--------|
+| `src/lib/analytics.ts` | rewritten — GA4 helpers, default `G-R7W0MMX4SW` |
+| `src/components/analytics/AnalyticsScripts.tsx` | modified — GA4-only, `send_page_view: false` |
+| `src/components/analytics/PageViewTracker.tsx` | modified — all routes |
+| `src/components/analytics/TrackedLinks.tsx` | modified — simplified params, optional `onClick` |
+| `src/components/forms/InquiryForm.tsx` | modified — `trackLead` on success |
+| `src/components/layout/PersistentCTA.tsx` | modified — `cta_click` only |
+| `src/components/layout/Header.tsx` | modified — `TrackedCtaLink` for Request Quote |
+| `src/components/layout/FooterContact.tsx` | modified — updated tracked link props |
+| `src/components/layout/FastContactBar.tsx` | modified — updated tracked link props |
+| `src/components/layout/PageCTAs.tsx` | modified — updated tracked link props |
+| `src/components/contact/ContactDirectLinks.tsx` | modified — updated tracked link props |
+| `src/components/conversion/ProductConversionSections.tsx` | modified — updated `StrongCTA` tracking |
+| `.env.example` | modified — `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` |
+| `seo/GA4_SETUP.md` | created — events, Realtime verification |
+| `seo/leads/lead-tracking.md` | modified — new GA4 event names |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+#### Remaining before live GA4 data
+
+1. Set `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` in Vercel Production (if not relying on code fallback)
+2. Redeploy Production
+3. Verify in GA4 Realtime; mark `generate_lead` as conversion in GA4 Admin
+
+---
+
+### REVIEW-011B: RFQ email delivery audit
+
+- **Date:** 2026-06-19
+- **Task:** REVIEW-011B
+- **Status:** awaiting_review
+
+#### Executive summary
+
+**NOT READY** — **4 blockers**. Inquiry API and Resend integration are implemented in code; production email delivery depends on `RESEND_API_KEY` + verified `silicatechem.com` domain on Vercel. Live DNS check (2026-06-19): nameservers are Vercel DNS; no Resend DKIM/SPF/MX records present. Without Resend, leads are logged to function logs only while users still see success.
+
+#### Audit results
+
+| Area | Status | Notes |
+|------|--------|-------|
+| Inquiry API (`/api/inquiry`, leads, validation) | **PASS** | Validates, builds structured lead, logs `[INQUIRY]` |
+| Resend integration (code) | **PASS** | `fetch` to `api.resend.com/emails`; plain text; `reply_to` |
+| Resend integration (production) | **BLOCKER** | API key unconfirmed; domain DNS not configured |
+| Email templates | **PASS** | Plain-text inline body; no HTML/React templates |
+| Environment variables | **WARNING** | `.env.example` correct; Vercel Production values not verified |
+| Fallback / UX on email failure | **BLOCKER** | Missing/failed Resend → no email, HTTP 200 + green success UI |
+| Security (rate limit, spam) | **WARNING** | Zod validation only; no CAPTCHA, honeypot, or throttling |
+| DNS (silicatechem.com) | **BLOCKER** | No `resend._domainkey`, `send` SPF, or `send` MX records |
+
+#### Blockers (4)
+
+1. `RESEND_API_KEY` must be set in Vercel Production
+2. `silicatechem.com` must be verified in Resend (add DKIM + SPF/MX on `send` in Vercel DNS)
+3. Silent success on email failure — sales team may miss leads without log monitoring
+4. `info@silicatechem.com` mailbox must exist and be monitored
+
+#### Canonical doc
+
+`seo/RFQ_EMAIL_SETUP.md` — architecture flow, env table, Resend/Vercel setup, manual test procedure, gaps.
+
+#### Files changed
+
+| File | Action |
+|------|--------|
+| `seo/RFQ_EMAIL_SETUP.md` | updated — live DNS audit, security section, PASS/WARNING/BLOCKER checklist |
+| `AI_REVIEW.md` | modified |
+
+#### Reviewer feedback
+
+_(Leave blank until reviewed.)_
+
+- **Decision:**
+- **Comments:**
+
+---
+
+### REVIEW-011A: GA4 production activation (documentation + env config)
+
+- **Date:** 2026-06-19
+- **Task:** REVIEW-011A
+- **Status:** awaiting_review
+
+#### Summary
+
+Configured production GA4 measurement ID `G-R7W0MMX4SW` in repo documentation and `.env.example`. Added code fallback in `src/lib/analytics.ts`. Created `seo/GA4_PRODUCTION_SETUP.md` with Vercel env scopes, redeploy steps, and Realtime verification. Updated deployment/launch docs and GA4 conversion audit. **No Vercel deploy performed.**
+
+#### Files changed
+
+| File | Action |
+|------|--------|
+| `src/lib/analytics.ts` | modified — `GA4_ID` fallback `G-R7W0MMX4SW` |
+| `.env.example` | modified — production GA4 ID + silicatechem.com comment |
+| `seo/GA4_PRODUCTION_SETUP.md` | created — Vercel activation guide |
+| `seo/GA4_CONVERSION_AUDIT.md` | modified — production ID status |
+| `seo/deployment-guide.md` | modified — GA4 env example |
+| `seo/launch-checklist.md` | modified — GA4 property + Vercel step |
+| `seo/leads/lead-tracking.md` | modified — production measurement ID |
+| `AI_REVIEW.md`, `CHANGELOG_AI.md` | modified |
+
+#### Remaining before live GA4 data
+
+1. Set `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` in Vercel **Production** env
+2. Redeploy Production
+3. Verify in GA4 Realtime; mark conversion events in GA4 Admin
+
+---
+
 ### Factory noindex removal — Ad-hoc
 
 - **Date:** 2026-06-18
@@ -191,6 +335,39 @@ _(Leave blank until reviewed.)_
 
 - **Decision:**
 - **Comments:**
+
+---
+
+### REVIEW-011A: GA4 Production Activation — REVIEW-011A
+
+- **Date:** 2026-06-19
+- **Task:** REVIEW-011A
+- **Status:** awaiting_review
+
+#### Summary
+
+Documented silicatechem.com GA4 property (`G-R7W0MMX4SW`) for production activation. Updated `.env.example`, deployment/launch guides, and conversion audit. Added `seo/GA4_PRODUCTION_SETUP.md` for Vercel env configuration and post-deploy verification. `src/lib/analytics.ts` reads `process.env.NEXT_PUBLIC_GA4_ID` with fallback default `G-R7W0MMX4SW`; `AnalyticsScripts.tsx` consumes `GA4_ID` from that module (no change required).
+
+#### GA4 env touchpoints
+
+| Location | Variable(s) |
+|----------|-------------|
+| `src/lib/analytics.ts` | `NEXT_PUBLIC_GA4_ID`, `NEXT_PUBLIC_GTM_ID` |
+| `src/components/analytics/AnalyticsScripts.tsx` | imports `GA4_ID`, `GTM_ID` |
+| `.env.example` | `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` |
+| `seo/GA4_PRODUCTION_SETUP.md` | Vercel activation guide (new) |
+| `seo/GA4_CONVERSION_AUDIT.md` | audit + checklist |
+| `seo/deployment-guide.md` | env var table |
+| `seo/launch-checklist.md` | analytics setup section |
+| `seo/leads/lead-tracking.md` | env var reference |
+
+#### Remaining (operational — not in this PR)
+
+1. Set `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` in Vercel Production
+2. Redeploy
+3. GA4 Admin: mark conversions, link Search Console
+
+**No Vercel deploy was performed.**
 
 ---
 

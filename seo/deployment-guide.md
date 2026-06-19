@@ -61,8 +61,8 @@ Add for **Production** (and Preview if desired):
 | `RESEND_API_KEY` | Recommended | `re_...` from [resend.com](https://resend.com) |
 | `INQUIRY_TO_EMAIL` | Recommended | `info@silicatechem.com` |
 | `INQUIRY_FROM_EMAIL` | Recommended | `info@silicatechem.com` |
-| `NEXT_PUBLIC_GA4_ID` | Optional | `G-XXXXXXXXXX` |
-| `NEXT_PUBLIC_GTM_ID` | Optional | `GTM-XXXXXXX` |
+| `NEXT_PUBLIC_GA4_ID` | Recommended | `G-R7W0MMX4SW` (silicatechem.com GA4 property) |
+| `NEXT_PUBLIC_GTM_ID` | Optional | `GTM-XXXXXXX` — only if using GTM; GA4-direct is primary |
 | `SMTP_HOST` | Optional | Only if not using Resend |
 | `SMTP_PORT` | Optional | e.g. `587` |
 | `SMTP_USER` | Optional | SMTP username |

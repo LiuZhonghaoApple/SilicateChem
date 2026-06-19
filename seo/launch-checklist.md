@@ -27,9 +27,9 @@ See also: `seo/indexing-guide.md`
 
 ## 3. Analytics Setup
 
-- [ ] Create GA4 property for silicatechem.com
-- [ ] Set `NEXT_PUBLIC_GA4_ID=G-XXXXXXXXXX` in production
-- [ ] (Optional) Create GTM container — set `NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX`
+- [x] Create GA4 property for silicatechem.com (`G-R7W0MMX4SW`)
+- [ ] Set `NEXT_PUBLIC_GA4_ID=G-R7W0MMX4SW` in Vercel Production (see `seo/GA4_PRODUCTION_SETUP.md`)
+- [ ] (Optional) Create GTM container — set `NEXT_PUBLIC_GTM_ID=GTM-XXXXXXX` (skip if using GA4-direct only)
 - [ ] Configure GA4 conversion events:
   - `rfq_submit`
   - `sample_request`
@@ -59,12 +59,13 @@ Submit these first in Search Console → URL Inspection → Request indexing:
 
 ## 5. Lead Capture
 
-- [ ] Set `RESEND_API_KEY` and wire email in `src/app/api/inquiry/route.ts`
-- [ ] Set `INQUIRY_TO_EMAIL=info@silicatechem.com`
+- [ ] Set `RESEND_API_KEY` in Vercel Production (email already wired in `src/app/api/inquiry/route.ts`)
+- [ ] Set `INQUIRY_TO_EMAIL=info@silicatechem.com` and `INQUIRY_FROM_EMAIL=info@silicatechem.com`
 - [x] WhatsApp number set in `src/lib/constants.ts` (`+86 18562682380`)
+- [ ] Verify `silicatechem.com` in Resend (DKIM + SPF/MX on `send` — add in Vercel DNS)
 - [ ] Test RFQ form end-to-end on production
-- [ ] Verify `[LEAD]` structured logs or email delivery
-- [ ] Lead schema reference: `seo/leads/lead-schema.md`
+- [ ] Verify `[INQUIRY]` structured logs and email delivery at info@
+- [ ] Lead schema reference: `seo/leads/lead-schema.md` (note: live API uses `[INQUIRY]` log prefix)
 
 ## 6. Trust & Media Assets
 

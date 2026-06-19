@@ -43,7 +43,6 @@ export function PageCTAs({
         href={quoteHref}
         ctaType="quote"
         location="page_ctas"
-        product={product}
         className={`${linkBase} ${quoteClass}`}
       >
         Request Quote
@@ -52,7 +51,6 @@ export function PageCTAs({
         href="/contact?type=contact"
         ctaType="contact"
         location="page_ctas"
-        product={product}
         className={`${linkBase} ${contactClass}`}
       >
         Contact Factory
@@ -61,7 +59,6 @@ export function PageCTAs({
         href={tdsHref}
         ctaType="tds"
         location="page_ctas"
-        product={product}
         className={`${linkBase} ${tdsClass}`}
       >
         Get TDS / MSDS

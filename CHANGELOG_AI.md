@@ -34,6 +34,62 @@ Records **every AI-assisted change** to this repository. Update this file after 
 
 ## Entries
 
+### 2026-06-19 — GA4 conversion tracking (REVIEW-011)
+
+- **Task:** REVIEW-011
+- **Review:** REVIEW-011
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/analytics.ts` | rewritten — GA4 helpers, `GA4_MEASUREMENT_ID` default `G-R7W0MMX4SW` |
+| `src/components/analytics/AnalyticsScripts.tsx` | modified — GA4-only loader, `send_page_view: false` |
+| `src/components/analytics/PageViewTracker.tsx` | modified — page views on all routes |
+| `src/components/analytics/TrackedLinks.tsx` | modified — `page`-only email/WhatsApp; CTA `cta_name`; optional `onClick` |
+| `src/components/forms/InquiryForm.tsx` | modified — `trackLead` replaces `trackInquiryByType` |
+| `src/components/layout/PersistentCTA.tsx` | modified — `cta_click` only (no mirrored lead events) |
+| `src/components/layout/Header.tsx` | modified — tracked Request Quote CTA |
+| `src/components/layout/FooterContact.tsx` | modified — remove obsolete `location` prop |
+| `src/components/layout/FastContactBar.tsx` | modified — remove obsolete props |
+| `src/components/layout/PageCTAs.tsx` | modified — remove obsolete `product` prop on tracked links |
+| `src/components/contact/ContactDirectLinks.tsx` | modified — remove obsolete `location` prop |
+| `src/components/conversion/ProductConversionSections.tsx` | modified — `StrongCTA` tracking props |
+| `.env.example` | modified — production GA4 ID |
+| `seo/GA4_SETUP.md` | created — measurement ID, events, Realtime steps |
+| `seo/leads/lead-tracking.md` | modified — `generate_lead`, `cta_click`, etc. |
+| `AI_REVIEW.md` | modified — REVIEW-011 entry |
+| `CHANGELOG_AI.md` | modified — this entry |
+
+**Summary:** Implemented GA4-direct tracking with measurement ID `G-R7W0MMX4SW`. SPA page views via `PageViewTracker`; conversion events `generate_lead` (form submit only) and `cta_click` (CTA clicks only). Removed GTM/dataLayer and legacy event names. Dev console logging in development.
+
+---
+
+### 2026-06-19 — GA4 production activation (documentation + env config)
+
+- **Task:** REVIEW-011A
+- **Review:** REVIEW-011A
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `src/lib/analytics.ts` | modified — `GA4_ID` fallback `G-R7W0MMX4SW` |
+| `.env.example` | modified — production GA4 ID for silicatechem.com |
+| `seo/GA4_PRODUCTION_SETUP.md` | created — Vercel env scopes, redeploy, Realtime verification |
+| `seo/GA4_CONVERSION_AUDIT.md` | modified — production ID documented, checklist updated |
+| `seo/deployment-guide.md` | modified — GA4 measurement ID in env table |
+| `seo/launch-checklist.md` | modified — GA4 property created, Vercel step |
+| `seo/leads/lead-tracking.md` | modified — production measurement ID in env table |
+| `AI_REVIEW.md` | modified — REVIEW-011A entry |
+| `CHANGELOG_AI.md` | modified — this entry |
+
+**Summary:** Documented production GA4 property `G-R7W0MMX4SW` across repo config and SEO docs. Added code fallback so analytics activates when Vercel env is set or at build time via default. Created operational guide for Vercel Production env and Realtime verification. No deploy.
+
+---
+
 ### 2026-06-18 — Factory noindex removed; money pages verified indexable
 
 - **Task:** ad-hoc (GSC noindex fix)
@@ -180,6 +236,24 @@ Records **every AI-assisted change** to this repository. Update this file after 
 | `AI_REVIEW.md` | WhatsApp update note |
 
 **Summary:** Centralized WhatsApp number in `SITE.whatsapp`. Footer, contact page, and sticky CTA use `https://wa.me/8618562682380` via existing link helpers.
+
+---
+
+### 2026-06-19 — REVIEW-011B: RFQ email delivery audit
+
+- **Task:** REVIEW-011B
+- **Review:** REVIEW-011B
+- **Agent:** Cursor
+
+**Files changed:**
+
+| File | Change |
+|------|--------|
+| `seo/RFQ_EMAIL_SETUP.md` | created — Resend/DNS/Vercel setup, audit PASS/WARNING/BLOCKER, testing |
+| `AI_REVIEW.md` | REVIEW-011B entry |
+| `CHANGELOG_AI.md` | this note |
+
+**Summary:** Audited inquiry API → Resend → info@ path (no code changes). **NOT READY** for guaranteed delivery until `RESEND_API_KEY` and verified `silicatechem.com` domain are configured on Vercel. Silent success when email fails is a documented blocker.
 
 ---
 

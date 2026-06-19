@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { TrackedCtaLink } from "@/components/analytics/TrackedLinks";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
 export function Header() {
@@ -32,12 +33,14 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
+          <TrackedCtaLink
             href="/contact?type=quote"
+            ctaType="quote"
+            location="header"
             className="rounded bg-[#0B2D5B] px-4 py-2 text-sm font-semibold text-white hover:bg-[#071F3F] transition-colors"
           >
             Request Quote
-          </Link>
+          </TrackedCtaLink>
         </nav>
 
         <button
@@ -70,13 +73,15 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            <Link
+            <TrackedCtaLink
               href="/contact?type=quote"
+              ctaType="quote"
+              location="header_mobile"
               className="mt-2 rounded bg-[#0B2D5B] px-4 py-2.5 text-sm font-semibold text-white text-center"
               onClick={() => setOpen(false)}
             >
               Request Quote
-            </Link>
+            </TrackedCtaLink>
           </div>
         </nav>
       )}

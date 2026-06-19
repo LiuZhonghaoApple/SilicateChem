@@ -4,6 +4,8 @@
 **Scope:** Google indexing readiness (codebase + configuration review)  
 **Method:** Static analysis of Next.js App Router SEO files — no live URL fetch (pre-deploy)
 
+> **Update (post-audit):** `/factory` is now **indexable** (`noIndex` removed) and included in the sitemap. See [`NOINDEX_AUDIT.md`](./NOINDEX_AUDIT.md) for the route-by-route noindex audit. Factory-related PASS/WARNING rows below reflect the **pre-fix** state.
+
 ---
 
 ## Executive Summary

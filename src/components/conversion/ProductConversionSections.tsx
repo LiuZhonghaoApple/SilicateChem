@@ -29,7 +29,6 @@ export function StrongCTA({ product, light = false, className = "" }: StrongCTAP
         href={`/contact?type=quote${q}`}
         ctaType="quote"
         location="strong_cta"
-        product={product}
         className={quote}
       >
         Request Quotation
@@ -38,7 +37,6 @@ export function StrongCTA({ product, light = false, className = "" }: StrongCTAP
         href={`/contact?type=sample${q}`}
         ctaType="sample"
         location="strong_cta"
-        product={product}
         className={sample}
       >
         Request Sample
@@ -47,7 +45,6 @@ export function StrongCTA({ product, light = false, className = "" }: StrongCTAP
         href={`/contact?type=tds${q}`}
         ctaType="tds"
         location="strong_cta"
-        product={product}
         className={docs}
       >
         Get COA / MSDS / TDS
