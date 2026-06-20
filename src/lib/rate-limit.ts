@@ -65,52 +65,30 @@ export function getClientIp(request: Request): string {
 
 export type InquiryRateLimitResult =
   | { allowed: true }
-  | { allowed: false; status: 429; error: "Too many requests. Please try again later." }
-  | {
-      allowed: false;
-      status: 503;
-      error: "Service temporarily unavailable. Please try again later.";
-    };
+  | { allowed: false; status: 429; error: "Too many requests. Please try again later." };
 
 /**
  * Inquiry form rate limit: 5 submissions per IP per hour.
  *
- * - Development without Redis env: skips rate limiting (fail open).
- * - Production without Redis env: returns 503 (rate limiting required).
+ * - Without Redis env: skips rate limiting (fail open).
  * - When Redis is configured: enforces the limit and returns 429 when exceeded.
  */
 export async function checkInquiryRateLimit(
   ip: string
 ): Promise<InquiryRateLimitResult> {
   if (!isRedisConfigured()) {
-    if (process.env.NODE_ENV === "development") {
-      console.warn(
-        "[RATE_LIMIT] Redis not configured — skipping inquiry rate limit in development"
-      );
-      return { allowed: true };
-    }
-
-    console.error(
-      "[RATE_LIMIT] Redis not configured — inquiry rate limiting unavailable in production"
+    console.warn(
+      "[RATE_LIMIT] UPSTASH_REDIS_REST_URL/TOKEN not configured — skipping inquiry rate limit"
     );
-    return {
-      allowed: false,
-      status: 503,
-      error: "Service temporarily unavailable. Please try again later.",
-    };
+    return { allowed: true };
   }
 
   const ratelimit = getInquiryRatelimit();
   if (!ratelimit) {
-    if (process.env.NODE_ENV === "development") {
-      return { allowed: true };
-    }
-
-    return {
-      allowed: false,
-      status: 503,
-      error: "Service temporarily unavailable. Please try again later.",
-    };
+    console.warn(
+      "[RATE_LIMIT] Redis client unavailable — skipping inquiry rate limit"
+    );
+    return { allowed: true };
   }
 
   const { success } = await ratelimit.limit(ip);

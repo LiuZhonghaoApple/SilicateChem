@@ -1,5 +1,6 @@
 const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
+/** When TURNSTILE_SECRET_KEY is unset, verification is skipped (fail open). */
 export function isTurnstileVerificationEnabled(): boolean {
   return Boolean(process.env.TURNSTILE_SECRET_KEY);
 }
@@ -9,7 +10,12 @@ export async function verifyTurnstileToken(
   remoteIp?: string | null
 ): Promise<boolean> {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return true;
+  if (!secret) {
+    console.warn(
+      "[INQUIRY] TURNSTILE_SECRET_KEY not configured — skipping Turnstile verification"
+    );
+    return true;
+  }
 
   const body = new URLSearchParams({
     secret,
