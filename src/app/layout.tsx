@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { FastContactBar } from "@/components/layout/FastContactBar";
 import { StickyQuoteBar, FloatingContactWidget } from "@/components/layout/PersistentCTA";
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
+import { ClarityScript } from "@/components/analytics/ClarityScript";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { OrganizationSchema } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/constants";
@@ -29,6 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="min-h-screen flex flex-col bg-white pb-20">
         <AnalyticsScripts />
+        <ClarityScript />
         <OrganizationSchema />
         <Header />
         <FastContactBar />
