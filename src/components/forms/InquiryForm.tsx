@@ -1,15 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
 import { trackInquiryByType } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
+import {
+  TurnstileField,
+  TURNSTILE_SITE_KEY,
+  type TurnstileFieldHandle,
+} from "@/components/forms/TurnstileField";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
 const EMAIL_DELIVERY_FAILED_MSG =
   "Email delivery failed. Please contact us via WhatsApp or info@silicatechem.com";
+
+const VERIFICATION_FAILED_MSG = "Verification failed. Please try again.";
+
+type InquiryPayload = Record<string, string>;
 
 export function InquiryForm({
   defaultProduct,
@@ -22,6 +31,9 @@ export function InquiryForm({
   const searchParams = useSearchParams();
   const [state, setState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const turnstileRef = useRef<TurnstileFieldHandle>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const pendingPayloadRef = useRef<InquiryPayload | null>(null);
 
   const ctx = getRfqContext(pathname);
   const product =
@@ -30,14 +42,10 @@ export function InquiryForm({
     defaultRequestType ?? searchParams.get("type") ?? "quote";
   const source = searchParams.get("source") ?? ctx.source ?? pathname;
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setState("submitting");
-    setErrorMsg("");
-
-    const form = e.currentTarget;
-    const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
+  async function submitInquiry(
+    payload: InquiryPayload,
+    form: HTMLFormElement
+  ) {
     const submittedRequestType = String(payload.requestType ?? requestType);
     const submittedProduct = String(payload.product ?? product);
 
@@ -57,6 +65,7 @@ export function InquiryForm({
             : (result.error ?? "Submission failed. Please try again.")
         );
         setState("error");
+        turnstileRef.current?.reset();
         return;
       }
 
@@ -69,10 +78,52 @@ export function InquiryForm({
 
       setState("success");
       form.reset();
+      turnstileRef.current?.reset();
     } catch {
       setErrorMsg("Network error. Please try again or email us directly.");
       setState("error");
+      turnstileRef.current?.reset();
     }
+  }
+
+  function handleTurnstileSuccess(token: string) {
+    const payload = pendingPayloadRef.current;
+    const form = formRef.current;
+
+    if (!payload || !form) {
+      setErrorMsg(VERIFICATION_FAILED_MSG);
+      setState("error");
+      turnstileRef.current?.reset();
+      return;
+    }
+
+    pendingPayloadRef.current = null;
+    void submitInquiry({ ...payload, turnstileToken: token }, form);
+  }
+
+  function handleTurnstileError() {
+    pendingPayloadRef.current = null;
+    setErrorMsg(VERIFICATION_FAILED_MSG);
+    setState("error");
+    turnstileRef.current?.reset();
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setState("submitting");
+    setErrorMsg("");
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = Object.fromEntries(data.entries()) as InquiryPayload;
+
+    if (TURNSTILE_SITE_KEY) {
+      pendingPayloadRef.current = payload;
+      turnstileRef.current?.execute();
+      return;
+    }
+
+    await submitInquiry(payload, form);
   }
 
   if (state === "success") {
@@ -98,7 +149,7 @@ export function InquiryForm({
   const labelClass = "block text-sm font-medium text-[#0B2D5B] mb-1";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <input type="hidden" name="source" value={source} />
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -187,6 +238,12 @@ export function InquiryForm({
           className={inputClass}
         />
       </div>
+
+      <TurnstileField
+        ref={turnstileRef}
+        onSuccess={handleTurnstileSuccess}
+        onError={handleTurnstileError}
+      />
 
       {state === "error" && (
         <p className="text-sm text-red-600">{errorMsg}</p>

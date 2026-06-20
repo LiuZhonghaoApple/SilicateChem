@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { buildStructuredLead } from "@/lib/leads";
 import { SITE } from "@/lib/constants";
+import { checkInquiryRateLimit, getClientIp } from "@/lib/rate-limit";
+import {
+  isTurnstileVerificationEnabled,
+  verifyTurnstileToken,
+} from "@/lib/turnstile";
 import { inquirySchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
@@ -73,6 +78,14 @@ async function sendInquiryEmail(
 
 export async function POST(request: Request) {
   try {
+    const rateLimit = await checkInquiryRateLimit(getClientIp(request));
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: rateLimit.error },
+        { status: rateLimit.status }
+      );
+    }
+
     const body = await request.json();
     const result = inquirySchema.safeParse(body);
 
@@ -82,7 +95,29 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: firstError }, { status: 400 });
     }
 
-    const lead = buildStructuredLead(result.data, {
+    const clientIp = getClientIp(request);
+
+    if (isTurnstileVerificationEnabled()) {
+      const token = result.data.turnstileToken;
+      if (!token) {
+        return NextResponse.json(
+          { error: "Verification failed" },
+          { status: 400 }
+        );
+      }
+
+      const verified = await verifyTurnstileToken(token, clientIp);
+      if (!verified) {
+        return NextResponse.json(
+          { error: "Verification failed" },
+          { status: 400 }
+        );
+      }
+    }
+
+    const { turnstileToken: _turnstileToken, ...inquiryData } = result.data;
+
+    const lead = buildStructuredLead(inquiryData, {
       userAgent: request.headers.get("user-agent"),
       referer: request.headers.get("referer"),
       siteUrl: SITE.url,

@@ -10,6 +10,7 @@ export const inquirySchema = z.object({
   message: z.string().min(10, "Please provide inquiry details"),
   requestType: z.enum(["quote", "contact", "tds", "sample"]).optional(),
   source: z.string().optional(),
+  turnstileToken: z.string().optional(),
 });
 
 export type InquiryInput = z.infer<typeof inquirySchema>;
