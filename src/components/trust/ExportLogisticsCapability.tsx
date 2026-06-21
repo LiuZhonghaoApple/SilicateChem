@@ -18,7 +18,7 @@ export function ExportLogisticsCapability({ className = "" }: { className?: stri
           </li>
         ))}
       </ul>
-      <DeploymentImageGrid images={siteImages.export.shipping} />
+      <DeploymentImageGrid images={siteImages.export.shipping} component="ExportLogisticsCapability" />
     </div>
   );
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
-import { LazyImage } from "@/components/ui/LazyImage";
+import { TrustBoundImage } from "@/components/trust/TrustBoundImage";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { products } from "@/content/products";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
@@ -40,6 +40,20 @@ export default function ProductsPage() {
       />
 
       <Section>
+        {hubImages.length > 0 && (
+          <div className="mb-10 grid gap-4 sm:grid-cols-3">
+            {hubImages.map((img) => (
+              <TrustBoundImage
+                key={img.src}
+                image={img}
+                component="ProductsPage"
+                aspect="video"
+                priority
+              />
+            ))}
+          </div>
+        )}
+
         <div className="mb-10 rounded-lg border-2 border-[#2E7D9A] bg-[#2E7D9A]/5 p-6 md:p-8">
           <span className="text-xs font-bold uppercase tracking-wider text-[#2E7D9A]">
             Main Product Category
@@ -81,20 +95,6 @@ export default function ProductsPage() {
             href={sodiumSilicateLink.href}
           />
         </div>
-
-        {hubImages.length > 0 && (
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
-            {hubImages.map((img) => (
-              <LazyImage
-                key={img.src}
-                src={img.src}
-                alt={img.alt}
-                aspect="video"
-                className="rounded-lg border border-[#E2E6EA]"
-              />
-            ))}
-          </div>
-        )}
 
         <div className="mt-10">
           <TechnicalDocsBlock product={cat.inquiryProductName} />

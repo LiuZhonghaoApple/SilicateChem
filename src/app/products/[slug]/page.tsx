@@ -13,6 +13,7 @@ import { ProductConversionSections, StrongCTA } from "@/components/conversion/Pr
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { TrustLayer } from "@/components/trust/TrustLayer";
+import { ProductProofPanel } from "@/components/trust/ProductProofPanel";
 import { TrustStack } from "@/components/trust/TrustStack";
 import {
   productBreadcrumbs,
@@ -91,6 +92,17 @@ export default async function ProductPage({ params }: Props) {
 
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
+            {productImage && (
+              <div className="lg:hidden">
+                <LazyImage
+                  src={productImage.src}
+                  alt={productImage.alt}
+                  aspect="wide"
+                  priority
+                  className="rounded-lg border border-[#E2E6EA] mb-6"
+                />
+              </div>
+            )}
             <div>
               <SectionHeader title="Product Overview" />
               {product.description.map((p, i) => (
@@ -111,6 +123,8 @@ export default async function ProductPage({ params }: Props) {
             </div>
 
             <TrustLayer variant="product" product={product} />
+
+            <ProductProofPanel product={product} showHeader={false} className="mt-2" />
 
             <TrustStack compact className="mt-2" />
 
@@ -158,6 +172,7 @@ export default async function ProductPage({ params }: Props) {
               src={productImage.src}
               alt={productImage.alt}
               aspect="square"
+              priority
               className="rounded-lg border border-[#E2E6EA]"
             />
             {galleryImage && (

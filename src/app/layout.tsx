@@ -8,6 +8,8 @@ import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { ClarityScript } from "@/components/analytics/ClarityScript";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { OrganizationSchema } from "@/components/seo/JsonLd";
+import { ImageVisualDebugPanel } from "@/components/trust/ImageVisualDebugPanel";
+import { VisualTrustProvider } from "@/components/trust/VisualTrustProvider";
 import { SITE } from "@/lib/constants";
 import "./globals.css";
 
@@ -34,13 +36,16 @@ export default function RootLayout({
         <OrganizationSchema />
         <Header />
         <FastContactBar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <StickyQuoteBar />
-        <FloatingContactWidget />
-        <Suspense fallback={null}>
-          <PageViewTracker />
-        </Suspense>
+        <VisualTrustProvider>
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <StickyQuoteBar />
+          <FloatingContactWidget />
+          <Suspense fallback={null}>
+            <PageViewTracker />
+          </Suspense>
+          <ImageVisualDebugPanel />
+        </VisualTrustProvider>
       </body>
     </html>
   );

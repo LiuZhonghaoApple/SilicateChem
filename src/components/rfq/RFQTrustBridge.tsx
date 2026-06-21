@@ -1,4 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import type { UserSegment } from "@/lib/conversion/v5-segmentation-engine";
+import { trackRfqClick } from "@/lib/conversion/v5-feedback-tracker";
+import { trackOutcome } from "@/lib/conversion/v6-conversion-tracker";
+import type { UIVariant } from "@/lib/conversion/v6-types";
 
 export type RFQTrustBridgePageType = "homepage" | "product" | "export";
 
@@ -8,6 +14,8 @@ type Props = {
   product?: string;
   pageType: RFQTrustBridgePageType;
   className?: string;
+  segment?: UserSegment;
+  uiVariant?: UIVariant;
 };
 
 function technicalInquiryType(pageType: RFQTrustBridgePageType): InquiryType {
@@ -45,7 +53,13 @@ const BRIDGE_ACTIONS = [
   },
 ] as const;
 
-export function RFQTrustBridge({ product, pageType, className = "" }: Props) {
+export function RFQTrustBridge({
+  product,
+  pageType,
+  className = "",
+  segment,
+  uiVariant,
+}: Props) {
   return (
     <div
       className={`rounded-lg border border-[#0B2D5B]/15 bg-[#0B2D5B]/5 p-5 md:p-6 ${className}`}
@@ -66,6 +80,15 @@ export function RFQTrustBridge({ product, pageType, className = "" }: Props) {
             <Link
               key={action.id}
               href={href}
+              onClick={() => {
+                if (segment && action.id === "quote") {
+                  if (uiVariant) {
+                    trackOutcome("rfq_click", { segment, uiVariant });
+                  } else {
+                    trackRfqClick(segment);
+                  }
+                }
+              }}
               className={`inline-flex items-center justify-center rounded px-5 py-2.5 text-sm font-bold transition-colors ${
                 isPrimary
                   ? "bg-[#0B2D5B] text-white hover:bg-[#071F3F]"

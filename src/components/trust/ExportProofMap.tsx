@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/Section";
+import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
+import { getExportImages } from "@/content/site-images";
 import {
   EXPORT_COUNTRIES,
   EXPORT_DATA_DISCLAIMER,
@@ -155,6 +157,21 @@ export function ExportProofMap({
             </>
           )}
         </div>
+      </div>
+
+      <div className="mt-8">
+        <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
+          Export shipment visual proof
+        </p>
+        <DeploymentImageGrid
+          images={
+            variant === "preview"
+              ? getExportImages().slice(0, 3)
+              : getExportImages()
+          }
+          columns={variant === "preview" ? "sm:grid-cols-3" : "sm:grid-cols-3 lg:grid-cols-6"}
+          component="ExportProofMap"
+        />
       </div>
     </div>
   );

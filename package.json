@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "images:report": "python3 scripts/generate-image-deployment-report.mjs",
+    "visual-trust:reports": "python3 scripts/generate-visual-trust-reports.py",
+    "visual-images:report": "python3 scripts/generate-visual-usage-report.mjs",
+    "trust-images:report": "node scripts/generate-trust-image-binding-report.mjs"
   },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.8",

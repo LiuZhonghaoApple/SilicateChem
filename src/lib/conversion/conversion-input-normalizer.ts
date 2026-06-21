@@ -1,27 +1,35 @@
-import {
-  calculateRfqIntentScore,
-  type RfqIntentLevel,
-  type RfqIntentPageType,
-  type RfqIntentTrustBlock,
-} from "@/lib/rfq/rfq-intent-score";
+export type ConversionPageType = "homepage" | "product" | "export" | "about";
 
 export type UnifiedInput = {
   baseIntentScore: number;
-  pageType: RfqIntentPageType;
+  pageType: ConversionPageType;
   trustSignals: string[];
   engagementScore: number;
   productSignalStrength: number;
 };
 
 export type NormalizeConversionInputArgs = {
-  pageType: RfqIntentPageType;
+  pageType: ConversionPageType;
   rawScrollDepth: number;
   trustSignals: string[];
   productView: boolean;
-  legacyScore?: number;
-  legacyLevel?: RfqIntentLevel;
-  viewedTrustBlocks?: RfqIntentTrustBlock[];
 };
+
+const PAGE_BASE_SCORE: Record<ConversionPageType, number> = {
+  homepage: 30,
+  product: 55,
+  export: 45,
+  about: 20,
+};
+
+const TRUST_SIGNAL_BOOST: Record<string, number> = {
+  export: 10,
+  product: 15,
+  docs: 20,
+  factory: 10,
+};
+
+const MAX_ENGAGEMENT_SCORE = 30;
 
 function clampScore(score: number): number {
   if (Number.isNaN(score)) return 0;
@@ -34,66 +42,39 @@ function clampScrollDepth(scrollDepth: number): number {
   return scrollDepth;
 }
 
-function resolveLegacyIntent(args: NormalizeConversionInputArgs): {
-  score: number;
-  level: RfqIntentLevel;
-} {
-  if (args.legacyScore !== undefined && args.legacyLevel !== undefined) {
-    return {
-      score: clampScore(args.legacyScore),
-      level: args.legacyLevel,
-    };
-  }
-
-  if (args.viewedTrustBlocks) {
-    const intent = calculateRfqIntentScore({
-      pageType: args.pageType,
-      hasProduct: args.productView,
-      viewedTrustBlocks: args.viewedTrustBlocks,
-      scrollDepth: args.rawScrollDepth,
-    });
-    return { score: intent.score, level: intent.level };
-  }
-
-  return { score: 0, level: "low" };
+function deriveEngagementScore(rawScrollDepth: number): number {
+  return Math.min(MAX_ENGAGEMENT_SCORE, clampScrollDepth(rawScrollDepth) / 10);
 }
 
-function deriveProductSignalStrength(
-  productView: boolean,
-  trustSignals: string[]
-): number {
-  if (!productView) return 0;
-  const signals = new Set(trustSignals);
-  if (signals.has("product")) return 100;
-  return 60;
+function deriveProductSignalStrength(productView: boolean): number {
+  return productView ? 20 : 0;
+}
+
+function deriveBaseIntentScore(args: NormalizeConversionInputArgs): number {
+  let score = PAGE_BASE_SCORE[args.pageType];
+  const signals = new Set(args.trustSignals);
+
+  for (const [signal, bonus] of Object.entries(TRUST_SIGNAL_BOOST)) {
+    if (signals.has(signal)) score += bonus;
+  }
+
+  score += deriveEngagementScore(args.rawScrollDepth);
+  score += deriveProductSignalStrength(args.productView);
+
+  return clampScore(score);
 }
 
 /**
- * Pure input standardization — single normalized source for the conversion brain.
- * Legacy RFQ intent scoring is resolved here (not inside unifiedConversionBrain).
+ * V4 pure signal normalizer — no legacy RFQ scoring dependencies.
  */
 export function normalizeConversionInput(
   args: NormalizeConversionInputArgs
 ): UnifiedInput {
-  const legacy = resolveLegacyIntent(args);
-  void legacy.level;
-
   return {
-    baseIntentScore: clampScore(legacy.score),
+    baseIntentScore: deriveBaseIntentScore(args),
     pageType: args.pageType,
     trustSignals: [...args.trustSignals],
-    engagementScore: clampScrollDepth(args.rawScrollDepth),
-    productSignalStrength: deriveProductSignalStrength(
-      args.productView,
-      args.trustSignals
-    ),
+    engagementScore: deriveEngagementScore(args.rawScrollDepth),
+    productSignalStrength: deriveProductSignalStrength(args.productView),
   };
-}
-
-export function unifiedInputToLegacyLevel(
-  input: UnifiedInput
-): RfqIntentLevel {
-  if (input.baseIntentScore <= 39) return "low";
-  if (input.baseIntentScore <= 69) return "medium";
-  return "high";
 }

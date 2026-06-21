@@ -3,6 +3,11 @@ import type {
   FunnelState,
 } from "@/types/funnel";
 
+/**
+ * LEGACY ONLY — do not import from runtime conversion pipeline (V4+).
+ * Superseded by src/lib/conversion/unified-conversion-brain.ts
+ */
+
 function normalizeScore(score: number): number {
   if (score < 0) return 0;
   if (score > 100) return 100;

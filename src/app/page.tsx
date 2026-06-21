@@ -2,15 +2,11 @@ import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
-import { LazyImage } from "@/components/ui/LazyImage";
+import { TrustBoundImage } from "@/components/trust/TrustBoundImage";
 import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
 import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
 import { TrustLayer } from "@/components/trust/TrustLayer";
-import {
-  HomeProductTrustCards,
-  HomeTrustRfqBlock,
-} from "@/components/trust/HomeTrustSection";
 import { TrustStack } from "@/components/trust/TrustStack";
 import {
   HomepageHeroBackground,
@@ -46,7 +42,7 @@ export default function HomePage() {
     <>
       <section className="relative bg-[#0B2D5B] text-white overflow-hidden min-h-[420px]">
         <HomepageHeroBackground images={getHeroImages()} />
-        <div className="absolute inset-0 bg-[#0B2D5B]/75" />
+        <div className="absolute inset-0 bg-[#0B2D5B]/45" />
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#2E7D9A_25%,#2E7D9A_50%,transparent_50%,transparent_75%,#2E7D9A_75%)] bg-[length:40px_40px]" />
         </div>
@@ -67,6 +63,22 @@ export default function HomePage() {
           <PageCTAs product={cat.inquiryProductName} className="mt-8" light size="lg" />
         </div>
       </section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Factory & Production Proof"
+          subtitle="Real photos from Changyi, Shandong — factory exterior, production lines, and on-site operations."
+        />
+        <TrustBoundImage
+          image={factoryPreview}
+          component="LazyImage"
+          aspect="wide"
+          priority
+          wrapperClassName="mb-8"
+        />
+        <HomepageImageStrip images={getHomeProductionImages()} className="mb-10" />
+        <FactoryProofStack variant="compact" showHeader={false} />
+      </Section>
 
       <Section>
         <SectionHeader
@@ -89,22 +101,13 @@ export default function HomePage() {
           title="Why Zhongzhi"
           subtitle="Verified factory scale, partial export customs data, and product trust — factory-direct manufacturer in Changyi, Shandong."
         />
-        <LazyImage
-          src={factoryPreview.src}
-          alt={factoryPreview.alt}
-          aspect="wide"
-          className="mb-8 rounded-lg border border-[#E2E6EA]"
-        />
-        <HomepageImageStrip images={getHomeProductionImages()} className="mb-10" />
         <div className="space-y-12">
-          <FactoryProofStack variant="compact" showHeader={false} />
           <TrustLayer
             variant="homepage"
             product={products.find((p) => p.slug === "sodium-metasilicate-granules")}
+            inquiryProductName={cat.inquiryProductName}
           />
-          <HomeProductTrustCards />
           <TrustStack compact />
-          <HomeTrustRfqBlock product={cat.inquiryProductName} />
         </div>
       </Section>
 

@@ -1,6 +1,7 @@
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { LazyImage } from "@/components/ui/LazyImage";
+import { TrustBoundImage } from "@/components/trust/TrustBoundImage";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
 import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
@@ -28,22 +29,23 @@ export default function AboutPage() {
           { name: "About Us", url: `${SITE.url}/about` },
         ]}
       />
+      {hero && (
+        <Section className="pb-0">
+          <TrustBoundImage
+            image={hero}
+            component="LazyImage"
+            aspect="wide"
+            priority
+            wrapperClassName="mb-8"
+          />
+        </Section>
+      )}
+
       <PageHeader
         title="About Us"
         description={company.intro}
         breadcrumbs={[{ label: "About Us" }]}
       />
-
-      {hero && (
-        <Section>
-          <LazyImage
-            src={hero.src}
-            alt={hero.alt}
-            aspect="wide"
-            className="rounded-lg border border-[#E2E6EA]"
-          />
-        </Section>
-      )}
 
       <Section background={hero ? "grey" : undefined}>
         <div className="max-w-3xl">
@@ -59,7 +61,7 @@ export default function AboutPage() {
       {sectionImages.length > 0 && (
         <Section id="why-zhongzhi">
           <SectionHeader title="Why Zhongzhi" subtitle="Integrated manufacturing at our Changyi, Shandong facility." />
-          <DeploymentImageGrid images={sectionImages} columns="sm:grid-cols-2" />
+          <DeploymentImageGrid images={sectionImages} columns="sm:grid-cols-2" component="WhyZhongzhiBlock" />
         </Section>
       )}
 

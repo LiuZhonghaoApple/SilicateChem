@@ -6,21 +6,27 @@
         "alt": "Shandong sodium metasilicate factory \u2014 Slide 1",
         "section": "Hero Carousel",
         "block": "Slide 1",
-        "source": "01_001_bg5.jpg"
+        "source": "01_001_bg5.jpg",
+        "deployPath": "/images/home/hero-01.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/hero-02.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Slide 2",
         "section": "Hero Carousel",
         "block": "Slide 2",
-        "source": "01_002_bg6.jpg"
+        "source": "01_002_bg6.jpg",
+        "deployPath": "/images/home/hero-02.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/hero-03.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Slide 3",
         "section": "Hero Carousel",
         "block": "Slide 3",
-        "source": "01_003_bg7.jpg"
+        "source": "01_003_bg7.jpg",
+        "deployPath": "/images/home/hero-03.webp",
+        "page": "/"
       }
     ],
     "factoryPreview": {
@@ -28,7 +34,9 @@
       "alt": "Shandong sodium metasilicate factory \u2014 Factory Strength Preview: Main Image",
       "section": "Factory Strength Preview",
       "block": "Main Image",
-      "source": "01_006_16329042743366285.jpg"
+      "source": "01_006_16329042743366285.jpg",
+      "deployPath": "/images/home/factory-preview.webp",
+      "page": "/"
     },
     "production": [
       {
@@ -36,56 +44,72 @@
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 1",
         "section": "Production Gallery Preview",
         "block": "Tile 1",
-        "source": "02_001_page0.jpg"
+        "source": "02_001_page0.jpg",
+        "deployPath": "/images/home/production-01.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-02.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 2",
         "section": "Production Gallery Preview",
         "block": "Tile 2",
-        "source": "02_002_page1.jpg"
+        "source": "02_002_page1.jpg",
+        "deployPath": "/images/home/production-02.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-03.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 3",
         "section": "Production Gallery Preview",
         "block": "Tile 3",
-        "source": "02_012_16162246398341719.jpeg"
+        "source": "02_012_16162246398341719.jpeg",
+        "deployPath": "/images/home/production-03.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-04.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 4",
         "section": "Production Gallery Preview",
         "block": "Tile 4",
-        "source": "02_009_16162217587949232.jpeg"
+        "source": "02_009_16162217587949232.jpeg",
+        "deployPath": "/images/home/production-04.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-05.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 5",
         "section": "Production Gallery Preview",
         "block": "Tile 5",
-        "source": "02_027_small4_16267659221010678.jpg"
+        "source": "02_027_small4_16267659221010678.jpg",
+        "deployPath": "/images/home/production-05.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-06.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 6",
         "section": "Production Gallery Preview",
         "block": "Tile 6",
-        "source": "02_041_small4_16343720996033491.jpg"
+        "source": "02_041_small4_16343720996033491.jpg",
+        "deployPath": "/images/home/production-06.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-07.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 7",
         "section": "Production Gallery Preview",
         "block": "Tile 7",
-        "source": "02_043_small4_16343725423742841.jpg"
+        "source": "02_043_small4_16343725423742841.jpg",
+        "deployPath": "/images/home/production-07.webp",
+        "page": "/"
       },
       {
         "src": "/images/home/production-08.webp",
         "alt": "Shandong sodium metasilicate factory \u2014 Production Gallery Preview: Tile 8",
         "section": "Production Gallery Preview",
         "block": "Tile 8",
-        "source": "02_054_small4_16445404628714705.jpg"
+        "source": "02_054_small4_16445404628714705.jpg",
+        "deployPath": "/images/home/production-08.webp",
+        "page": "/"
       }
     ]
   },
@@ -95,21 +119,27 @@
       "alt": "Shandong Zhongzhi Chemical manufacturing site \u2014 Page Hero: Facility Exterior",
       "section": "Page Hero",
       "block": "Facility Exterior",
-      "source": "01_007_15823544068322767.jpg"
+      "source": "01_007_15823544068322767.jpg",
+      "deployPath": "/images/about/facility-exterior.webp",
+      "page": "/about"
     },
     {
       "src": "/images/about/production-line.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Why Zhongzhi: Production Line",
       "section": "Why Zhongzhi",
       "block": "Production Line",
-      "source": "02_016_16215641475584837.JPG"
+      "source": "02_016_16215641475584837.JPG",
+      "deployPath": "/images/about/production-line.webp",
+      "page": "/about"
     },
     {
       "src": "/images/about/plant-operations.webp",
       "alt": "Shandong Zhongzhi Chemical manufacturing site \u2014 Company History: Plant Operations",
       "section": "Company History",
       "block": "Plant Operations",
-      "source": "02_039_16278062873775663.JPG"
+      "source": "02_039_16278062873775663.JPG",
+      "deployPath": "/images/about/plant-operations.webp",
+      "page": "/about"
     }
   ],
   "factory": [
@@ -118,70 +148,90 @@
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 1",
       "section": "Production Gallery",
       "block": "Line 1",
-      "source": "02_005_16162085326335340.jpg"
+      "source": "02_005_16162085326335340.jpg",
+      "deployPath": "/images/factory/line-01.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-02.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 2",
       "section": "Production Gallery",
       "block": "Line 2",
-      "source": "02_006_16162106174389936.JPG"
+      "source": "02_006_16162106174389936.JPG",
+      "deployPath": "/images/factory/line-02.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-03.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 3",
       "section": "Production Gallery",
       "block": "Line 3",
-      "source": "02_007_16162186764949690.jpg"
+      "source": "02_007_16162186764949690.jpg",
+      "deployPath": "/images/factory/line-03.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-04.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 4",
       "section": "Production Gallery",
       "block": "Line 4",
-      "source": "02_008_16162210042604795.jpg"
+      "source": "02_008_16162210042604795.jpg",
+      "deployPath": "/images/factory/line-04.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-05.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 5",
       "section": "Production Gallery",
       "block": "Line 5",
-      "source": "02_010_16162239026824232.png"
+      "source": "02_010_16162239026824232.png",
+      "deployPath": "/images/factory/line-05.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-06.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 6",
       "section": "Production Gallery",
       "block": "Line 6",
-      "source": "02_011_16162241972178251.JPG"
+      "source": "02_011_16162241972178251.JPG",
+      "deployPath": "/images/factory/line-06.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-07.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 7",
       "section": "Production Gallery",
       "block": "Line 7",
-      "source": "02_013_16210694848023664.jpg"
+      "source": "02_013_16210694848023664.jpg",
+      "deployPath": "/images/factory/line-07.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-08.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 8",
       "section": "Production Gallery",
       "block": "Line 8",
-      "source": "02_014_16210704137023908.jpg"
+      "source": "02_014_16210704137023908.jpg",
+      "deployPath": "/images/factory/line-08.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/line-09.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Production Gallery: Line 9",
       "section": "Production Gallery",
       "block": "Line 9",
-      "source": "02_015_16210708579051573.JPG"
+      "source": "02_015_16210708579051573.JPG",
+      "deployPath": "/images/factory/line-09.webp",
+      "page": "/factory"
     },
     {
       "src": "/images/factory/warehouse-staging.webp",
       "alt": "Sodium metasilicate production facility Changyi Shandong \u2014 Warehouse Gallery: Staging",
       "section": "Warehouse Gallery",
       "block": "Staging",
-      "source": "02_040_16304777291299482.JPG"
+      "source": "02_040_16304777291299482.JPG",
+      "deployPath": "/images/factory/warehouse-staging.webp",
+      "page": "/factory"
     }
   ],
   "products": [
@@ -190,98 +240,126 @@
       "alt": "Shandong inorganic silicate manufacturing \u2014 Hero",
       "section": "Sodium Metasilicate Hub",
       "block": "Hero",
-      "source": "04_056_16221816453945814.JPG"
+      "source": "04_056_16221816453945814.JPG",
+      "deployPath": "/images/products/product-01.webp",
+      "page": "/products/sodium-metasilicate"
     },
     {
       "src": "/images/products/product-02.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Hero",
       "section": "Granules",
       "block": "Hero",
-      "source": "04_057_16227038236233579.JPG"
+      "source": "04_057_16227038236233579.JPG",
+      "deployPath": "/images/products/product-02.webp",
+      "page": "/products/sodium-metasilicate-granules"
     },
     {
       "src": "/images/products/product-03.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Granules: Gallery",
       "section": "Granules",
       "block": "Gallery",
-      "source": "04_066_16234597752787717.jpg"
+      "source": "04_066_16234597752787717.jpg",
+      "deployPath": "/images/products/product-03.webp",
+      "page": "/products/sodium-metasilicate-granules"
     },
     {
       "src": "/images/products/product-04.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Hero",
       "section": "Anhydrous",
       "block": "Hero",
-      "source": "04_103_16247821264455442.JPG"
+      "source": "04_103_16247821264455442.JPG",
+      "deployPath": "/images/products/product-04.webp",
+      "page": "/products/sodium-metasilicate-anhydrous"
     },
     {
       "src": "/images/products/product-05.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Anhydrous: Gallery",
       "section": "Anhydrous",
       "block": "Gallery",
-      "source": "04_104_16247840484087400.JPG"
+      "source": "04_104_16247840484087400.JPG",
+      "deployPath": "/images/products/product-05.webp",
+      "page": "/products/sodium-metasilicate-anhydrous"
     },
     {
       "src": "/images/products/product-06.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Hero",
       "section": "Pentahydrate",
       "block": "Hero",
-      "source": "04_105_16313411267425459.jpg"
+      "source": "04_105_16313411267425459.jpg",
+      "deployPath": "/images/products/product-06.webp",
+      "page": "/products/sodium-metasilicate-pentahydrate"
     },
     {
       "src": "/images/products/product-07.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Pentahydrate: Gallery",
       "section": "Pentahydrate",
       "block": "Gallery",
-      "source": "04_106_16313422112909253.JPG"
+      "source": "04_106_16313422112909253.JPG",
+      "deployPath": "/images/products/product-07.webp",
+      "page": "/products/sodium-metasilicate-pentahydrate"
     },
     {
       "src": "/images/products/product-08.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Hero",
       "section": "Sodium Silicate",
       "block": "Hero",
-      "source": "04_107_16373734318357374.JPG"
+      "source": "04_107_16373734318357374.JPG",
+      "deployPath": "/images/products/product-08.webp",
+      "page": "/products/sodium-silicate"
     },
     {
       "src": "/images/products/product-09.webp",
       "alt": "Shandong inorganic silicate manufacturing \u2014 Sodium Silicate: Gallery",
       "section": "Sodium Silicate",
       "block": "Gallery",
-      "source": "04_108_16450878333085172.JPG"
+      "source": "04_108_16450878333085172.JPG",
+      "deployPath": "/images/products/product-09.webp",
+      "page": "/products/sodium-silicate"
     },
     {
       "src": "/images/products/product-10.webp",
       "alt": "Sodium metasilicate product \u2014 Products Hub: Grid 1",
       "section": "Products Hub",
       "block": "Grid 1",
-      "source": "04_110_16541375837371763.JPG"
+      "source": "04_110_16541375837371763.JPG",
+      "deployPath": "/images/products/product-10.webp",
+      "page": "/products"
     },
     {
       "src": "/images/products/product-11.webp",
       "alt": "Sodium metasilicate product \u2014 Products Hub: Grid 2",
       "section": "Products Hub",
       "block": "Grid 2",
-      "source": "04_041_small4_16343453454845869.jpg"
+      "source": "04_041_small4_16343453454845869.jpg",
+      "deployPath": "/images/products/product-11.webp",
+      "page": "/products"
     },
     {
       "src": "/images/products/product-12.webp",
       "alt": "Sodium metasilicate product \u2014 Products Hub: Grid 3",
       "section": "Products Hub",
       "block": "Grid 3",
-      "source": "04_043_small4_16343473835112699.jpg"
+      "source": "04_043_small4_16343473835112699.jpg",
+      "deployPath": "/images/products/product-12.webp",
+      "page": "/products"
     },
     {
       "src": "/images/products/product-13.webp",
       "alt": "Sodium metasilicate industrial application \u2014 Applications Hub: Grid 4",
       "section": "Applications Hub",
       "block": "Grid 4",
-      "source": "04_047_small4_16343726808472731.jpg"
+      "source": "04_047_small4_16343726808472731.jpg",
+      "deployPath": "/images/products/product-13.webp",
+      "page": "/applications"
     },
     {
       "src": "/images/products/product-14.webp",
       "alt": "Sodium metasilicate industrial application \u2014 Applications Hub: Grid 5",
       "section": "Applications Hub",
       "block": "Grid 5",
-      "source": "04_109_16472273299248778.jpeg"
+      "source": "04_109_16472273299248778.jpeg",
+      "deployPath": "/images/products/product-14.webp",
+      "page": "/applications"
     }
   ],
   "export": {
@@ -291,21 +369,27 @@
         "alt": "Sodium metasilicate export \u2014 Warehouse Staging at Changyi Shandong plant",
         "section": "Packaging & Logistics",
         "block": "Warehouse Staging",
-        "source": "02_050_16394414613759733.jpg"
+        "source": "02_050_16394414613759733.jpg",
+        "deployPath": "/images/export/warehouse-staging.webp",
+        "page": "/export"
       },
       {
         "src": "/images/export/bagged-product-01.webp",
         "alt": "Sodium metasilicate export \u2014 Bagged Product 1 at Changyi Shandong plant",
         "section": "Packaging & Logistics",
         "block": "Bagged Product 1",
-        "source": "02_055_16452309401132077.JPG"
+        "source": "02_055_16452309401132077.JPG",
+        "deployPath": "/images/export/bagged-product-01.webp",
+        "page": "/export"
       },
       {
         "src": "/images/export/bagged-product-02.webp",
         "alt": "Sodium metasilicate export \u2014 Bagged Product 2 at Changyi Shandong plant",
         "section": "Packaging & Logistics",
         "block": "Bagged Product 2",
-        "source": "02_056_16455956483127332.jpg"
+        "source": "02_056_16455956483127332.jpg",
+        "deployPath": "/images/export/bagged-product-02.webp",
+        "page": "/export"
       }
     ],
     "shipping": [
@@ -314,21 +398,27 @@
         "alt": "Sodium metasilicate export \u2014 Export Loading 1 at Changyi Shandong plant",
         "section": "Port & Shipping",
         "block": "Export Loading 1",
-        "source": "02_057_16530072996455366.JPG"
+        "source": "02_057_16530072996455366.JPG",
+        "deployPath": "/images/export/export-loading-01.webp",
+        "page": "/export"
       },
       {
         "src": "/images/export/export-loading-02.webp",
         "alt": "Sodium metasilicate export \u2014 Export Loading 2 at Changyi Shandong plant",
         "section": "Port & Shipping",
         "block": "Export Loading 2",
-        "source": "02_058_16541395155275572.jpg"
+        "source": "02_058_16541395155275572.jpg",
+        "deployPath": "/images/export/export-loading-02.webp",
+        "page": "/export"
       },
       {
         "src": "/images/export/export-loading-03.webp",
         "alt": "Sodium metasilicate export \u2014 Export Loading 3 at Changyi Shandong plant",
         "section": "Port & Shipping",
         "block": "Export Loading 3",
-        "source": "02_059_16541524563712080.JPG"
+        "source": "02_059_16541524563712080.JPG",
+        "deployPath": "/images/export/export-loading-03.webp",
+        "page": "/export"
       }
     ]
   },

@@ -26,7 +26,7 @@ export function FactoryImageGallery({
           subtitle="On-site production line, warehouse staging, and manufacturing equipment at Changyi, Shandong."
         />
       )}
-      <DeploymentImageGrid images={galleryImages} />
+      <DeploymentImageGrid images={galleryImages} component="FactoryImageGallery" />
       <p className="mt-6 text-sm text-[#5A6570]">
         Factory inspection and video walkthrough available on request for qualified buyers.
       </p>

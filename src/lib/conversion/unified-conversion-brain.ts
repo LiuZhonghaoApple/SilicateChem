@@ -1,98 +1,63 @@
-import type { RfqIntentLevel } from "@/lib/rfq/rfq-intent-score";
 import type { UnifiedInput } from "@/lib/conversion/conversion-input-normalizer";
 
-export type ConversionMode = "trust" | "nurture" | "convert";
+export type ConversionFunnelStage = "awareness" | "consideration" | "conversion";
 
-export type ConversionIntensity = "low" | "medium" | "high";
+export type ConversionBannerPriority = "high" | "low" | "none";
 
-export type ConversionPrimaryCTA = "none" | "rfq" | "quote" | "contact";
-
-export type ConversionOutput = {
-  mode: ConversionMode;
-  intensity: ConversionIntensity;
-  primaryCTA: ConversionPrimaryCTA;
+export type ConversionDecision = {
   showTrust: boolean;
+  showProduct: boolean;
   showRFQ: boolean;
   showQuoteCTA: boolean;
-  confidence: number;
-};
-
-const TRUST_SIGNAL_BOOST: Record<string, number> = {
-  export: 10,
-  product: 15,
-  docs: 20,
-  factory: 10,
+  bannerPriority: ConversionBannerPriority;
+  funnelStage: ConversionFunnelStage;
 };
 
 function clampScore(score: number): number {
   return Math.max(0, Math.min(100, Math.round(score)));
 }
 
-function scoreToLevel(score: number): RfqIntentLevel {
-  if (score <= 39) return "low";
-  if (score <= 69) return "medium";
-  return "high";
-}
-
-function applyTrustBoost(input: UnifiedInput): number {
-  let score = input.baseIntentScore;
-  const signals = new Set(input.trustSignals);
-
-  for (const [signal, bonus] of Object.entries(TRUST_SIGNAL_BOOST)) {
-    if (signals.has(signal)) score += bonus;
-  }
-
-  score += input.engagementScore / 10;
-  score += input.productSignalStrength / 20;
-
-  return clampScore(score);
+function hasProductSignal(input: UnifiedInput): boolean {
+  return input.productSignalStrength > 0 && input.trustSignals.includes("product");
 }
 
 /**
- * V3 unified conversion decision engine — accepts UnifiedInput only.
+ * V4 unified conversion decision engine — UnifiedInput only.
  */
-export function unifiedConversionBrain(input: UnifiedInput): ConversionOutput {
+export function unifiedConversionBrain(input: UnifiedInput): ConversionDecision {
   void input.pageType;
 
-  const adjustedScore = applyTrustBoost(input);
-  const adjustedLevel = scoreToLevel(adjustedScore);
-  const baseLevel = scoreToLevel(input.baseIntentScore);
+  const score = clampScore(input.baseIntentScore);
 
-  // RULE 1 — HIGH INTENT (strict priority)
-  if (adjustedScore >= 70 || baseLevel === "high" || adjustedLevel === "high") {
+  if (score >= 70) {
     return {
-      mode: "convert",
-      intensity: "high",
-      primaryCTA: "rfq",
       showTrust: true,
+      showProduct: hasProductSignal(input),
       showRFQ: true,
       showQuoteCTA: false,
-      confidence: adjustedScore,
+      bannerPriority: "high",
+      funnelStage: "conversion",
     };
   }
 
-  // RULE 2 — MID INTENT
-  if (adjustedScore >= 40 && adjustedScore <= 69) {
+  if (score >= 40) {
     return {
-      mode: "nurture",
-      intensity: "medium",
-      primaryCTA: "quote",
       showTrust: true,
+      showProduct: hasProductSignal(input),
       showRFQ: false,
       showQuoteCTA: true,
-      confidence: adjustedScore,
+      bannerPriority: "low",
+      funnelStage: "consideration",
     };
   }
 
-  // RULE 3 — LOW INTENT
   return {
-    mode: "trust",
-    intensity: "low",
-    primaryCTA: "none",
     showTrust: true,
+    showProduct: hasProductSignal(input),
     showRFQ: false,
     showQuoteCTA: false,
-    confidence: adjustedScore,
+    bannerPriority: "none",
+    funnelStage: "awareness",
   };
 }
 

@@ -1,13 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import type { RfqIntentPageType } from "@/lib/rfq/rfq-intent-score";
+import type { ConversionPageType } from "@/lib/conversion/conversion-input-normalizer";
 
 export type AutoRFQTriggerMode = "high-intent" | "soft-intent";
 
 export type AutoRFQTriggerInput = {
   score: number;
-  pageType: RfqIntentPageType;
+  pageType: ConversionPageType;
   product?: string;
 };
 
@@ -16,7 +16,7 @@ export type AutoRFQTriggerState =
   | { showRFQBanner: false; mode?: undefined };
 
 /**
- * Maps RFQ intent score to UI trigger flags only — no side effects.
+ * LEGACY ONLY — superseded by useConversionBrain (V4).
  */
 export function useAutoRFQTrigger({
   score,

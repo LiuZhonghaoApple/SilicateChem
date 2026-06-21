@@ -18,7 +18,7 @@ export function ExportPackagingProof({ className = "" }: { className?: string })
           </li>
         ))}
       </ul>
-      <DeploymentImageGrid images={siteImages.export.packaging} />
+      <DeploymentImageGrid images={siteImages.export.packaging} component="ExportPackagingProof" />
     </div>
   );
 }

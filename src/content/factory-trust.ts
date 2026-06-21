@@ -1,5 +1,5 @@
 import { SITE } from "@/lib/constants";
-import { REAL_ASSETS, FACTORY_IMAGE_BASE } from "@/lib/trust/image-strategy";
+import { REAL_ASSETS } from "@/lib/trust/image-strategy";
 
 export type FactoryTrustItem = {
   title: string;
@@ -119,10 +119,10 @@ export const factoryTrustSections = [
 
 export const factoryGalleryImages = REAL_ASSETS.map((asset) => ({
   category: asset.sectionLabel,
-  filename: asset.filename,
+  filename: asset.id,
   alt: asset.alt,
   caption: asset.caption,
   description: asset.description,
 }));
 
-export const FACTORY_IMAGE_PATH = FACTORY_IMAGE_BASE;
+export const FACTORY_IMAGE_PATH = "/images/factory";

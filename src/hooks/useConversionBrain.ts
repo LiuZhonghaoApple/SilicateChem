@@ -3,60 +3,77 @@
 import { useMemo } from "react";
 import {
   normalizeConversionInput,
-  unifiedInputToLegacyLevel,
+  type ConversionPageType,
 } from "@/lib/conversion/conversion-input-normalizer";
+import { unifiedConversionBrain } from "@/lib/conversion/unified-conversion-brain";
 import {
-  unifiedConversionBrain,
-  type ConversionOutput,
-} from "@/lib/conversion/unified-conversion-brain";
-import { calculateFunnelState } from "@/lib/funnel/funnel-optimizer";
-import type { RfqIntentPageType, RfqIntentTrustBlock } from "@/lib/rfq/rfq-intent-score";
-import type { FunnelTrustSignal } from "@/types/funnel";
+  calculateUserSegment,
+  type V5Decision,
+} from "@/lib/conversion/v5-segmentation-engine";
 
 export type UseConversionBrainInput = {
-  pageType: RfqIntentPageType;
+  pageType: ConversionPageType;
   trustSignals: string[];
-  viewedTrustBlocks: RfqIntentTrustBlock[];
   scrollDepth: number;
   hasProductView: boolean;
+  productViews?: number;
+  exportPageViewed?: boolean;
+  timeOnSite?: number;
+  adaptiveWeighting?: boolean;
 };
 
-export type ConversionBrainUIState = ConversionOutput;
+export type { V5Decision };
 
 /**
- * V3 conversion hook — normalizes input, then delegates to unifiedConversionBrain only.
+ * V5 conversion hook — normalize → V4 brain → V5 segment → UI decision.
  */
-export function useConversionBrain({
-  pageType,
-  trustSignals,
-  viewedTrustBlocks,
-  scrollDepth,
-  hasProductView,
-}: UseConversionBrainInput): ConversionBrainUIState {
+export function useConversionBrain(input: UseConversionBrainInput): V5Decision {
   return useMemo(() => {
     const unified = normalizeConversionInput({
-      pageType,
-      rawScrollDepth: scrollDepth,
-      trustSignals,
-      productView: hasProductView,
-      viewedTrustBlocks,
+      pageType: input.pageType,
+      rawScrollDepth: input.scrollDepth,
+      trustSignals: input.trustSignals,
+      productView: input.hasProductView,
     });
 
-    // Legacy funnel layer — backward compatibility only (side-effect free)
-    calculateFunnelState({
+    const v4 = unifiedConversionBrain(unified);
+
+    const productViews =
+      input.productViews ?? (input.hasProductView ? 1 : 0);
+    const exportPageViewed =
+      input.exportPageViewed ??
+      (input.pageType === "export" || input.trustSignals.includes("export"));
+    const timeOnSite = input.timeOnSite ?? 0;
+
+    const decision = calculateUserSegment({
       rfqScore: unified.baseIntentScore,
-      rfqLevel: unifiedInputToLegacyLevel(unified),
-      trustSignals: trustSignals as FunnelTrustSignal[],
-      pageType,
-      hasProductView,
+      funnelStage: v4.funnelStage,
+      trustSignals: input.trustSignals,
+      productViews,
+      exportPageViewed,
+      scrollDepth: input.scrollDepth,
+      timeOnSite,
+      adaptiveWeighting: input.adaptiveWeighting,
     });
 
-    return unifiedConversionBrain(unified);
+    if (process.env.NODE_ENV === "development") {
+      console.log("[V5 SEGMENT]", {
+        segment: decision.segment,
+        rfqScore: unified.baseIntentScore,
+        productViews,
+        exportPageViewed,
+      });
+    }
+
+    return decision;
   }, [
-    pageType,
-    trustSignals,
-    viewedTrustBlocks,
-    scrollDepth,
-    hasProductView,
+    input.pageType,
+    input.trustSignals,
+    input.scrollDepth,
+    input.hasProductView,
+    input.productViews,
+    input.exportPageViewed,
+    input.timeOnSite,
+    input.adaptiveWeighting,
   ]);
 }

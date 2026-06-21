@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { LazyImage } from "@/components/ui/LazyImage";
+import { useEffect, useState } from "react";
+import { ImageDebugWrapper, logImageMount } from "@/components/ui/ImageDebugWrapper";
+import { VisualTrustImage } from "@/components/trust/VisualTrustImage";
+import { useVisualTrustContext } from "@/components/trust/VisualTrustProvider";
 import type { ImageEntry } from "@/content/site-images";
 
 type Props = {
@@ -10,20 +12,48 @@ type Props = {
   priority?: boolean;
 };
 
-/** Rotates through hero banner images without changing page copy. */
+/** Rotates through all hero banner images — every slide stays mounted in the DOM. */
 export function HomepageHeroBackground({ images, className = "" }: Props) {
-  const [index] = useState(0);
-  const entry = images[index] ?? images[0];
+  const [index, setIndex] = useState(0);
+  const { trackImageView } = useVisualTrustContext();
 
-  if (!entry) return null;
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % images.length);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [images.length]);
+
+  if (images.length === 0) return null;
 
   return (
-    <LazyImage
-      src={entry.src}
-      alt={entry.alt}
-      priority
-      className={`absolute inset-0 h-full w-full object-cover ${className}`}
-    />
+    <div className={`absolute inset-0 ${className}`} aria-hidden="true">
+      {images.map((entry, i) => {
+        logImageMount(entry.src, "HomepageHeroBackground", entry.page);
+        return (
+          <ImageDebugWrapper
+            key={entry.src}
+            src={entry.src}
+            component="HomepageHeroBackground"
+            page={entry.page}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              i === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <VisualTrustImage
+              src={entry.src}
+              alt={entry.alt}
+              priority={i === 0}
+              trustKind="factory"
+              onTrustView={trackImageView}
+              className="absolute inset-0 h-full w-full object-cover"
+              aspect="auto"
+            />
+          </ImageDebugWrapper>
+        );
+      })}
+    </div>
   );
 }
 
@@ -31,19 +61,32 @@ export function HomepageImageStrip({
   images,
   className = "",
 }: Omit<Props, "priority">) {
+  const { trackImageView } = useVisualTrustContext();
+
   if (images.length === 0) return null;
 
   return (
     <div className={`grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 ${className}`}>
-      {images.map((entry) => (
-        <LazyImage
-          key={entry.src}
-          src={entry.src}
-          alt={entry.alt}
-          aspect="video"
-          className="rounded-lg border border-[#E2E6EA]"
-        />
-      ))}
+      {images.map((entry) => {
+        logImageMount(entry.src, "HomepageImageStrip", entry.page);
+        return (
+          <ImageDebugWrapper
+            key={entry.src}
+            src={entry.src}
+            component="HomepageImageStrip"
+            page={entry.page}
+          >
+            <VisualTrustImage
+              src={entry.src}
+              alt={entry.alt}
+              aspect="video"
+              trustKind="factory"
+              onTrustView={trackImageView}
+              className="rounded-lg border border-[#E2E6EA]"
+            />
+          </ImageDebugWrapper>
+        );
+      })}
     </div>
   );
 }
@@ -52,24 +95,38 @@ export function DeploymentImageGrid({
   images,
   className = "",
   columns = "sm:grid-cols-2 lg:grid-cols-3",
+  component = "DeploymentImageGrid",
 }: {
   images: ImageEntry[];
   className?: string;
   columns?: string;
+  component?: string;
 }) {
+  const { trackImageView } = useVisualTrustContext();
+
   if (images.length === 0) return null;
 
   return (
     <div className={`grid gap-4 ${columns} ${className}`}>
-      {images.map((entry) => (
-        <LazyImage
-          key={entry.src}
-          src={entry.src}
-          alt={entry.alt}
-          aspect="video"
-          className="rounded-lg border border-[#E2E6EA]"
-        />
-      ))}
+      {images.map((entry) => {
+        logImageMount(entry.src, component, entry.page);
+        return (
+          <ImageDebugWrapper
+            key={entry.src}
+            src={entry.src}
+            component={component}
+            page={entry.page}
+          >
+            <VisualTrustImage
+              src={entry.src}
+              alt={entry.alt}
+              aspect="video"
+              onTrustView={trackImageView}
+              className="rounded-lg border border-[#E2E6EA]"
+            />
+          </ImageDebugWrapper>
+        );
+      })}
     </div>
   );
 }

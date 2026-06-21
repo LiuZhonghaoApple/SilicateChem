@@ -6,8 +6,10 @@ import { ExportProofMap } from "@/components/trust/ExportProofMap";
 import { ExportShipmentEvidence } from "@/components/trust/ExportShipmentEvidence";
 import { ExportPackagingProof } from "@/components/trust/ExportPackagingProof";
 import { ExportLogisticsCapability } from "@/components/trust/ExportLogisticsCapability";
+import { PageVisualBanner, PageVisualGrid } from "@/components/trust/PageVisualBanner";
 import { TechnicalDocsBlock } from "@/components/trust/TechnicalDocsBlock";
 import { TrustStack } from "@/components/trust/TrustStack";
+import { getExportShippingImages, getExportPackagingImages } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -19,6 +21,9 @@ export const metadata = createMetadata({
 });
 
 export default function ExportPage() {
+  const shipping = getExportShippingImages();
+  const packaging = getExportPackagingImages();
+
   return (
     <>
       <BreadcrumbSchema
@@ -43,6 +48,20 @@ export default function ExportPage() {
           </p>
         </div>
       </div>
+
+      <Section className="pt-8 pb-0">
+        <PageVisualBanner
+          image={shipping[0]!}
+          component="ExportPageHero"
+          priority
+          className="mb-6"
+        />
+        <PageVisualGrid
+          images={[...shipping.slice(1), ...packaging.slice(0, 2)]}
+          component="ExportPageAboveFold"
+          columns="grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+        />
+      </Section>
 
       {/* 2. Export Map */}
       <Section id="export-markets">

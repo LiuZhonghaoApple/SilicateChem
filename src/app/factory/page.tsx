@@ -4,7 +4,9 @@ import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { FactoryImageGallery } from "@/components/trust/FactoryImageGallery";
 import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
+import { PageVisualBanner, PageVisualGrid } from "@/components/trust/PageVisualBanner";
 import { TrustStack } from "@/components/trust/TrustStack";
+import { getFactoryGalleryImages } from "@/content/site-images";
 import {
   exportCapability,
   qualityControlSystem,
@@ -21,6 +23,10 @@ export const metadata = createMetadata({
 });
 
 export default function FactoryPage() {
+  const gallery = getFactoryGalleryImages();
+  const heroImage = gallery[0]!;
+  const aboveFoldGallery = gallery.slice(0, 3);
+
   return (
     <>
       <BreadcrumbSchema
@@ -53,6 +59,20 @@ export default function FactoryPage() {
           </div>
         </div>
       </div>
+
+      <Section className="pt-8 pb-0">
+        <PageVisualBanner
+          image={heroImage}
+          component="FactoryPageHero"
+          priority
+          className="mb-6"
+        />
+        <PageVisualGrid
+          images={aboveFoldGallery}
+          component="FactoryPageAboveFold"
+          columns="grid-cols-1 sm:grid-cols-3"
+        />
+      </Section>
 
       <Section>
         <SectionHeader

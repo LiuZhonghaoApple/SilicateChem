@@ -3,6 +3,7 @@ import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { CertificatePlaceholder } from "@/components/trust/CertificatePlaceholder";
+import { CertificateSection } from "@/components/trust/CertificateSection";
 import { TrustStack } from "@/components/trust/TrustStack";
 import {
   ASSOCIATION_MEMBERSHIP,
@@ -52,6 +53,10 @@ export default function CertificationsPage() {
           subtitle="How factory, export, product, and compliance signals connect."
         />
         <TrustStack />
+      </Section>
+
+      <Section id="certificate-gallery">
+        <CertificateSection />
       </Section>
 
       <Section background="grey" id="industry-honors">

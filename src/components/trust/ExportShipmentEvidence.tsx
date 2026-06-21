@@ -1,8 +1,10 @@
 import { SectionHeader } from "@/components/ui/Section";
+import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import {
   EXPORT_SHIPMENT_STATS,
   EXPORT_DATA_DISCLAIMER,
 } from "@/content/trust/export-countries";
+import { siteImages } from "@/content/site-images";
 
 export function ExportShipmentEvidence({ className = "" }: { className?: string }) {
   const stats = [
@@ -56,6 +58,16 @@ export function ExportShipmentEvidence({ className = "" }: { className?: string 
           HS code 283911 series and CAS-identified product descriptions in customs goods fields.
         </li>
       </ul>
+      <div className="mt-8">
+        <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
+          Documented export loading
+        </p>
+        <DeploymentImageGrid
+          images={siteImages.export.shipping}
+          columns="sm:grid-cols-3"
+          component="ExportShipmentEvidence"
+        />
+      </div>
     </div>
   );
 }

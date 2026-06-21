@@ -1,3 +1,8 @@
+/**
+ * LEGACY ONLY — do not import from runtime conversion pipeline (V4+).
+ * Superseded by src/lib/conversion/conversion-input-normalizer.ts
+ */
+
 export type RfqIntentPageType = "homepage" | "product" | "export" | "about";
 
 export type RfqIntentLevel = "low" | "medium" | "high";
