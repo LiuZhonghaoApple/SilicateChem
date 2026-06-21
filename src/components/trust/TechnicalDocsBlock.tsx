@@ -57,11 +57,6 @@ export function TechnicalDocsBlock({
                   <p className="mt-2 text-sm text-[#5A6570] leading-relaxed">
                     {doc.description}
                   </p>
-                  {type === "COA" && doc.fields && (
-                    <p className="mt-2 text-xs text-[#5A6570]">
-                      Typical fields on request: {doc.fields.join(", ")}.
-                    </p>
-                  )}
                   <p className="mt-2 text-xs text-[#5A6570]">
                     Applies to: {doc.applicableProducts.join(", ")}.
                   </p>
