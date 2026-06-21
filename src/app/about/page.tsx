@@ -1,8 +1,11 @@
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
+import { LazyImage } from "@/components/ui/LazyImage";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
+import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import { company } from "@/content/company";
+import { getAboutImages } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -13,6 +16,10 @@ export const metadata = createMetadata({
 });
 
 export default function AboutPage() {
+  const aboutImages = getAboutImages();
+  const hero = aboutImages[0];
+  const sectionImages = aboutImages.slice(1);
+
   return (
     <>
       <BreadcrumbSchema
@@ -27,7 +34,18 @@ export default function AboutPage() {
         breadcrumbs={[{ label: "About Us" }]}
       />
 
-      <Section>
+      {hero && (
+        <Section>
+          <LazyImage
+            src={hero.src}
+            alt={hero.alt}
+            aspect="wide"
+            className="rounded-lg border border-[#E2E6EA]"
+          />
+        </Section>
+      )}
+
+      <Section background={hero ? "grey" : undefined}>
         <div className="max-w-3xl">
           <SectionHeader title="Company Background" />
           {company.history.map((p, i) => (
@@ -37,6 +55,13 @@ export default function AboutPage() {
           ))}
         </div>
       </Section>
+
+      {sectionImages.length > 0 && (
+        <Section id="why-zhongzhi">
+          <SectionHeader title="Why Zhongzhi" subtitle="Integrated manufacturing at our Changyi, Shandong facility." />
+          <DeploymentImageGrid images={sectionImages} columns="sm:grid-cols-2" />
+        </Section>
+      )}
 
       <Section background="grey">
         <SectionHeader title="Our Commitment" subtitle={company.mission} />

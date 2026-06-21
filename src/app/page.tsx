@@ -15,10 +15,9 @@ import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import {
-  getHeroImage,
+  getHeroImages,
   getHomeFactoryImage,
   getHomeProductionImages,
-  siteImages,
 } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
@@ -35,13 +34,12 @@ export const metadata = createMetadata({
 const cat = sodiumMetasilicateCategory;
 
 export default function HomePage() {
+  const factoryPreview = getHomeFactoryImage();
+
   return (
     <>
       <section className="relative bg-[#0B2D5B] text-white overflow-hidden min-h-[420px]">
-        <HomepageHeroBackground
-          images={siteImages.hero.length > 0 ? siteImages.hero : [getHeroImage()]}
-          alt="Shandong sodium metasilicate manufacturing facility"
-        />
+        <HomepageHeroBackground images={getHeroImages()} />
         <div className="absolute inset-0 bg-[#0B2D5B]/75" />
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#2E7D9A_25%,#2E7D9A_50%,transparent_50%,transparent_75%,#2E7D9A_75%)] bg-[length:40px_40px]" />
@@ -82,16 +80,12 @@ export default function HomePage() {
 
       <Section background="grey">
         <LazyImage
-          src={getHomeFactoryImage()}
-          alt="Sodium metasilicate factory exterior and production site in Shandong, China"
+          src={factoryPreview.src}
+          alt={factoryPreview.alt}
           aspect="wide"
           className="mb-8 rounded-lg border border-[#E2E6EA]"
         />
-        <HomepageImageStrip
-          images={getHomeProductionImages()}
-          alt="Sodium metasilicate production line and manufacturing equipment"
-          className="mb-8"
-        />
+        <HomepageImageStrip images={getHomeProductionImages()} className="mb-8" />
         <FactoryTrustSystem product={cat.inquiryProductName} />
       </Section>
 

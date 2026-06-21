@@ -2,9 +2,11 @@ import Link from "next/link";
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
+import { LazyImage } from "@/components/ui/LazyImage";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { products } from "@/content/products";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
+import { getProductImages } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
@@ -20,6 +22,7 @@ export const metadata = createMetadata({
 
 export default function ProductsPage() {
   const cat = sodiumMetasilicateCategory;
+  const hubImages = getProductImages().slice(9, 12);
 
   return (
     <>
@@ -77,6 +80,20 @@ export default function ProductsPage() {
             href={sodiumSilicateLink.href}
           />
         </div>
+
+        {hubImages.length > 0 && (
+          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+            {hubImages.map((img) => (
+              <LazyImage
+                key={img.src}
+                src={img.src}
+                alt={img.alt}
+                aspect="video"
+                className="rounded-lg border border-[#E2E6EA]"
+              />
+            ))}
+          </div>
+        )}
 
         <PageCTAs product={cat.inquiryProductName} className="mt-10" />
       </Section>

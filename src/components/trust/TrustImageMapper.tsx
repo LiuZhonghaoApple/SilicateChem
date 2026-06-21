@@ -20,6 +20,7 @@ export function TrustImage({
   showCaption = true,
 }: TrustImageProps) {
   const asset = getTrustImageForCategory(category);
+  const src = getTrustImageSrc(category);
 
   return (
     <figure
@@ -31,7 +32,7 @@ export function TrustImage({
       <div className="aspect-video relative">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={getTrustImageSrc(asset.filename)}
+          src={src}
           alt={asset.alt}
           loading="lazy"
           decoding="async"

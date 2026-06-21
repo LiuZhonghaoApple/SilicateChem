@@ -1,8 +1,8 @@
 "use client";
 
 import { SectionHeader } from "@/components/ui/Section";
-import { LazyImage } from "@/components/ui/LazyImage";
 import { StrongCTA } from "@/components/conversion/ProductConversionSections";
+import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import { getFactoryGalleryImages } from "@/content/site-images";
 
 type Props = {
@@ -23,20 +23,10 @@ export function FactoryImageGallery({
       {showHeader && (
         <SectionHeader
           title="Factory Proof — Production & Export"
-          subtitle="On-site production line, QC laboratory, warehouse, packaging, and export loading."
+          subtitle="On-site production line, warehouse staging, and manufacturing equipment at Changyi, Shandong."
         />
       )}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {galleryImages.map((src, index) => (
-          <LazyImage
-            key={src}
-            src={src}
-            alt={`Sodium metasilicate factory China — production and export facility photo ${index + 1}`}
-            aspect="video"
-            className="rounded-lg border border-[#E2E6EA]"
-          />
-        ))}
-      </div>
+      <DeploymentImageGrid images={galleryImages} />
       <p className="mt-6 text-sm text-[#5A6570]">
         Factory inspection and video walkthrough available on request for qualified buyers.
       </p>

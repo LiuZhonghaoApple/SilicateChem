@@ -13,6 +13,7 @@ const INDEXABLE_STATIC = [
   "/contact",
   "/faq",
   "/factory",
+  "/export",
   "/products",
   "/guides",
   "/applications",
@@ -27,7 +28,7 @@ function priorityForPath(path: string): number {
   if (path === "/guides") return 0.75;
   if (path.startsWith("/applications/")) return 0.6;
   if (path === "/applications") return 0.65;
-  if (path === "/about" || path === "/contact" || path === "/faq" || path === "/factory")
+  if (path === "/about" || path === "/contact" || path === "/faq" || path === "/factory" || path === "/export")
     return 0.7;
   return 0.6;
 }

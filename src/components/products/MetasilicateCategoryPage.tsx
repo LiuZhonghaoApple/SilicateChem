@@ -16,6 +16,7 @@ import { SITE } from "@/lib/constants";
 
 export function MetasilicateCategoryPage() {
   const cat = sodiumMetasilicateCategory;
+  const categoryImage = getCategoryPageProductImage();
 
   return (
     <>
@@ -47,8 +48,8 @@ export function MetasilicateCategoryPage() {
             <StrongCTA product={cat.inquiryProductName} className="mt-4" />
           </div>
           <LazyImage
-            src={getCategoryPageProductImage()}
-            alt="Sodium metasilicate granules and industrial grades — factory direct from Shandong"
+            src={categoryImage.src}
+            alt={categoryImage.alt}
             aspect="video"
             className="rounded-lg border border-[#E2E6EA]"
           />
