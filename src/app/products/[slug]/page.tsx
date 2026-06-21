@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { SpecTable } from "@/components/ui/SpecTable";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { LazyImage } from "@/components/ui/LazyImage";
+import { getProductImageForSlug } from "@/content/site-images";
 import { BreadcrumbSchema, ProductSchema } from "@/components/seo/JsonLd";
 import { products, getProductBySlug } from "@/content/products";
 import { SITE } from "@/lib/constants";
@@ -144,10 +145,11 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="space-y-6">
-            <ImagePlaceholder
-              label={product.name}
-              path={`products/${product.slug}.jpg`}
+            <LazyImage
+              src={getProductImageForSlug(product.slug)}
+              alt={`${product.name} — factory direct sodium metasilicate from Shandong`}
               aspect="square"
+              className="rounded-lg border border-[#E2E6EA]"
             />
             <InternalProductLinks />
             <div className="rounded-lg border border-[#E2E6EA] p-5">

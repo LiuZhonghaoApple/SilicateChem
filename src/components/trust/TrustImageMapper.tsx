@@ -1,11 +1,8 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import {
-  getAssetsForCategory,
   getTrustImageForCategory,
   getTrustImageSrc,
-  type TrustImageAsset,
   type TrustImageCategory,
 } from "@/lib/trust/image-strategy";
 
@@ -22,21 +19,7 @@ export function TrustImage({
   className = "",
   showCaption = true,
 }: TrustImageProps) {
-  const initial = getTrustImageForCategory(category);
-  const [asset, setAsset] = useState<TrustImageAsset>(initial);
-  const [failedIds, setFailedIds] = useState<Set<string>>(() => new Set());
-
-  const handleError = useCallback(() => {
-    setFailedIds((prev) => {
-      const next = new Set(prev);
-      next.add(asset.id);
-      const fallback = getAssetsForCategory(category).find((a) => !next.has(a.id));
-      if (fallback) {
-        setAsset(fallback);
-      }
-      return next;
-    });
-  }, [asset.id, category]);
+  const asset = getTrustImageForCategory(category);
 
   return (
     <figure
@@ -50,8 +33,9 @@ export function TrustImage({
         <img
           src={getTrustImageSrc(asset.filename)}
           alt={asset.alt}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover"
-          onError={handleError}
         />
       </div>
       {showCaption && (

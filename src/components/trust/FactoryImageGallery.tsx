@@ -1,9 +1,9 @@
 "use client";
 
 import { SectionHeader } from "@/components/ui/Section";
+import { LazyImage } from "@/components/ui/LazyImage";
 import { StrongCTA } from "@/components/conversion/ProductConversionSections";
-import { GALLERY_CATEGORIES } from "@/lib/trust/image-strategy";
-import { TrustImage } from "@/components/trust/TrustImageMapper";
+import { getFactoryGalleryImages } from "@/content/site-images";
 
 type Props = {
   showHeader?: boolean;
@@ -16,6 +16,8 @@ export function FactoryImageGallery({
   product,
   className = "",
 }: Props) {
+  const galleryImages = getFactoryGalleryImages();
+
   return (
     <div className={className}>
       {showHeader && (
@@ -25,8 +27,14 @@ export function FactoryImageGallery({
         />
       )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {GALLERY_CATEGORIES.map((category) => (
-          <TrustImage key={category} category={category} />
+        {galleryImages.map((src, index) => (
+          <LazyImage
+            key={src}
+            src={src}
+            alt={`Sodium metasilicate factory China — production and export facility photo ${index + 1}`}
+            aspect="video"
+            className="rounded-lg border border-[#E2E6EA]"
+          />
         ))}
       </div>
       <p className="mt-6 text-sm text-[#5A6570]">

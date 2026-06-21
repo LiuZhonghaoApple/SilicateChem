@@ -4,7 +4,8 @@ import {
   SupplyComparisonTable,
 } from "@/components/conversion/ProductConversionSections";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import { LazyImage } from "@/components/ui/LazyImage";
+import { getCategoryPageProductImage } from "@/content/site-images";
 import { FAQSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
@@ -45,10 +46,11 @@ export function MetasilicateCategoryPage() {
             ))}
             <StrongCTA product={cat.inquiryProductName} className="mt-4" />
           </div>
-          <ImagePlaceholder
-            label="Sodium Metasilicate Products"
-            path="products/sodium-metasilicate-granules.jpg"
+          <LazyImage
+            src={getCategoryPageProductImage()}
+            alt="Sodium metasilicate granules and industrial grades — factory direct from Shandong"
             aspect="video"
+            className="rounded-lg border border-[#E2E6EA]"
           />
         </div>
       </Section>

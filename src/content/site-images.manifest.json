@@ -1,0 +1,64 @@
+{
+  "hero": [
+    "/images/factory/hero-01.webp",
+    "/images/factory/hero-02.webp",
+    "/images/factory/hero-03.webp"
+  ],
+  "homeFactory": [
+    "/images/factory/home-factory-01.webp"
+  ],
+  "homeProduction": [
+    "/images/factory/home-production-01.webp",
+    "/images/factory/home-production-02.webp",
+    "/images/factory/home-production-03.webp",
+    "/images/factory/home-production-04.webp",
+    "/images/factory/home-production-05.webp",
+    "/images/factory/home-production-06.webp",
+    "/images/factory/home-production-07.webp",
+    "/images/factory/home-production-08.webp"
+  ],
+  "factoryGallery": [
+    "/images/factory/gallery-01.webp",
+    "/images/factory/gallery-02.webp",
+    "/images/factory/gallery-03.webp",
+    "/images/factory/gallery-04.webp",
+    "/images/factory/gallery-05.webp",
+    "/images/factory/gallery-06.webp",
+    "/images/factory/gallery-07.webp",
+    "/images/factory/gallery-08.webp",
+    "/images/factory/gallery-09.webp",
+    "/images/factory/gallery-10.webp",
+    "/images/factory/gallery-11.webp",
+    "/images/factory/gallery-12.webp",
+    "/images/factory/gallery-13.webp",
+    "/images/factory/gallery-14.webp",
+    "/images/factory/gallery-15.webp",
+    "/images/factory/gallery-16.webp",
+    "/images/factory/gallery-17.webp",
+    "/images/factory/gallery-18.webp",
+    "/images/factory/gallery-19.webp"
+  ],
+  "products": [
+    "/images/products/product-01.webp",
+    "/images/products/product-02.webp",
+    "/images/products/product-03.webp",
+    "/images/products/product-04.webp",
+    "/images/products/product-05.webp",
+    "/images/products/product-06.webp",
+    "/images/products/product-07.webp",
+    "/images/products/product-08.webp",
+    "/images/products/product-09.webp",
+    "/images/products/product-10.webp",
+    "/images/products/product-11.webp",
+    "/images/products/product-12.webp",
+    "/images/products/product-13.webp",
+    "/images/products/product-14.webp"
+  ],
+  "galleryByCategory": {
+    "production": "/images/factory/gallery-01.webp",
+    "lab": "/images/factory/gallery-02.webp",
+    "warehouse": "/images/factory/gallery-03.webp",
+    "packaging": "/images/factory/gallery-04.webp",
+    "shipping": "/images/factory/gallery-05.webp"
+  }
+}

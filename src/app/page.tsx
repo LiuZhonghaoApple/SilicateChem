@@ -2,13 +2,24 @@ import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
+import { LazyImage } from "@/components/ui/LazyImage";
 import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
+import {
+  HomepageHeroBackground,
+  HomepageImageStrip,
+} from "@/components/trust/HomepageRealImages";
 import { products } from "@/content/products";
 import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
+import {
+  getHeroImage,
+  getHomeFactoryImage,
+  getHomeProductionImages,
+  siteImages,
+} from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { SEO_KEYWORDS, METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
@@ -26,7 +37,12 @@ const cat = sodiumMetasilicateCategory;
 export default function HomePage() {
   return (
     <>
-      <section className="relative bg-[#0B2D5B] text-white overflow-hidden">
+      <section className="relative bg-[#0B2D5B] text-white overflow-hidden min-h-[420px]">
+        <HomepageHeroBackground
+          images={siteImages.hero.length > 0 ? siteImages.hero : [getHeroImage()]}
+          alt="Shandong sodium metasilicate manufacturing facility"
+        />
+        <div className="absolute inset-0 bg-[#0B2D5B]/75" />
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#2E7D9A_25%,#2E7D9A_50%,transparent_50%,transparent_75%,#2E7D9A_75%)] bg-[length:40px_40px]" />
         </div>
@@ -65,6 +81,17 @@ export default function HomePage() {
       </Section>
 
       <Section background="grey">
+        <LazyImage
+          src={getHomeFactoryImage()}
+          alt="Sodium metasilicate factory exterior and production site in Shandong, China"
+          aspect="wide"
+          className="mb-8 rounded-lg border border-[#E2E6EA]"
+        />
+        <HomepageImageStrip
+          images={getHomeProductionImages()}
+          alt="Sodium metasilicate production line and manufacturing equipment"
+          className="mb-8"
+        />
         <FactoryTrustSystem product={cat.inquiryProductName} />
       </Section>
 
