@@ -58,8 +58,7 @@ export const faqItems: FAQItem[] = [
       "Yes. Combined container shipments of granules, anhydrous, pentahydrate, and sodium silicate are supported. This simplifies procurement for distributors stocking multiple grades.",
   },
   {
-    question: "What is the relationship to Shandong Longgang Silicon Industry?",
-    answer:
-      "Shandong Zhongzhi Chemical Technology Co., Ltd. continues the manufacturing operations previously under Shandong Longgang Silicon Industry Technology Co., Ltd. The production site, technical team, and product lines remain the same under the updated company name.",
+    question: "How long has your Shandong facility manufactured sodium metasilicate?",
+    answer: `${SITE.company} produces sodium metasilicate at a Shandong manufacturing site with decades of silicate industry experience. The same production facility, technical team, and product lines support continued factory-direct export supply under our current company name.`,
   },
 ];

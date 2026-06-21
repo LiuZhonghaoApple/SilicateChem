@@ -1,3 +1,5 @@
+import { SITE } from "./constants";
+
 /**
  * Keyword-to-page mapping. Each primary keyword targets ONE dedicated landing page.
  * Avoid reusing head terms across routes (anti-cannibalization).
@@ -8,7 +10,7 @@ export const SEO_KEYWORDS = {
     primary: "sodium metasilicate manufacturer china",
     title: "Sodium Metasilicate Manufacturer in China",
     description:
-      "Shandong Zhongzhi Chemical — factory-direct sodium metasilicate manufacturer in China. 100,000+ tons capacity. Export supply for global B2B buyers.",
+      `${SITE.company} — factory-direct sodium metasilicate manufacturer in China. 100,000+ tons capacity. Export supply for global B2B buyers.`,
   },
   /** Strongest product page — owns generic sodium metasilicate head terms */
   sodiumMetasilicate: {

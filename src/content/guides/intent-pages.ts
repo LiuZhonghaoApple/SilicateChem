@@ -1,4 +1,5 @@
 import type { IntentGuide } from "@/types";
+import { SITE } from "@/lib/constants";
 
 /** Layer 3 — commercial-intent guides only. Each page pushes to /products/sodium-metasilicate */
 export const intentGuides: IntentGuide[] = [
@@ -16,7 +17,7 @@ export const intentGuides: IntentGuide[] = [
         heading: "Manufacturer vs Trading Company",
         paragraphs: [
           "Request production license, factory photos, and video inspection. Manufacturers explain granulation capacity, lead times, and batch QC from production schedules. Trading companies resell without controlling quality.",
-          "Factory-direct supply from Shandong Zhongzhi Chemical eliminates intermediary markup and gives buyers direct access to specification control.",
+          `Factory-direct supply from ${SITE.company} eliminates intermediary markup and gives buyers direct access to specification control.`,
         ],
       },
       {
@@ -154,7 +155,7 @@ export const intentGuides: IntentGuide[] = [
         heading: "Export and Volume Capability",
         paragraphs: [
           "For FCL contracts, confirm annual capacity (100,000+ tons supports volume buyers). Verify export documentation experience to your destination market.",
-          "Factory-direct orders from Shandong Zhongzhi Chemical include COA, TDS, and MSDS per shipment with combined multi-grade FCL options.",
+          `Factory-direct orders from ${SITE.company} include COA, TDS, and MSDS per shipment with combined multi-grade FCL options.`,
         ],
       },
     ],

@@ -8,8 +8,7 @@ import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
   title: "About Us",
-  description:
-    "Shandong Zhongzhi Chemical Technology — sodium metasilicate manufacturer in Shandong, China. Formerly Longgang Silicon Industry. Factory-direct export supply.",
+  description: `${SITE.company} — sodium metasilicate manufacturer in Shandong, China. Factory-direct export supply.`,
   path: "/about",
 });
 

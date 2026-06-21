@@ -12,7 +12,7 @@ export const factoryTrustPillars = [
   {
     title: "Factory Direct Manufacturer",
     description:
-      "Shandong Zhongzhi Chemical operates the production site. No trading layer — buyers communicate with the manufacturer for specifications, COA, and shipment scheduling.",
+      `${SITE.company} operates the production site. No trading layer — buyers communicate with the manufacturer for specifications, COA, and shipment scheduling.`,
   },
   {
     title: "Export Experience",

@@ -40,7 +40,7 @@ export default function SodiumMetasilicatePage() {
       <MetasilicateCategoryPage />
       <Section background="grey">
         <p className="mx-auto max-w-6xl px-4 sm:px-6 text-sm text-[#5A6570]">
-          Shandong Zhongzhi Chemical is a sodium metasilicate manufacturer and supplier based in China.
+          {SITE.company} is a sodium metasilicate manufacturer and supplier based in China.
           For company-level information see our{" "}
           <Link href="/" className="font-semibold text-[#2E7D9A] hover:underline">homepage</Link>.
         </p>

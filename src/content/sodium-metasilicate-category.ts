@@ -155,7 +155,7 @@ export const sodiumMetasilicateCategory = {
     {
       question: "Are you a manufacturer or trading company?",
       answer:
-        "We are the manufacturer. Shandong Zhongzhi Chemical operates the production site and sells factory-direct to global B2B buyers.",
+        `We are the manufacturer. ${SITE.company} operates the production site and sells factory-direct to global B2B buyers.`,
     },
     {
       question: "What is the MOQ for sodium metasilicate?",

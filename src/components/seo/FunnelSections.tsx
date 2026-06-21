@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { StrongCTA } from "@/components/conversion/ProductConversionSections";
+import { SITE } from "@/lib/constants";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 
@@ -9,7 +10,7 @@ export function ProductFunnelBanner({ className = "" }: { className?: string }) 
     <div className={`rounded-lg border border-[#2E7D9A]/30 bg-[#2E7D9A]/5 p-6 ${className}`}>
       <h3 className="font-bold text-[#0B2D5B]">Source Sodium Metasilicate Factory-Direct</h3>
       <p className="mt-2 text-sm text-[#5A6570] leading-relaxed">
-        Shandong Zhongzhi Chemical manufactures all grades at our China facility.
+        {SITE.company} manufactures all grades at our China facility.
         View specifications, grades, and request factory-direct quotation.
       </p>
       <div className="mt-4 flex flex-wrap gap-4">

@@ -142,9 +142,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-blue-800/50 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-xs text-blue-200/50">
+        <div className="mt-10 border-t border-blue-800/50 pt-6 text-xs text-blue-200/50">
           <p>© {new Date().getFullYear()} {SITE.company}. All rights reserved.</p>
-          <p>Formerly: {SITE.formerCompany}</p>
         </div>
       </div>
     </footer>

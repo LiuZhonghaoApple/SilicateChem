@@ -2,7 +2,6 @@ export const SITE = {
   name: "SilicateChem",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://silicatechem.com",
   company: "Shandong Zhongzhi Chemical Technology Co., Ltd.",
-  formerCompany: "Shandong Longgang Silicon Industry Technology Co., Ltd.",
   tagline: "Sodium Metasilicate Manufacturer in China",
   description:
     "Factory-direct sodium metasilicate manufacturer in Shandong, China. High purity granules, anhydrous, and pentahydrate for detergent, water treatment, and industrial chemical buyers.",

@@ -10,7 +10,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata = createMetadata({
   title: "Contact — Request a Quote",
   description:
-    `Contact Shandong Zhongzhi Chemical for sodium metasilicate quotes, TDS/MSDS requests, and factory inquiries. Email: ${SITE.email}`,
+    `Contact ${SITE.company} for sodium metasilicate quotes, TDS/MSDS requests, and factory inquiries. Email: ${SITE.email}`,
   path: "/contact",
 });
 

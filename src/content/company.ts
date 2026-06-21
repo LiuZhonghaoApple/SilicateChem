@@ -3,7 +3,8 @@ import { SITE } from "@/lib/constants";
 export const company = {
   intro: `${SITE.company} is a sodium metasilicate manufacturer based in Shandong, China. We supply granules, anhydrous, and pentahydrate grades to detergent manufacturers, industrial chemical distributors, and water treatment companies worldwide.`,
   history: [
-    `The company operates under ${SITE.company}, continuing production experience from ${SITE.formerCompany}. The rebrand reflects expanded export operations and upgraded production capacity while maintaining the same manufacturing site and technical team.`,
+    "Our manufacturing roots trace to Shandong Longgang Silicon Industry Technology Co., Ltd., with decades of silicate production experience in Shandong including sodium metasilicate granules, anhydrous, and pentahydrate lines.",
+    `${SITE.company} continues that production heritage at the same Shandong facility with expanded export operations and upgraded capacity, maintaining the same technical team and manufacturing site.`,
     "Our focus is factory-direct supply of sodium metasilicate with consistent purity, stable color, and documented batch quality. We do not operate as a trading company — all products listed on this site are manufactured at our Shandong facility.",
     `Current annual production capacity exceeds ${SITE.capacity}, with sodium metasilicate granules as the primary output line.`,
   ],
