@@ -3,6 +3,8 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { FactoryImageGallery } from "@/components/trust/FactoryImageGallery";
+import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
+import { TrustStack } from "@/components/trust/TrustStack";
 import {
   exportCapability,
   qualityControlSystem,
@@ -73,6 +75,13 @@ export default function FactoryPage() {
       </Section>
 
       <Section background="grey">
+        <FactoryProofStack />
+        <div className="mt-10">
+          <TrustStack compact />
+        </div>
+      </Section>
+
+      <Section>
         <FactoryTrustSystem showHeader />
       </Section>
 

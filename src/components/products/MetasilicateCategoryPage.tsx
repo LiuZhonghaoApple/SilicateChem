@@ -11,6 +11,8 @@ import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { FactoryImageGallery } from "@/components/trust/FactoryImageGallery";
 import { IndustryApplicationsSummary } from "@/components/trust/IndustryApplicationsSummary";
+import { TechnicalDocsBlock } from "@/components/trust/TechnicalDocsBlock";
+import { TrustStack } from "@/components/trust/TrustStack";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { SITE } from "@/lib/constants";
 
@@ -140,6 +142,8 @@ export function MetasilicateCategoryPage() {
           />
           <FactoryImageGallery product={cat.inquiryProductName} />
           <IndustryApplicationsSummary />
+          <TechnicalDocsBlock product={cat.inquiryProductName} />
+          <TrustStack compact />
         </div>
         <StrongCTA product={cat.inquiryProductName} className="mt-10" />
       </Section>

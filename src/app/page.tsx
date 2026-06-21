@@ -5,7 +5,13 @@ import { Card } from "@/components/ui/Card";
 import { LazyImage } from "@/components/ui/LazyImage";
 import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
-import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
+import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
+import { TrustLayer } from "@/components/trust/TrustLayer";
+import {
+  HomeProductTrustCards,
+  HomeTrustRfqBlock,
+} from "@/components/trust/HomeTrustSection";
+import { TrustStack } from "@/components/trust/TrustStack";
 import {
   HomepageHeroBackground,
   HomepageImageStrip,
@@ -79,14 +85,27 @@ export default function HomePage() {
       </Section>
 
       <Section background="grey">
+        <SectionHeader
+          title="Why Zhongzhi"
+          subtitle="Verified factory scale, partial export customs data, and product trust — factory-direct manufacturer in Changyi, Shandong."
+        />
         <LazyImage
           src={factoryPreview.src}
           alt={factoryPreview.alt}
           aspect="wide"
           className="mb-8 rounded-lg border border-[#E2E6EA]"
         />
-        <HomepageImageStrip images={getHomeProductionImages()} className="mb-8" />
-        <FactoryTrustSystem product={cat.inquiryProductName} />
+        <HomepageImageStrip images={getHomeProductionImages()} className="mb-10" />
+        <div className="space-y-12">
+          <FactoryProofStack variant="compact" showHeader={false} />
+          <TrustLayer
+            variant="homepage"
+            product={products.find((p) => p.slug === "sodium-metasilicate-granules")}
+          />
+          <HomeProductTrustCards />
+          <TrustStack compact />
+          <HomeTrustRfqBlock product={cat.inquiryProductName} />
+        </div>
       </Section>
 
       <Section>

@@ -12,6 +12,8 @@ import { createMetadata } from "@/lib/metadata";
 import { ProductConversionSections, StrongCTA } from "@/components/conversion/ProductConversionSections";
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
+import { TrustLayer } from "@/components/trust/TrustLayer";
+import { TrustStack } from "@/components/trust/TrustStack";
 import {
   productBreadcrumbs,
   productBreadcrumbSchemaItems,
@@ -107,6 +109,10 @@ export default async function ProductPage({ params }: Props) {
               <SectionHeader title="Key Specifications" />
               <SpecTable specs={product.specs} />
             </div>
+
+            <TrustLayer variant="product" product={product} />
+
+            <TrustStack compact className="mt-2" />
 
             <div>
               <SectionHeader title="Applications" />

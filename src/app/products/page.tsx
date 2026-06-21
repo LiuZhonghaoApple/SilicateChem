@@ -11,6 +11,7 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 import { metasilicateGradeLinks, sodiumSilicateLink } from "@/lib/internal-links";
+import { TechnicalDocsBlock } from "@/components/trust/TechnicalDocsBlock";
 
 export const metadata = createMetadata({
   title: "Products — Sodium Metasilicate & Sodium Silicate",
@@ -94,6 +95,10 @@ export default function ProductsPage() {
             ))}
           </div>
         )}
+
+        <div className="mt-10">
+          <TechnicalDocsBlock product={cat.inquiryProductName} />
+        </div>
 
         <PageCTAs product={cat.inquiryProductName} className="mt-10" />
       </Section>

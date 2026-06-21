@@ -10,6 +10,7 @@ import {
   TURNSTILE_SITE_KEY,
   type TurnstileFieldHandle,
 } from "@/components/forms/TurnstileField";
+import { RFQTrustPreflight } from "@/components/forms/RFQTrustPreflight";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -248,6 +249,8 @@ export function InquiryForm({
       {state === "error" && (
         <p className="text-sm text-red-600">{errorMsg}</p>
       )}
+
+      <RFQTrustPreflight />
 
       <button
         type="submit"
