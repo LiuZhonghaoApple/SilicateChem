@@ -7,9 +7,22 @@ export type ImageEntry = {
   section: string;
   block: string;
   source: string;
-  deployPath: string;
-  page: string;
+  deployPath?: string;
+  page?: string;
 };
+
+/** Product slug → hero/gallery bindings (manifest bySlug section). */
+export type SlugImageBinding = {
+  hero?: ImageEntry;
+  gallery?: ImageEntry;
+};
+
+export type GalleryCategoryKey =
+  | "production"
+  | "lab"
+  | "warehouse"
+  | "packaging"
+  | "shipping";
 
 export type SiteImages = {
   home: {
@@ -25,11 +38,11 @@ export type SiteImages = {
     shipping: ImageEntry[];
   };
   certifications: ImageEntry[];
-  galleryByCategory: Record<string, string>;
-  bySlug: Record<string, { hero?: ImageEntry; gallery?: ImageEntry }>;
+  bySlug: Record<string, SlugImageBinding>;
+  galleryByCategory: Record<GalleryCategoryKey, string>;
 };
 
-export const siteImages = manifest as SiteImages;
+export const siteImages = manifest as unknown as SiteImages;
 
 if (typeof window === "undefined") {
   assertImageDeployment();
@@ -40,11 +53,14 @@ export function getHeroImages(): ImageEntry[] {
 }
 
 export function getHomeFactoryImage(): ImageEntry {
-  return (
+  const image =
     siteImages.home.factoryPreview ??
     siteImages.home.production[0] ??
-    siteImages.factory[0]
-  );
+    siteImages.factory[0];
+  if (!image) {
+    throw new Error("[site-images] No home factory image configured");
+  }
+  return image;
 }
 
 export function getHomeProductionImages(): ImageEntry[] {
@@ -79,9 +95,7 @@ export function getCertificationImages(): ImageEntry[] {
   return siteImages.certifications;
 }
 
-export function getGalleryImageForCategory(
-  category: keyof typeof siteImages.galleryByCategory
-): string {
+export function getGalleryImageForCategory(category: GalleryCategoryKey): string {
   return siteImages.galleryByCategory[category];
 }
 
@@ -90,6 +104,9 @@ export function getProductImageForSlug(slug: string): ImageEntry {
   if (mapped) return mapped;
   const index = ["sodium-metasilicate-granules", "sodium-metasilicate-anhydrous", "sodium-metasilicate-pentahydrate", "sodium-silicate"].indexOf(slug);
   const fallback = siteImages.products[index + 1] ?? siteImages.products[0];
+  if (!fallback) {
+    throw new Error(`[site-images] No product image for slug: ${slug}`);
+  }
   return fallback;
 }
 
@@ -98,7 +115,12 @@ export function getProductGalleryForSlug(slug: string): ImageEntry | undefined {
 }
 
 export function getCategoryPageProductImage(): ImageEntry {
-  return siteImages.bySlug["sodium-metasilicate"]?.hero ?? siteImages.products[0];
+  const image =
+    siteImages.bySlug["sodium-metasilicate"]?.hero ?? siteImages.products[0];
+  if (!image) {
+    throw new Error("[site-images] No category page product image configured");
+  }
+  return image;
 }
 
 /** @deprecated Use getHeroImages()[0] */
