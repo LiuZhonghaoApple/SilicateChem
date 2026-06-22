@@ -1,12 +1,9 @@
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { LazyImage } from "@/components/ui/LazyImage";
-import { TrustBoundImage } from "@/components/trust/TrustBoundImage";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import { company } from "@/content/company";
-import { getAboutImages } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -17,10 +14,6 @@ export const metadata = createMetadata({
 });
 
 export default function AboutPage() {
-  const aboutImages = getAboutImages();
-  const hero = aboutImages[0];
-  const sectionImages = aboutImages.slice(1);
-
   return (
     <>
       <BreadcrumbSchema
@@ -29,17 +22,9 @@ export default function AboutPage() {
           { name: "About Us", url: `${SITE.url}/about` },
         ]}
       />
-      {hero && (
-        <Section className="pb-0">
-          <TrustBoundImage
-            image={hero}
-            component="LazyImage"
-            aspect="wide"
-            priority
-            wrapperClassName="mb-8"
-          />
-        </Section>
-      )}
+      <Section className="pb-0">
+        <VisualProofPlaceholder className="mb-8" />
+      </Section>
 
       <PageHeader
         title="About Us"
@@ -47,7 +32,7 @@ export default function AboutPage() {
         breadcrumbs={[{ label: "About Us" }]}
       />
 
-      <Section background={hero ? "grey" : undefined}>
+      <Section background="grey">
         <div className="max-w-3xl">
           <SectionHeader title="Company Background" />
           {company.history.map((p, i) => (
@@ -58,12 +43,10 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {sectionImages.length > 0 && (
-        <Section id="why-zhongzhi">
-          <SectionHeader title="Why Zhongzhi" subtitle="Integrated manufacturing at our Changyi, Shandong facility." />
-          <DeploymentImageGrid images={sectionImages} columns="sm:grid-cols-2" component="WhyZhongzhiBlock" />
-        </Section>
-      )}
+      <Section id="why-zhongzhi">
+        <SectionHeader title="Why Zhongzhi" subtitle="Integrated manufacturing at our Changyi, Shandong facility." />
+        <VisualProofPlaceholder />
+      </Section>
 
       <Section background="grey">
         <SectionHeader title="Our Commitment" subtitle={company.mission} />

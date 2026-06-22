@@ -4,12 +4,10 @@ import {
   SupplyComparisonTable,
 } from "@/components/conversion/ProductConversionSections";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { LazyImage } from "@/components/ui/LazyImage";
-import { getCategoryPageProductImage } from "@/content/site-images";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { FAQSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
-import { FactoryImageGallery } from "@/components/trust/FactoryImageGallery";
 import { IndustryApplicationsSummary } from "@/components/trust/IndustryApplicationsSummary";
 import { TechnicalDocsBlock } from "@/components/trust/TechnicalDocsBlock";
 import { TrustStack } from "@/components/trust/TrustStack";
@@ -18,7 +16,6 @@ import { SITE } from "@/lib/constants";
 
 export function MetasilicateCategoryPage() {
   const cat = sodiumMetasilicateCategory;
-  const categoryImage = getCategoryPageProductImage();
 
   return (
     <>
@@ -49,12 +46,7 @@ export function MetasilicateCategoryPage() {
             ))}
             <StrongCTA product={cat.inquiryProductName} className="mt-4" />
           </div>
-          <LazyImage
-            src={categoryImage.src}
-            alt={categoryImage.alt}
-            aspect="video"
-            className="rounded-lg border border-[#E2E6EA]"
-          />
+          <VisualProofPlaceholder />
         </div>
       </Section>
 
@@ -140,7 +132,7 @@ export function MetasilicateCategoryPage() {
             showHeader={false}
             product={cat.inquiryProductName}
           />
-          <FactoryImageGallery product={cat.inquiryProductName} />
+          <VisualProofPlaceholder />
           <IndustryApplicationsSummary />
           <TechnicalDocsBlock product={cat.inquiryProductName} />
           <TrustStack compact />

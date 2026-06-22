@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { ImageDebugWrapper, logImageMount } from "@/components/ui/ImageDebugWrapper";
 import { VisualTrustImage } from "@/components/trust/VisualTrustImage";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { useVisualTrustContext } from "@/components/trust/VisualTrustProvider";
+import { filterAllowedVisualProofImages } from "@/content/trust-visual-allowlist";
 import type { ImageEntry } from "@/content/site-images";
 
 type Props = {
@@ -104,11 +106,14 @@ export function DeploymentImageGrid({
 }) {
   const { trackImageView } = useVisualTrustContext();
 
-  if (images.length === 0) return null;
+  const allowedImages = filterAllowedVisualProofImages(images);
+  if (allowedImages.length === 0) {
+    return <VisualProofPlaceholder className={className} />;
+  }
 
   return (
     <div className={`grid gap-4 ${columns} ${className}`}>
-      {images.map((entry) => {
+      {allowedImages.map((entry) => {
         logImageMount(entry.src, component, entry.page);
         return (
           <ImageDebugWrapper

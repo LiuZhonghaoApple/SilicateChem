@@ -1,12 +1,10 @@
 import Link from "next/link";
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
-import { LazyImage } from "@/components/ui/LazyImage";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import { industryApplications } from "@/content/applications/industries";
-import { getProductImages } from "@/content/site-images";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
@@ -19,8 +17,6 @@ export const metadata = createMetadata({
 });
 
 export default function ApplicationsIndexPage() {
-  const appImages = getProductImages().slice(12, 14);
-
   return (
     <>
       <BreadcrumbSchema
@@ -35,19 +31,7 @@ export default function ApplicationsIndexPage() {
         breadcrumbs={[{ label: "Applications" }]}
       />
       <Section>
-        {appImages.length > 0 && (
-          <div className="mb-8 grid gap-4 sm:grid-cols-2">
-            {appImages.map((img) => (
-              <LazyImage
-                key={img.src}
-                src={img.src}
-                alt={img.alt}
-                aspect="video"
-                className="rounded-lg border border-[#E2E6EA]"
-              />
-            ))}
-          </div>
-        )}
+        <VisualProofPlaceholder className="mb-8" />
         <div className="grid gap-6 sm:grid-cols-2">
           {industryApplications.map((app) => (
             <Link

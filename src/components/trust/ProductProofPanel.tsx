@@ -2,15 +2,9 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { VisualTrustImage } from "@/components/trust/VisualTrustImage";
-import { useVisualTrustContext } from "@/components/trust/VisualTrustProvider";
-import { ImageDebugWrapper, logImageMount } from "@/components/ui/ImageDebugWrapper";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { SectionHeader } from "@/components/ui/Section";
 import type { Product } from "@/types";
-import {
-  getProductGalleryForSlug,
-  getProductImageForSlug,
-} from "@/content/site-images";
 import {
   getFactoryVerificationBadgeLabel,
   getKbApplicationFields,
@@ -49,17 +43,11 @@ export function ProductProofPanel({
   showHeader = true,
   className = "",
 }: Props) {
-  const { trackImageView } = useVisualTrustContext();
   const cas = getKbProductCas(product);
   const physicalForm = getKbPhysicalForm(product);
   const applicationFields = getKbApplicationFields(product);
   const specHref = getSpecificationSheetHref(product);
   const factoryBadge = getFactoryVerificationBadgeLabel();
-  const heroImage = getProductImageForSlug(product.slug);
-  const galleryImage = getProductGalleryForSlug(product.slug);
-  const productImages = [heroImage, galleryImage].filter(
-    (img, index, arr) => img && arr.findIndex((x) => x?.src === img.src) === index
-  ) as NonNullable<typeof heroImage>[];
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -144,31 +132,9 @@ export function ProductProofPanel({
         </div>
       </ProofSection>
 
-      {productImages.length > 0 && (
-        <ProofSection title="Product Visual Proof">
-          <div className={`grid gap-3 ${productImages.length > 1 ? "sm:grid-cols-2" : ""}`}>
-            {productImages.map((img) => {
-              logImageMount(img.src, "ProductProofPanel", img.page);
-              return (
-                <ImageDebugWrapper
-                  key={img.src}
-                  src={img.src}
-                  component="ProductProofPanel"
-                  page={img.page}
-                >
-                  <VisualTrustImage
-                    src={img.src}
-                    alt={img.alt}
-                    aspect="video"
-                    onTrustView={trackImageView}
-                    className="rounded-lg border border-[#E2E6EA]"
-                  />
-                </ImageDebugWrapper>
-              );
-            })}
-          </div>
-        </ProofSection>
-      )}
+      <ProofSection title="Product Visual Proof">
+        <VisualProofPlaceholder compact />
+      </ProofSection>
 
       {/* Section 4 — RFQ CTA */}
       <div className="rounded-lg border border-[#0B2D5B]/15 bg-[#0B2D5B]/5 p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

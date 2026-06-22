@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { SpecTable } from "@/components/ui/SpecTable";
-import { LazyImage } from "@/components/ui/LazyImage";
-import { getProductImageForSlug, getProductGalleryForSlug } from "@/content/site-images";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { BreadcrumbSchema, ProductSchema } from "@/components/seo/JsonLd";
 import { products, getProductBySlug } from "@/content/products";
 import { SITE } from "@/lib/constants";
@@ -50,9 +49,6 @@ export default async function ProductPage({ params }: Props) {
   const productPath = `/products/${product.slug}`;
   const related = products.filter((p) => p.slug !== product.slug);
 
-  const productImage = getProductImageForSlug(product.slug);
-  const galleryImage = getProductGalleryForSlug(product.slug);
-
   return (
     <>
       <ProductSchema
@@ -92,17 +88,9 @@ export default async function ProductPage({ params }: Props) {
 
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
-            {productImage && (
-              <div className="lg:hidden">
-                <LazyImage
-                  src={productImage.src}
-                  alt={productImage.alt}
-                  aspect="wide"
-                  priority
-                  className="rounded-lg border border-[#E2E6EA] mb-6"
-                />
-              </div>
-            )}
+            <div className="lg:hidden">
+              <VisualProofPlaceholder compact className="mb-6" />
+            </div>
             <div>
               <SectionHeader title="Product Overview" />
               {product.description.map((p, i) => (
@@ -168,21 +156,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="space-y-6">
-            <LazyImage
-              src={productImage.src}
-              alt={productImage.alt}
-              aspect="square"
-              priority
-              className="rounded-lg border border-[#E2E6EA]"
-            />
-            {galleryImage && (
-              <LazyImage
-                src={galleryImage.src}
-                alt={galleryImage.alt}
-                aspect="square"
-                className="rounded-lg border border-[#E2E6EA]"
-              />
-            )}
+            <VisualProofPlaceholder compact />
             <InternalProductLinks />
             <div className="rounded-lg border border-[#E2E6EA] p-5">
               <h3 className="font-bold text-[#0B2D5B] text-sm">Quick Inquiry</h3>

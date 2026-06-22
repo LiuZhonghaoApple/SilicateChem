@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { LazyImage } from "@/components/ui/LazyImage";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { isAllowedVisualProofSrc } from "@/content/trust-visual-allowlist";
 import { classifyImageSrc } from "@/lib/trust/v6-visual-trust-engine";
 
 type TrustImageKind = "factory" | "export" | "loading" | "gallery" | "general";
@@ -40,6 +42,7 @@ export function VisualTrustImage({
 
   useEffect(() => {
     if (!onTrustView || !ref.current) return;
+    if (!isAllowedVisualProofSrc(src)) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -57,6 +60,10 @@ export function VisualTrustImage({
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [onTrustView, src, trustKind]);
+
+  if (!isAllowedVisualProofSrc(src)) {
+    return <VisualProofPlaceholder compact />;
+  }
 
   return (
     <div ref={ref}>
