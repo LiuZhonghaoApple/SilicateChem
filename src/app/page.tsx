@@ -8,20 +8,13 @@ import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
 import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
 import { TrustLayer } from "@/components/trust/TrustLayer";
 import { TrustStack } from "@/components/trust/TrustStack";
-import {
-  HomepageHeroBackground,
-  HomepageImageStrip,
-} from "@/components/trust/HomepageRealImages";
+import { HomepageHero } from "@/components/home/HomepageHero";
+import { HomepageImageStrip } from "@/components/trust/HomepageRealImages";
 import { products } from "@/content/products";
 import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
-import {
-  getHeroImages,
-  getHomeFactoryImage,
-  getHomeProductionImages,
-} from "@/content/site-images";
-import { SITE } from "@/lib/constants";
+import { getHomeFactoryImage, getHomeProductionImages } from "@/content/site-images";
 import { createMetadata } from "@/lib/metadata";
 import { SEO_KEYWORDS, METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 
@@ -40,29 +33,7 @@ export default function HomePage() {
 
   return (
     <>
-      <section className="relative bg-[#0B2D5B] text-white overflow-hidden min-h-[420px]">
-        <HomepageHeroBackground images={getHeroImages()} />
-        <div className="absolute inset-0 bg-[#0B2D5B]/45" />
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_25%,#2E7D9A_25%,#2E7D9A_50%,transparent_50%,transparent_75%,#2E7D9A_75%)] bg-[length:40px_40px]" />
-        </div>
-        <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-16 md:py-20">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#2E7D9A]">
-            {SITE.company}
-          </p>
-          <h1 className="mt-3 text-3xl md:text-5xl font-bold tracking-tight max-w-4xl">
-            Sodium Metasilicate Manufacturer in China
-          </h1>
-          <p className="mt-4 text-lg md:text-xl font-medium text-blue-50 max-w-3xl">
-            Factory Direct Supply | 100,000+ Tons | RFQ for Global B2B Buyers
-          </p>
-          <p className="mt-5 text-base text-blue-100 max-w-2xl leading-relaxed">
-            Request factory-direct quotation for sodium metasilicate granules, anhydrous, and pentahydrate.
-            No trader markup. Export documentation included.
-          </p>
-          <PageCTAs product={cat.inquiryProductName} className="mt-8" light size="lg" />
-        </div>
-      </section>
+      <HomepageHero />
 
       <Section background="grey">
         <SectionHeader

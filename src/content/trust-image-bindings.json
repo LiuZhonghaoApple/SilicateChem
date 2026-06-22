@@ -1,7 +1,7 @@
 [
-  { "image_id": "hero-01", "src": "/images/home/hero-01.webp", "page_route": "/", "used_component": "HomepageHeroBackground", "section": "Hero Carousel", "block": "Slide 1" },
-  { "image_id": "hero-02", "src": "/images/home/hero-02.webp", "page_route": "/", "used_component": "HomepageHeroBackground", "section": "Hero Carousel", "block": "Slide 2" },
-  { "image_id": "hero-03", "src": "/images/home/hero-03.webp", "page_route": "/", "used_component": "HomepageHeroBackground", "section": "Hero Carousel", "block": "Slide 3" },
+  { "image_id": "hero-lab", "src": "/images/home/hero-lab-sodium-metasilicate.webp", "page_route": "/", "used_component": "HomepageHero", "section": "Homepage Hero", "block": "Laboratory Banner" },
+  { "image_id": "hero-02", "src": "/images/home/hero-02.webp", "page_route": "/", "used_component": "ImageArchive", "section": "Asset Archive", "block": "Legacy Hero 2" },
+  { "image_id": "hero-03", "src": "/images/home/hero-03.webp", "page_route": "/", "used_component": "ImageArchive", "section": "Asset Archive", "block": "Legacy Hero 3" },
   { "image_id": "factory-preview", "src": "/images/home/factory-preview.webp", "page_route": "/", "used_component": "LazyImage", "section": "Factory Strength Preview", "block": "Main Image" },
   { "image_id": "production-01", "src": "/images/home/production-01.webp", "page_route": "/", "used_component": "HomepageImageStrip", "section": "Production Gallery Preview", "block": "Tile 1" },
   { "image_id": "production-02", "src": "/images/home/production-02.webp", "page_route": "/", "used_component": "HomepageImageStrip", "section": "Production Gallery Preview", "block": "Tile 2" },

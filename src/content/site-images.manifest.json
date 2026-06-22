@@ -2,30 +2,12 @@
   "home": {
     "hero": [
       {
-        "src": "/images/home/hero-01.webp",
-        "alt": "Shandong sodium metasilicate factory \u2014 Slide 1",
-        "section": "Hero Carousel",
-        "block": "Slide 1",
-        "source": "01_001_bg5.jpg",
-        "deployPath": "/images/home/hero-01.webp",
-        "page": "/"
-      },
-      {
-        "src": "/images/home/hero-02.webp",
-        "alt": "Shandong sodium metasilicate factory \u2014 Slide 2",
-        "section": "Hero Carousel",
-        "block": "Slide 2",
-        "source": "01_002_bg6.jpg",
-        "deployPath": "/images/home/hero-02.webp",
-        "page": "/"
-      },
-      {
-        "src": "/images/home/hero-03.webp",
-        "alt": "Shandong sodium metasilicate factory \u2014 Slide 3",
-        "section": "Hero Carousel",
-        "block": "Slide 3",
-        "source": "01_003_bg7.jpg",
-        "deployPath": "/images/home/hero-03.webp",
+        "src": "/images/home/hero-lab-sodium-metasilicate.webp",
+        "alt": "White sodium metasilicate granules in laboratory QC testing \u2014 Shandong Zhongzhi Chemical",
+        "section": "Homepage Hero",
+        "block": "Laboratory Banner",
+        "source": "hero-lab-sodium-metasilicate.png",
+        "deployPath": "/images/home/hero-lab-sodium-metasilicate.webp",
         "page": "/"
       }
     ],
@@ -360,6 +342,24 @@
       "source": "04_109_16472273299248778.jpeg",
       "deployPath": "/images/products/product-14.webp",
       "page": "/applications"
+    },
+    {
+      "src": "/images/home/hero-02.webp",
+      "alt": "Legacy homepage hero asset \u2014 archived",
+      "section": "Asset Archive",
+      "block": "Legacy Hero 2",
+      "source": "01_002_bg6.jpg",
+      "deployPath": "/images/home/hero-02.webp",
+      "page": "/"
+    },
+    {
+      "src": "/images/home/hero-03.webp",
+      "alt": "Legacy homepage hero asset \u2014 archived",
+      "section": "Asset Archive",
+      "block": "Legacy Hero 3",
+      "source": "01_003_bg7.jpg",
+      "deployPath": "/images/home/hero-03.webp",
+      "page": "/"
     }
   ],
   "export": {
