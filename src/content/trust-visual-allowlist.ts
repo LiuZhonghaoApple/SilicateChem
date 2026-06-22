@@ -84,14 +84,30 @@ export const VISUAL_IMAGE_REGISTRY: VisualImageRecord[] = [
 
 const registryBySrc = new Map(VISUAL_IMAGE_REGISTRY.map((r) => [r.src, r]));
 
+export function normalizeVisualProofSrc(src: string): string {
+  return src.replace(/^https?:\/\/[^/]+/, "").replace(/\?.*$/, "");
+}
+
 export function isAllowedVisualProofSrc(src: string): boolean {
-  const normalized = src.replace(/^https?:\/\/[^/]+/, "");
-  return ALLOWED_VISUAL_PROOF_SRCS.has(normalized);
+  return ALLOWED_VISUAL_PROOF_SRCS.has(normalizeVisualProofSrc(src));
+}
+
+/** Runtime guard — warn and return false when a non-allowlisted image would render. */
+export function guardVisualProofRender(
+  src: string,
+  component: string
+): boolean {
+  if (isAllowedVisualProofSrc(src)) return true;
+  if (typeof console !== "undefined") {
+    console.warn(
+      `[visual-proof-guard] Blocked non-allowlisted image in ${component}: ${src}`
+    );
+  }
+  return false;
 }
 
 export function getVisualImageRecord(src: string): VisualImageRecord | undefined {
-  const normalized = src.replace(/^https?:\/\/[^/]+/, "");
-  return registryBySrc.get(normalized);
+  return registryBySrc.get(normalizeVisualProofSrc(src));
 }
 
 export function filterAllowedVisualProofImages<T extends { src: string }>(images: T[]): T[] {

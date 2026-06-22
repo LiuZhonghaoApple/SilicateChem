@@ -2,9 +2,10 @@
 
 import {
   getTrustImageForCategory,
-  getTrustImageSrc,
   type TrustImageCategory,
 } from "@/lib/trust/image-strategy";
+import { guardVisualProofRender } from "@/content/trust-visual-allowlist";
+import { PRODUCT_VISUAL_PROOF_MESSAGE } from "@/components/trust/ProductVisualProof";
 
 export { getTrustImageForCategory } from "@/lib/trust/image-strategy";
 
@@ -14,13 +15,21 @@ type TrustImageProps = {
   showCaption?: boolean;
 };
 
+/** @deprecated Bypasses removed — use allowlisted VisualTrustImage or ProductVisualProof. */
 export function TrustImage({
   category,
   className = "",
   showCaption = true,
 }: TrustImageProps) {
   const asset = getTrustImageForCategory(category);
-  const src = getTrustImageSrc(category);
+
+  if (!guardVisualProofRender(asset.id, "TrustImage")) {
+    return (
+      <p className={`text-sm font-semibold text-[#0B2D5B] ${className}`}>
+        {PRODUCT_VISUAL_PROOF_MESSAGE}
+      </p>
+    );
+  }
 
   return (
     <figure
@@ -29,16 +38,6 @@ export function TrustImage({
       data-image-category={category}
       data-image-id={asset.id}
     >
-      <div className="aspect-video relative">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={src}
-          alt={asset.alt}
-          loading="lazy"
-          decoding="async"
-          className="h-full w-full object-cover"
-        />
-      </div>
       {showCaption && (
         <figcaption className="p-4 bg-white">
           <p className="font-bold text-[#0B2D5B] text-sm">{asset.caption}</p>

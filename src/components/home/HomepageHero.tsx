@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { TrackedCtaLink } from "@/components/analytics/TrackedLinks";
+import { guardVisualProofRender } from "@/content/trust-visual-allowlist";
 import { SITE } from "@/lib/constants";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
@@ -49,14 +50,20 @@ export function HomepageHero() {
         </div>
 
         <div className="relative z-10 aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/15 shadow-2xl md:aspect-[5/4]">
-          <Image
-            src={HERO_IMAGE}
-            alt={HERO_ALT}
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
-          />
+          {guardVisualProofRender(HERO_IMAGE, "HomepageHero") ? (
+            <Image
+              src={HERO_IMAGE}
+              alt={HERO_ALT}
+              fill
+              priority
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center bg-[#071F3F] px-6 text-center text-sm font-semibold text-blue-100">
+              Authentic factory and product images are being updated.
+            </div>
+          )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0B2D5B]/25 to-transparent" />
         </div>
       </div>

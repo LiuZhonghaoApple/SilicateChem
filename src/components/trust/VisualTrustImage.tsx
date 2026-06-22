@@ -2,8 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { LazyImage } from "@/components/ui/LazyImage";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
-import { isAllowedVisualProofSrc } from "@/content/trust-visual-allowlist";
+import {
+  guardVisualProofRender,
+  isAllowedVisualProofSrc,
+} from "@/content/trust-visual-allowlist";
 import { classifyImageSrc } from "@/lib/trust/v6-visual-trust-engine";
 
 type TrustImageKind = "factory" | "export" | "loading" | "gallery" | "general";
@@ -61,8 +63,8 @@ export function VisualTrustImage({
     return () => observer.disconnect();
   }, [onTrustView, src, trustKind]);
 
-  if (!isAllowedVisualProofSrc(src)) {
-    return <VisualProofPlaceholder compact />;
+  if (!guardVisualProofRender(src, "VisualTrustImage")) {
+    return null;
   }
 
   return (

@@ -90,8 +90,10 @@ export function getTrustImageForCategory(category: TrustImageCategory): TrustIma
   return asset;
 }
 
+import { isAllowedVisualProofSrc } from "@/content/trust-visual-allowlist";
 import { getGalleryImageForCategory } from "@/content/site-images";
 
 export function getTrustImageSrc(category: TrustImageCategory): string {
-  return getGalleryImageForCategory(category);
+  const src = getGalleryImageForCategory(category);
+  return isAllowedVisualProofSrc(src) ? src : "";
 }

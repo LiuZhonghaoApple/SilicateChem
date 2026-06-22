@@ -99,33 +99,25 @@ export function getGalleryImageForCategory(category: GalleryCategoryKey): string
   return siteImages.galleryByCategory[category];
 }
 
-export function getProductImageForSlug(slug: string): ImageEntry {
-  const mapped = siteImages.bySlug[slug]?.hero;
-  if (mapped) return mapped;
-  const index = ["sodium-metasilicate-granules", "sodium-metasilicate-anhydrous", "sodium-metasilicate-pentahydrate", "sodium-silicate"].indexOf(slug);
-  const fallback = siteImages.products[index + 1] ?? siteImages.products[0];
-  if (!fallback) {
-    throw new Error(`[site-images] No product image for slug: ${slug}`);
-  }
-  return fallback;
+export function getProductImageForSlug(_slug: string): never {
+  throw new Error(
+    "[site-images] getProductImageForSlug is disabled — use ProductVisualProof (text only)."
+  );
 }
 
-export function getProductGalleryForSlug(slug: string): ImageEntry | undefined {
-  return siteImages.bySlug[slug]?.gallery;
+export function getProductGalleryForSlug(_slug: string): undefined {
+  return undefined;
 }
 
-export function getCategoryPageProductImage(): ImageEntry {
-  const image =
-    siteImages.bySlug["sodium-metasilicate"]?.hero ?? siteImages.products[0];
-  if (!image) {
-    throw new Error("[site-images] No category page product image configured");
-  }
-  return image;
+export function getCategoryPageProductImage(): never {
+  throw new Error(
+    "[site-images] getCategoryPageProductImage is disabled — use ProductVisualProof (text only)."
+  );
 }
 
 /** @deprecated Use getHeroImages()[0] */
 export function getHeroImage(): string {
-  return getHeroImages()[0]?.src ?? "/images/home/hero-01.webp";
+  return getHeroImages()[0]?.src ?? "/images/home/hero-lab-sodium-metasilicate.webp";
 }
 
 export { ENABLE_IMAGE_VISUAL_DEBUG } from "@/lib/trust/image-deployment";

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { ProductVisualProof } from "@/components/trust/ProductVisualProof";
 import { SectionHeader } from "@/components/ui/Section";
 import type { Product } from "@/types";
 import {
@@ -133,7 +133,7 @@ export function ProductProofPanel({
       </ProofSection>
 
       <ProofSection title="Product Visual Proof">
-        <VisualProofPlaceholder compact />
+        <ProductVisualProof />
       </ProofSection>
 
       {/* Section 4 — RFQ CTA */}

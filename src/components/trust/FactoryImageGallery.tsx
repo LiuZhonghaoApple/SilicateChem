@@ -1,36 +1,26 @@
-"use client";
-
 import { SectionHeader } from "@/components/ui/Section";
-import { StrongCTA } from "@/components/conversion/ProductConversionSections";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
-import { getFactoryGalleryImages } from "@/content/site-images";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 
 type Props = {
-  showHeader?: boolean;
   product?: string;
+  showHeader?: boolean;
   className?: string;
 };
 
+/** Factory gallery — legacy image arrays disabled; placeholder only. */
 export function FactoryImageGallery({
   showHeader = true,
-  product,
   className = "",
 }: Props) {
-  const galleryImages = getFactoryGalleryImages();
-
   return (
     <div className={className}>
       {showHeader && (
         <SectionHeader
-          title="Factory Proof — Production & Export"
-          subtitle="On-site production line, warehouse staging, and manufacturing equipment at Changyi, Shandong."
+          title="Factory Image Gallery"
+          subtitle="Verified production, warehouse, and packaging photos."
         />
       )}
-      <DeploymentImageGrid images={galleryImages} component="FactoryImageGallery" />
-      <p className="mt-6 text-sm text-[#5A6570]">
-        Factory inspection and video walkthrough available on request for qualified buyers.
-      </p>
-      <StrongCTA product={product} className="mt-4" />
+      <VisualProofPlaceholder />
     </div>
   );
 }

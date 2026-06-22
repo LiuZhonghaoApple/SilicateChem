@@ -1,3 +1,5 @@
+import { guardVisualProofRender } from "@/content/trust-visual-allowlist";
+
 type LazyImageProps = {
   src: string;
   alt: string;
@@ -21,6 +23,10 @@ export function LazyImage({
   priority = false,
   aspect = "auto",
 }: LazyImageProps) {
+  if (!guardVisualProofRender(src, "LazyImage")) {
+    return null;
+  }
+
   const aspectCls = aspectClass[aspect];
 
   if (aspect === "auto") {
