@@ -2,19 +2,16 @@ import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
-import { TrustBoundImage } from "@/components/trust/TrustBoundImage";
-import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
-import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
-import { FactoryProofStack } from "@/components/trust/FactoryProofStack";
 import { TrustLayer } from "@/components/trust/TrustLayer";
 import { TrustStack } from "@/components/trust/TrustStack";
+import { ProductLinkGrid } from "@/components/seo/InternalProductLinks";
+import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
+import { HomepageFactoryProofSection } from "@/components/home/HomepageFactoryProofSection";
 import { HomepageHero } from "@/components/home/HomepageHero";
-import { HomepageImageStrip } from "@/components/trust/HomepageRealImages";
 import { products } from "@/content/products";
 import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
-import { getHomeFactoryImage, getHomeProductionImages } from "@/content/site-images";
 import { createMetadata } from "@/lib/metadata";
 import { SEO_KEYWORDS, METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 
@@ -29,26 +26,12 @@ export const metadata = createMetadata({
 const cat = sodiumMetasilicateCategory;
 
 export default function HomePage() {
-  const factoryPreview = getHomeFactoryImage();
-
   return (
     <>
       <HomepageHero />
 
       <Section background="grey">
-        <SectionHeader
-          title="Factory & Production Proof"
-          subtitle="Real photos from Changyi, Shandong — factory exterior, production lines, and on-site operations."
-        />
-        <TrustBoundImage
-          image={factoryPreview}
-          component="LazyImage"
-          aspect="wide"
-          priority
-          wrapperClassName="mb-8"
-        />
-        <HomepageImageStrip images={getHomeProductionImages()} className="mb-10" />
-        <FactoryProofStack variant="compact" showHeader={false} />
+        <HomepageFactoryProofSection />
       </Section>
 
       <Section>
