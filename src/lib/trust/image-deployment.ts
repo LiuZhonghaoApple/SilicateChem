@@ -46,7 +46,7 @@ export function getManifestImageSrcs(): string[] {
   for (const entry of manifest.products) srcs.add(entry.src);
   for (const entry of manifest.export.packaging) srcs.add(entry.src);
   for (const entry of manifest.export.shipping) srcs.add(entry.src);
-  for (const entry of manifest.certifications) srcs.add(entry.src);
+  for (const entry of manifest.certifications as { src: string }[]) srcs.add(entry.src);
 
   return [...srcs].sort();
 }
