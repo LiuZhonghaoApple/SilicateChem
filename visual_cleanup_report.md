@@ -119,7 +119,7 @@ To permanently remove files from the repo, run a separate asset purge after appr
 - [x] `DeploymentImageGrid` returns placeholder when no allowlisted images
 - [x] `VisualTrustImage` blocks non-allowlisted src at runtime
 - [x] Homepage hero still uses lab sodium metasilicate image
-- [ ] Production deploy + live crawl confirm forbidden URLs absent from HTML
+- [x] Production deploy + live crawl confirm forbidden URLs absent from HTML (commit `841105e`, 2026-06-18)
 
 ---
 
