@@ -1,10 +1,9 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import {
   EXPORT_SHIPMENT_STATS,
   EXPORT_DATA_DISCLAIMER,
 } from "@/content/trust/export-countries";
-import { siteImages } from "@/content/site-images";
 
 export function ExportShipmentEvidence({ className = "" }: { className?: string }) {
   const stats = [
@@ -62,11 +61,7 @@ export function ExportShipmentEvidence({ className = "" }: { className?: string 
         <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
           Documented export loading
         </p>
-        <DeploymentImageGrid
-          images={siteImages.export.shipping}
-          columns="sm:grid-cols-3"
-          component="ExportShipmentEvidence"
-        />
+        <VisualProofPlaceholder compact />
       </div>
     </div>
   );

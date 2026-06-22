@@ -1,7 +1,6 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { VERIFIED_PACKAGING } from "@/content/trust/export-countries";
-import { siteImages } from "@/content/site-images";
 
 export function ExportPackagingProof({ className = "" }: { className?: string }) {
   return (
@@ -18,7 +17,7 @@ export function ExportPackagingProof({ className = "" }: { className?: string })
           </li>
         ))}
       </ul>
-      <DeploymentImageGrid images={siteImages.export.packaging} component="ExportPackagingProof" />
+      <VisualProofPlaceholder compact />
     </div>
   );
 }

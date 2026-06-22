@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/Section";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
 import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
-import { getExportImages } from "@/content/site-images";
-import { filterAllowedVisualProofImages } from "@/content/trust-visual-allowlist";
 import {
   EXPORT_COUNTRIES,
   EXPORT_DATA_DISCLAIMER,
@@ -165,21 +162,7 @@ export function ExportProofMap({
         <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
           Export shipment visual proof
         </p>
-        {filterAllowedVisualProofImages(
-          variant === "preview" ? getExportImages().slice(0, 3) : getExportImages()
-        ).length > 0 ? (
-          <DeploymentImageGrid
-            images={
-              variant === "preview"
-                ? getExportImages().slice(0, 3)
-                : getExportImages()
-            }
-            columns={variant === "preview" ? "sm:grid-cols-3" : "sm:grid-cols-3 lg:grid-cols-6"}
-            component="ExportProofMap"
-          />
-        ) : (
-          <VisualProofPlaceholder compact />
-        )}
+        <VisualProofPlaceholder compact />
       </div>
     </div>
   );

@@ -50,9 +50,9 @@ All other 39 legacy `.webp` assets are blocked at render time.
 | **MetasilicateCategoryPage** | Category hero + `FactoryImageGallery` | Group lab tour + factory gallery (all forbidden) |
 | **Applications hub** | `product-13`, `product-14` | Certificate plaque, Women's Day graphic |
 | **ExportProofMap** | All `export/*` images | Showroom tours, patent screenshot, people in warehouse, drum-dance, conference meeting |
-| **ExportShipmentEvidence** | `export-loading-01`–`03.webp` | Showroom, patent screenshot, people walkthrough |
-| **ExportPackagingProof** | `bagged-product-01/02`, `warehouse-staging` | Community event, conference meeting, showroom |
-| **ExportLogisticsCapability** | `export-loading-*` (shipping set) | Same forbidden export set |
+| **ExportShipmentEvidence** | `export-loading-01`–`03.webp` | Showroom, patent screenshot, people walkthrough — direct placeholder (no RSC payload) |
+| **ExportPackagingProof** | `bagged-product-01/02`, `warehouse-staging` | Community event, conference meeting, showroom — direct placeholder |
+| **ExportLogisticsCapability** | `export-loading-*` (shipping set) | Same forbidden export set — direct placeholder |
 | **Export page** | `PageVisualBanner` | Export hero mislabeled images |
 
 ---

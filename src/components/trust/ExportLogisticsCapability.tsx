@@ -1,7 +1,6 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { DeploymentImageGrid } from "@/components/trust/HomepageRealImages";
+import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { LOGISTICS_SIGNALS } from "@/content/trust/export-countries";
-import { siteImages } from "@/content/site-images";
 
 export function ExportLogisticsCapability({ className = "" }: { className?: string }) {
   return (
@@ -18,7 +17,7 @@ export function ExportLogisticsCapability({ className = "" }: { className?: stri
           </li>
         ))}
       </ul>
-      <DeploymentImageGrid images={siteImages.export.shipping} component="ExportLogisticsCapability" />
+      <VisualProofPlaceholder compact />
     </div>
   );
 }
