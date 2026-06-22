@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import {
   EXPORT_COUNTRIES,
   EXPORT_DATA_DISCLAIMER,
@@ -162,7 +162,7 @@ export function ExportProofMap({
         <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
           Export shipment visual proof
         </p>
-        <VisualProofPlaceholder compact />
+        <VisualAssetPendingNotice compact />
       </div>
     </div>
   );

@@ -4,8 +4,8 @@ import {
   getTrustImageForCategory,
   type TrustImageCategory,
 } from "@/lib/trust/image-strategy";
-import { guardVisualProofRender } from "@/content/trust-visual-allowlist";
-import { PRODUCT_VISUAL_PROOF_MESSAGE } from "@/components/trust/ProductVisualProof";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
+import { isImageRenderingEnabled } from "@/lib/image-system";
 
 export { getTrustImageForCategory } from "@/lib/trust/image-strategy";
 
@@ -15,21 +15,17 @@ type TrustImageProps = {
   showCaption?: boolean;
 };
 
-/** @deprecated Bypasses removed — use allowlisted VisualTrustImage or ProductVisualProof. */
+/** @deprecated Image rendering disabled while IMAGE_SYSTEM_MODE is PENDING. */
 export function TrustImage({
   category,
   className = "",
   showCaption = true,
 }: TrustImageProps) {
-  const asset = getTrustImageForCategory(category);
-
-  if (!guardVisualProofRender(asset.id, "TrustImage")) {
-    return (
-      <p className={`text-sm font-semibold text-[#0B2D5B] ${className}`}>
-        {PRODUCT_VISUAL_PROOF_MESSAGE}
-      </p>
-    );
+  if (!isImageRenderingEnabled()) {
+    return <VisualAssetPendingNotice compact className={className} />;
   }
+
+  const asset = getTrustImageForCategory(category);
 
   return (
     <figure

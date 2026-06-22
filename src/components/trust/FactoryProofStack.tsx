@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import {
   FACTORY_METRICS,
   FACTORY_PROOF_AREAS,
@@ -67,7 +67,7 @@ export function FactoryProofStack({
         </span>
       </div>
 
-      <VisualProofPlaceholder className="mb-8" />
+      <VisualAssetPendingNotice className="mb-8" />
 
       <div className={`grid gap-6 ${variant === "compact" ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
         {areas.map((area) => (

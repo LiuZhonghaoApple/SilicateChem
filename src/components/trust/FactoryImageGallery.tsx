@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 
 type Props = {
   product?: string;
@@ -7,7 +7,7 @@ type Props = {
   className?: string;
 };
 
-/** Factory gallery — legacy image arrays disabled; placeholder only. */
+/** Factory gallery — image system PENDING; layout shell only. */
 export function FactoryImageGallery({
   showHeader = true,
   className = "",
@@ -20,7 +20,7 @@ export function FactoryImageGallery({
           subtitle="Verified production, warehouse, and packaging photos."
         />
       )}
-      <VisualProofPlaceholder />
+      <VisualAssetPendingNotice />
     </div>
   );
 }

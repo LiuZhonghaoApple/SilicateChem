@@ -1,9 +1,8 @@
-/** Product Visual Proof — text only. No image arrays, manifests, or legacy asset imports. */
-export const PRODUCT_VISUAL_PROOF_MESSAGE =
-  "Authentic factory and product images are being updated.";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 
+export { VISUAL_ASSET_PENDING_MESSAGE as PRODUCT_VISUAL_PROOF_MESSAGE } from "@/components/trust/VisualAssetPendingNotice";
+
+/** Product Visual Proof — placeholder only while IMAGE_SYSTEM_MODE is PENDING. */
 export function ProductVisualProof() {
-  return (
-    <p className="text-sm font-semibold text-[#0B2D5B]">{PRODUCT_VISUAL_PROOF_MESSAGE}</p>
-  );
+  return <VisualAssetPendingNotice compact />;
 }

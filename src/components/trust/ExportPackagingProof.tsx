@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import { VERIFIED_PACKAGING } from "@/content/trust/export-countries";
 
 export function ExportPackagingProof({ className = "" }: { className?: string }) {
@@ -17,7 +17,7 @@ export function ExportPackagingProof({ className = "" }: { className?: string })
           </li>
         ))}
       </ul>
-      <VisualProofPlaceholder compact />
+      <VisualAssetPendingNotice compact />
     </div>
   );
 }

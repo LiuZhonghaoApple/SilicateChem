@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { ImageDebugWrapper, logImageMount } from "@/components/ui/ImageDebugWrapper";
 import { VisualTrustImage } from "@/components/trust/VisualTrustImage";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import { useVisualTrustContext } from "@/components/trust/VisualTrustProvider";
 import { filterAllowedVisualProofImages } from "@/content/trust-visual-allowlist";
+import { isImageRenderingEnabled } from "@/lib/image-system";
 import type { ImageEntry } from "@/content/site-images";
 
 type Props = {
@@ -20,12 +21,16 @@ export function HomepageHeroBackground({ images, className = "" }: Props) {
   const { trackImageView } = useVisualTrustContext();
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (!isImageRenderingEnabled() || images.length <= 1) return;
     const timer = window.setInterval(() => {
       setIndex((current) => (current + 1) % images.length);
     }, 5000);
     return () => window.clearInterval(timer);
   }, [images.length]);
+
+  if (!isImageRenderingEnabled()) {
+    return <VisualAssetPendingNotice className={className} />;
+  }
 
   if (images.length === 0) return null;
 
@@ -64,6 +69,10 @@ export function HomepageImageStrip({
   className = "",
 }: Omit<Props, "priority">) {
   const { trackImageView } = useVisualTrustContext();
+
+  if (!isImageRenderingEnabled()) {
+    return <VisualAssetPendingNotice className={className} />;
+  }
 
   if (images.length === 0) return null;
 
@@ -106,9 +115,13 @@ export function DeploymentImageGrid({
 }) {
   const { trackImageView } = useVisualTrustContext();
 
+  if (!isImageRenderingEnabled()) {
+    return <VisualAssetPendingNotice className={className} />;
+  }
+
   const allowedImages = filterAllowedVisualProofImages(images);
   if (allowedImages.length === 0) {
-    return <VisualProofPlaceholder className={className} />;
+    return <VisualAssetPendingNotice className={className} />;
   }
 
   return (

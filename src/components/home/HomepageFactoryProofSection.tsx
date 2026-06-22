@@ -1,18 +1,10 @@
 import Link from "next/link";
 import { SectionHeader } from "@/components/ui/Section";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import {
   FACTORY_METRICS,
   FACTORY_VERIFICATION_BADGE,
 } from "@/content/trust/factory-proof";
-
-const NEEDED_PHOTOS = [
-  "Factory exterior",
-  "Production line",
-  "Packaging line",
-  "Warehouse",
-  "Loading / dispatch",
-  "Product close-up",
-] as const;
 
 export function HomepageFactoryProofSection() {
   return (
@@ -22,30 +14,7 @@ export function HomepageFactoryProofSection() {
         subtitle="Real photos from Changyi, Shandong — factory exterior, production lines, and on-site operations."
       />
 
-      <div className="mb-8 rounded-lg border border-dashed border-[#2E7D9A]/40 bg-white p-6 md:p-8">
-        <h3 className="text-lg font-bold text-[#0B2D5B]">
-          Verified Factory Photos Coming Soon
-        </h3>
-        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[#5A6570]">
-          We are updating this section with verified production line, warehouse,
-          packaging, and loading photos from our Changyi manufacturing site.
-        </p>
-        <div className="mt-5">
-          <p className="text-xs font-bold uppercase tracking-wide text-[#2E7D9A]">
-            Needed photos
-          </p>
-          <ul className="mt-2 grid gap-1.5 sm:grid-cols-2 text-sm text-[#5A6570]">
-            {NEEDED_PHOTOS.map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <span className="text-[#2E7D9A]" aria-hidden="true">
-                  •
-                </span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <VisualAssetPendingNotice className="mb-8" />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <div className="rounded-lg border border-[#2E7D9A]/30 bg-white p-5">

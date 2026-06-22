@@ -1,3 +1,5 @@
+import { isImageRenderingEnabled } from "@/lib/image-system";
+
 /** Images permitted to render in buyer-facing visual proof UI. */
 export const ALLOWED_VISUAL_PROOF_SRCS = new Set([
   "/images/home/hero-lab-sodium-metasilicate.webp",
@@ -89,6 +91,7 @@ export function normalizeVisualProofSrc(src: string): string {
 }
 
 export function isAllowedVisualProofSrc(src: string): boolean {
+  if (!isImageRenderingEnabled()) return false;
   return ALLOWED_VISUAL_PROOF_SRCS.has(normalizeVisualProofSrc(src));
 }
 
@@ -97,6 +100,7 @@ export function guardVisualProofRender(
   src: string,
   component: string
 ): boolean {
+  if (!isImageRenderingEnabled()) return false;
   if (isAllowedVisualProofSrc(src)) return true;
   if (typeof console !== "undefined") {
     console.warn(
@@ -111,6 +115,7 @@ export function getVisualImageRecord(src: string): VisualImageRecord | undefined
 }
 
 export function filterAllowedVisualProofImages<T extends { src: string }>(images: T[]): T[] {
+  if (!isImageRenderingEnabled()) return [];
   return images.filter((img) => isAllowedVisualProofSrc(img.src));
 }
 

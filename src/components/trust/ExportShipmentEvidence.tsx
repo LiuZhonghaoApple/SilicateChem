@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import {
   EXPORT_SHIPMENT_STATS,
   EXPORT_DATA_DISCLAIMER,
@@ -61,7 +61,7 @@ export function ExportShipmentEvidence({ className = "" }: { className?: string 
         <p className="text-sm font-semibold text-[#0B2D5B] mb-3">
           Documented export loading
         </p>
-        <VisualProofPlaceholder compact />
+        <VisualAssetPendingNotice compact />
       </div>
     </div>
   );

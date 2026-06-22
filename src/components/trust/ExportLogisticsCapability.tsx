@@ -1,5 +1,5 @@
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import { LOGISTICS_SIGNALS } from "@/content/trust/export-countries";
 
 export function ExportLogisticsCapability({ className = "" }: { className?: string }) {
@@ -17,7 +17,7 @@ export function ExportLogisticsCapability({ className = "" }: { className?: stri
           </li>
         ))}
       </ul>
-      <VisualProofPlaceholder compact />
+      <VisualAssetPendingNotice compact />
     </div>
   );
 }

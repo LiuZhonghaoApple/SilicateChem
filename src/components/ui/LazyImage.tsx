@@ -1,3 +1,4 @@
+import { isImageRenderingEnabled } from "@/lib/image-system";
 import { guardVisualProofRender } from "@/content/trust-visual-allowlist";
 
 type LazyImageProps = {
@@ -16,6 +17,7 @@ const aspectClass = {
   auto: "",
 };
 
+/** Image rendering disabled while IMAGE_SYSTEM_MODE is PENDING. */
 export function LazyImage({
   src,
   alt,
@@ -23,6 +25,10 @@ export function LazyImage({
   priority = false,
   aspect = "auto",
 }: LazyImageProps) {
+  if (!isImageRenderingEnabled()) {
+    return null;
+  }
+
   if (!guardVisualProofRender(src, "LazyImage")) {
     return null;
   }

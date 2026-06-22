@@ -1,5 +1,6 @@
 import manifest from "./site-images.manifest.json";
 import bindings from "./trust-image-bindings.json";
+import { isImageSystemPending } from "@/lib/image-system";
 
 export type ImageEntry = {
   src: string;
@@ -180,7 +181,8 @@ export function validateTrustImageRegistry(): {
 if (
   typeof process !== "undefined" &&
   process.env.NODE_ENV === "development" &&
-  typeof window === "undefined"
+  typeof window === "undefined" &&
+  !isImageSystemPending()
 ) {
   validateTrustImageRegistry();
 }
