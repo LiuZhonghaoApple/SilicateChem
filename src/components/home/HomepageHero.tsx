@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Image from "next/image";
 import { TrackedCtaLink } from "@/components/analytics/TrackedLinks";
-import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import { SITE } from "@/lib/constants";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
@@ -11,21 +11,36 @@ export function HomepageHero() {
   )}`;
 
   return (
-    <section className="relative overflow-hidden bg-[#0B2D5B] text-white">
-      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-2 md:items-center md:py-20">
-        <div className="relative z-10">
-          <p className="text-sm font-semibold uppercase tracking-widest text-[#2E7D9A]">
+    <section className="relative min-h-[560px] overflow-hidden bg-[#0B2D5B] text-white md:aspect-[1916/821] md:min-h-[560px] lg:min-h-[620px]">
+      <Image
+        src="/assets/images/home-hero-visual-bg-clear.png"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 z-0 object-cover object-center"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 z-10 bg-gradient-to-r from-[#0B2D5B]/85 via-[#0B2D5B]/45 to-[#0B2D5B]/10"
+        aria-hidden="true"
+      />
+      <div className="relative z-20 flex h-full w-full items-center px-4 py-16 sm:px-6 md:justify-start md:py-0 md:pl-[10vw] lg:pl-[11vw] xl:pl-[12vw]">
+        <div className="max-w-[560px]">
+          <p className="text-sm font-semibold uppercase tracking-widest text-[#7FD6E8]">
             {SITE.company}
           </p>
-          <h1 className="mt-3 text-3xl font-bold tracking-tight md:text-5xl">
-            Reliable Sodium Metasilicate Manufacturer
+          <h1 className="mt-4 text-[26px] font-bold leading-[1.14] tracking-tight sm:text-3xl md:text-5xl">
+            Reliable Sodium
+            <br />
+            <span className="whitespace-nowrap">Metasilicate Manufacturer</span>
           </h1>
-          <p className="mt-4 text-lg font-medium text-blue-50 md:text-xl">
+          <p className="mt-6 text-lg font-medium text-blue-50 md:mt-8 md:text-xl">
             Industrial Grade Sodium Metasilicate
             <br className="hidden sm:block" />
             <span className="sm:ml-0"> Verified Quality • Stable Supply • Global Export</span>
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:mt-9">
             <TrackedCtaLink
               href={quoteHref}
               ctaType="quote"
@@ -42,10 +57,6 @@ export function HomepageHero() {
               View Products
             </Link>
           </div>
-        </div>
-
-        <div className="relative z-10 aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/15 shadow-2xl md:aspect-[5/4] flex items-center">
-          <VisualAssetPendingNotice variant="light" className="w-full border-0 bg-transparent" />
         </div>
       </div>
     </section>
