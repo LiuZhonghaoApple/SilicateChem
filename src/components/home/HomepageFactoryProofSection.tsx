@@ -1,10 +1,25 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SectionHeader } from "@/components/ui/Section";
-import { VisualAssetPendingNotice } from "@/components/trust/VisualAssetPendingNotice";
 import {
   FACTORY_METRICS,
   FACTORY_VERIFICATION_BADGE,
 } from "@/content/trust/factory-proof";
+
+const factoryProofImages = [
+  {
+    src: "/assets/images/factory-proof/factory-gate.jpg",
+    alt: "Zhongzhi factory gate and exterior",
+  },
+  {
+    src: "/assets/images/factory-proof/production-equipment.png",
+    alt: "Sodium metasilicate production equipment",
+  },
+  {
+    src: "/assets/images/factory-proof/finished-goods-warehouse.png",
+    alt: "Finished goods warehouse with packed sodium metasilicate products",
+  },
+] as const;
 
 export function HomepageFactoryProofSection() {
   return (
@@ -14,7 +29,22 @@ export function HomepageFactoryProofSection() {
         subtitle="Real photos from Changyi, Shandong — factory exterior, production lines, and on-site operations."
       />
 
-      <VisualAssetPendingNotice className="mb-8" />
+      <div className="mb-8 grid gap-4 lg:grid-cols-3">
+        {factoryProofImages.map((image) => (
+          <div
+            key={image.src}
+            className="relative h-64 overflow-hidden rounded-2xl border border-[#E2E6EA] bg-white lg:h-72"
+          >
+            <Image
+              src={image.src}
+              alt={image.alt}
+              fill
+              sizes="(min-width: 1024px) 33vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
+      </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-6">
         <div className="rounded-lg border border-[#2E7D9A]/30 bg-white p-5">
