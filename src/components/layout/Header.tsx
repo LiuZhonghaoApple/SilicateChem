@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#E2E6EA] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-3 py-3 sm:px-4 lg:px-6">
+      <div className="mx-auto flex w-full items-center justify-between px-3 py-3 sm:px-4 lg:pl-[11vw] lg:pr-6 xl:pl-[12vw]">
         <Link href="/" className="flex shrink-0 items-center gap-4">
           <Image
             src="/assets/images/zhongzhi-logo-nav.png"
@@ -32,16 +32,18 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 xl:flex 2xl:gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="whitespace-nowrap text-[13px] font-semibold text-[#5A6570] transition-colors hover:text-[#0B2D5B] 2xl:text-sm"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-2 xl:flex 2xl:gap-3">
+          <div className="flex items-center gap-2 transform-gpu xl:-translate-x-24 2xl:-translate-x-32 2xl:gap-3">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="origin-center transform-gpu whitespace-nowrap rounded-full px-2.5 py-1.5 text-[15px] font-semibold text-[#5A6570] transition-all duration-300 ease-out hover:scale-[1.15] hover:bg-[#EAF4FA] hover:text-[#0B2D5B] hover:shadow-sm 2xl:text-[16px]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
           <Link
             href="/contact?type=quote"
             className="whitespace-nowrap rounded bg-[#0B2D5B] px-5 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-[#071F3F] 2xl:px-6 2xl:text-sm"
