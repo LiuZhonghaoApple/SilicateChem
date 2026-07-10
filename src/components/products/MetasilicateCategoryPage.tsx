@@ -5,6 +5,7 @@ import {
 } from "@/components/conversion/ProductConversionSections";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
+import { ProductMainImage } from "@/components/products/ProductMainImage";
 import { FAQSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
@@ -46,7 +47,7 @@ export function MetasilicateCategoryPage() {
             ))}
             <StrongCTA product={cat.inquiryProductName} className="mt-4" />
           </div>
-          <VisualProofPlaceholder />
+          <ProductMainImage productSlug="sodium-metasilicate" />
         </div>
       </Section>
 

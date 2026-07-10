@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { SpecTable } from "@/components/ui/SpecTable";
-import { VisualProofPlaceholder } from "@/components/trust/VisualProofPlaceholder";
 import { BreadcrumbSchema, ProductSchema } from "@/components/seo/JsonLd";
 import { products, getProductBySlug } from "@/content/products";
 import { SITE } from "@/lib/constants";
@@ -14,6 +13,7 @@ import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { TrustLayer } from "@/components/trust/TrustLayer";
 import { ProductProofPanel } from "@/components/trust/ProductProofPanel";
 import { TrustStack } from "@/components/trust/TrustStack";
+import { ProductMainImage } from "@/components/products/ProductMainImage";
 import {
   productBreadcrumbs,
   productBreadcrumbSchemaItems,
@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
             <div className="lg:hidden">
-              <VisualProofPlaceholder compact className="mb-6" />
+              <ProductMainImage productSlug={product.slug} compact className="mb-6" />
             </div>
             <div>
               <SectionHeader title="Product Overview" />
@@ -156,7 +156,9 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="space-y-6">
-            <VisualProofPlaceholder compact />
+            <div className="hidden lg:block">
+              <ProductMainImage productSlug={product.slug} compact />
+            </div>
             <InternalProductLinks />
             <div className="rounded-lg border border-[#E2E6EA] p-5">
               <h3 className="font-bold text-[#0B2D5B] text-sm">Quick Inquiry</h3>
