@@ -2,12 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { TrustLayer } from "@/components/trust/TrustLayer";
-import { TrustStack } from "@/components/trust/TrustStack";
+import { HomepageWhyChooseSection } from "@/components/trust/HomepageWhyChooseSection";
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
 import { HomepageFactoryProofSection } from "@/components/home/HomepageFactoryProofSection";
 import { HomepageHero } from "@/components/home/HomepageHero";
-import { products } from "@/content/products";
 import { industryApplications } from "@/content/applications/industries";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
@@ -316,18 +314,7 @@ export default function HomePage() {
       </Section>
 
       <Section background="grey">
-        <SectionHeader
-          title="Why Zhongzhi"
-          subtitle="Verified factory scale, partial export customs data, and product trust — factory-direct manufacturer in Changyi, Shandong."
-        />
-        <div className="space-y-12">
-          <TrustLayer
-            variant="homepage"
-            product={products.find((p) => p.slug === "sodium-metasilicate-granules")}
-            inquiryProductName={cat.inquiryProductName}
-          />
-          <TrustStack compact />
-        </div>
+        <HomepageWhyChooseSection />
       </Section>
 
       <Section>
