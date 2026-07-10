@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const proofCards = [
   {
@@ -185,6 +186,17 @@ export function HomepageWhyChooseSection() {
         >
           Learn More →
         </Link>
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-[28px] border border-[#D7E6EF] bg-white shadow-sm">
+        <Image
+          src="/assets/images/trust/global-buyer-distribution-aligned.png"
+          alt="Global buyer distribution map showing Zhongzhi export experience and overseas buyer markets"
+          width={1640}
+          height={899}
+          className="h-auto w-full"
+          sizes="(min-width: 1024px) 1200px, 100vw"
+        />
       </div>
 
       <div className="mt-6 rounded-2xl bg-[#0B2D5B] p-6 text-white shadow-sm md:p-7 lg:flex lg:items-center lg:gap-8">
