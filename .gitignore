@@ -35,3 +35,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local asset staging and review outputs
+external-assets/
+public/asset-preview/
+
+# Local SEO monitoring exports
+seo-monitoring/
+
+# Deprecated local hero image drafts
+public/assets/images/home-hero-banner-static.png
+public/assets/images/home-hero-visual-bg.png
+public/images/home-hero-banner-static.png
