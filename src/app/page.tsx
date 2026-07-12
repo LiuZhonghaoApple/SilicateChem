@@ -6,7 +6,6 @@ import { HomepageWhyChooseSection } from "@/components/trust/HomepageWhyChooseSe
 import { SiteExploreSection } from "@/components/seo/SiteExploreSection";
 import { HomepageFactoryProofSection } from "@/components/home/HomepageFactoryProofSection";
 import { HomepageHero } from "@/components/home/HomepageHero";
-import { intentGuides } from "@/content/guides/intent-pages";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { createMetadata } from "@/lib/metadata";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
@@ -279,6 +278,137 @@ function BuyerProfileIcon({ type }: { type: BuyerProfileIcon }) {
         strokeLinejoin="round"
         strokeWidth="1.5"
         viewBox="0 0 96 96"
+      >
+        {paths[type]}
+      </svg>
+    </span>
+  );
+}
+
+type BuyerIntentGuideIcon =
+  | "supplier"
+  | "price"
+  | "detergent"
+  | "comparison"
+  | "factory"
+  | "download";
+
+type BuyerIntentGuideCard = {
+  title: string;
+  href: string;
+  cta: string;
+  icon: BuyerIntentGuideIcon;
+};
+
+const buyerIntentGuideCards: BuyerIntentGuideCard[] = [
+  {
+    title: "Export Compliance Documents Download",
+    href: "/downloads",
+    cta: "Download files → Request quote",
+    icon: "download",
+  },
+  {
+    title: "How to Select a Sodium Metasilicate Supplier",
+    href: "/guides/supplier-selection",
+    cta: "Read guide → Request quote",
+    icon: "supplier",
+  },
+  {
+    title: "Sodium Metasilicate Price Factors — Factory Quotation Guide",
+    href: "/guides/price-factors",
+    cta: "Read guide → Request quote",
+    icon: "price",
+  },
+  {
+    title: "Sodium Metasilicate Uses in Detergent Manufacturing",
+    href: "/guides/uses-detergent",
+    cta: "Read guide → Request quote",
+    icon: "detergent",
+  },
+  {
+    title: "Sodium Metasilicate vs Soda Ash — Procurement Comparison",
+    href: "/guides/sodium-metasilicate-vs-soda-ash",
+    cta: "Read guide → Request quote",
+    icon: "comparison",
+  },
+  {
+    title: "How to Choose a Sodium Metasilicate Factory in China",
+    href: "/guides/how-to-choose-china-factory",
+    cta: "Read guide → Request quote",
+    icon: "factory",
+  },
+];
+
+function BuyerIntentGuideIcon({ type }: { type: BuyerIntentGuideIcon }) {
+  const paths = {
+    supplier: (
+      <>
+        <circle cx="20" cy="22" r="5.5" fill="white" />
+        <circle cx="32" cy="18" r="6.5" fill="white" />
+        <circle cx="44" cy="22" r="5.5" fill="white" />
+        <path d="M12 43c1.4-6.8 6.2-10.2 14.2-10.2M23 43c1.2-8 7.2-12 9-12s7.8 4 9 12M37.8 32.8c8 0 12.8 3.4 14.2 10.2" />
+        <path d="M20 27.5a5.5 5.5 0 1 1 0-11M32 24.5a6.5 6.5 0 1 1 0-13M44 27.5a5.5 5.5 0 1 0 0-11" />
+        <path d="M15 49h34" stroke="#2A86A5" />
+      </>
+    ),
+    price: (
+      <>
+        <path d="M15 17h25l11 11-25 25-11-11V17Z" fill="white" />
+        <path d="M15 17h25l11 11-25 25-11-11V17Z" />
+        <circle cx="24" cy="26" r="3" fill="#EAF4FA" />
+        <path d="M33 28c-1.2-2-5.8-1.6-6.2 1-.6 4 8.8 2.2 8.2 6.5-.4 3-5.6 3.4-7.5.8M31.5 24v16" stroke="#2A86A5" />
+        <path d="M41 20 52 9M45 22l8-8" />
+      </>
+    ),
+    detergent: (
+      <>
+        <path d="M19 24h17l5 8v20H15V32l4-8Z" fill="white" />
+        <path d="M19 24h17l5 8v20H15V32l4-8ZM22 14h11v10H22z" />
+        <path d="M21 38h13M21 44h9" stroke="#2A86A5" />
+        <path d="M43 37h10v15H43z" fill="#EAF4FA" />
+        <path d="M43 37h10v15H43zM45 32h6v5" />
+        <circle cx="48" cy="17" r="3" fill="white" />
+        <circle cx="53" cy="25" r="2.5" fill="white" />
+        <path d="M48 17h.1M53 25h.1" />
+      </>
+    ),
+    comparison: (
+      <>
+        <path d="M32 13v38M18 21h28M32 21l-11 19M32 21l11 19" />
+        <path d="M13 40h16c-.8 5.2-3.8 8-8 8s-7.2-2.8-8-8ZM35 40h16c-.8 5.2-3.8 8-8 8s-7.2-2.8-8-8Z" fill="#EAF4FA" />
+        <path d="M13 40h16c-.8 5.2-3.8 8-8 8s-7.2-2.8-8-8ZM35 40h16c-.8 5.2-3.8 8-8 8s-7.2-2.8-8-8ZM23 55h18" />
+        <path d="M17 34h8M39 34h8" stroke="#2A86A5" />
+      </>
+    ),
+    factory: (
+      <>
+        <path d="M12 51V25l10 6v-6l11 7V20h13v31" fill="#EAF4FA" />
+        <path d="M12 51V25l10 6v-6l11 7V20h13v31M9 51h46" />
+        <path d="M19 42h6M31 42h6M19 36h6M31 36h6M40 27h5M40 33h5" stroke="#2A86A5" />
+        <path d="M17 57h30" />
+      </>
+    ),
+    download: (
+      <>
+        <path d="M18 10h22l8 8v36H18V10Z" fill="white" />
+        <path d="M18 10h22l8 8v36H18V10ZM40 10v10h8" />
+        <path d="M32 24v18M24 34l8 8 8-8" stroke="#2A86A5" />
+        <path d="M24 48h16M24 18h8" />
+      </>
+    ),
+  };
+
+  return (
+    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-[#D7E6EF] bg-[#EAF4FA] text-[#0B2D5B] transition duration-300 group-hover:scale-105 group-hover:border-[#2A86A5] group-hover:bg-[#DFF2F7] group-hover:text-[#2A86A5]">
+      <svg
+        aria-hidden="true"
+        className="h-9 w-9"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+        viewBox="0 0 64 64"
       >
         {paths[type]}
       </svg>
@@ -590,16 +720,26 @@ export default function HomePage() {
           title="Buyer Intent Guides"
           subtitle="Commercial procurement guides — each leads to product quotation."
         />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {intentGuides.map((guide) => (
-            <Link
-              key={guide.slug}
-              href={`/guides/${guide.slug}`}
-              className="block rounded-lg border border-[#E2E6EA] bg-white p-5 hover:shadow-sm"
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {buyerIntentGuideCards.map((guide) => (
+            <article
+              key={guide.title}
+              className="group flex min-h-[260px] flex-col rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:border-[#2A86A5] hover:bg-[#F8FCFE] hover:shadow-[0_18px_45px_rgba(42,134,165,0.14)]"
             >
-              <h3 className="font-bold text-[#0B2D5B] text-sm">{guide.title}</h3>
-              <p className="mt-3 text-xs font-semibold text-[#2E7D9A]">Read guide → Request quote</p>
-            </Link>
+              <BuyerIntentGuideIcon type={guide.icon} />
+              <h3 className="mt-6 text-lg font-bold leading-snug text-[#0B2D5B] transition-colors duration-300 group-hover:text-[#2A86A5]">
+                {guide.title}
+              </h3>
+              <div className="mt-auto pt-6">
+                <div className="mb-4 h-px w-full bg-[#D7E6EF]" />
+                <Link
+                  href={guide.href}
+                  className="inline-flex w-fit items-center justify-center whitespace-nowrap text-sm font-bold text-[#1D6680] transition-colors hover:text-[#0B2D5B] hover:underline"
+                >
+                  {guide.cta}
+                </Link>
+              </div>
+            </article>
           ))}
         </div>
       </Section>
