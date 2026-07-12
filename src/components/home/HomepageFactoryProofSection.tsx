@@ -25,8 +25,8 @@ export function HomepageFactoryProofSection() {
   return (
     <>
       <SectionHeader
-        title="Factory & Production Proof"
-        subtitle="Real photos from Changyi, Shandong — factory exterior, production lines, and on-site operations."
+        title="Factory & Production Capabilities"
+        subtitle="A closer look at Zhongzhi’s Changyi factory — from factory entrance and production equipment to finished goods warehouse for stable sodium metasilicate supply."
       />
 
       <div className="mb-8 grid gap-4 lg:grid-cols-3">
