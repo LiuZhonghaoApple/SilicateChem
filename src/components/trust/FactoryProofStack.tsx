@@ -85,7 +85,7 @@ export function FactoryProofStack({
 
       {variant === "compact" && (
         <Link
-          href="/factory"
+          href="/about"
           className="mt-6 inline-block text-sm font-bold text-[#2E7D9A] hover:underline"
         >
           View full factory proof →

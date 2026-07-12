@@ -9,7 +9,7 @@ const TRUST_LAYERS = [
     title: "Factory Verified",
     status: "verified" as const,
     description: `${FACTORY_VERIFICATION_BADGE.description} 100,000 MT stated capacity · 438 equipment sets · 83 employees (QCC 2025).`,
-    href: "/factory",
+    href: "/about",
   },
   {
     id: "export",

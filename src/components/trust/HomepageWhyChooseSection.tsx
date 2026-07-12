@@ -7,8 +7,8 @@ const proofCards = [
     title: "Factory-Direct Supply",
     description:
       "Registered manufacturing site in Changyi, Shandong, supporting stable sodium metasilicate supply.",
-    cta: "View Factory",
-    href: "/factory",
+    cta: "About Us",
+    href: "/about",
     icon: "factory",
   },
   {
@@ -181,7 +181,7 @@ export function HomepageWhyChooseSection() {
           </p>
         </div>
         <Link
-          href="/factory"
+          href="/about"
           className="mt-6 inline-flex w-fit items-center justify-center whitespace-nowrap rounded border border-[#0B2D5B] px-5 py-2.5 text-sm font-bold text-[#0B2D5B] transition-colors hover:bg-[#0B2D5B] hover:text-white md:mt-0"
         >
           Learn More →
