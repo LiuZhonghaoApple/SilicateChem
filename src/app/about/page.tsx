@@ -76,34 +76,6 @@ const qualityPoints = [
   },
 ];
 
-function ImagePlaceholder({ label, className = "" }: { label: string; className?: string }) {
-  return (
-    <div
-      className={`flex min-h-[280px] items-center justify-center rounded-2xl border border-[#D7E6EF] bg-gradient-to-br from-[#F2F8FB] to-white p-6 text-center shadow-sm ${className}`}
-    >
-      <div>
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#2A86A5] shadow-sm">
-          <svg
-            aria-hidden="true"
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="1.7"
-            viewBox="0 0 24 24"
-          >
-            <path d="M4 7h16v10H4z" />
-            <path d="m8 14 2.5-3 2 2.4 1.5-1.8L17 15" />
-            <path d="M8 9h.01" />
-          </svg>
-        </div>
-        <p className="text-sm font-semibold text-[#0B2D5B]">{label}</p>
-      </div>
-    </div>
-  );
-}
-
 export default function AboutPage() {
   return (
     <>
@@ -134,7 +106,15 @@ export default function AboutPage() {
               material markets.
             </p>
           </div>
-          <ImagePlaceholder label="Company exterior image placeholder" />
+          <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <Image
+              src="/assets/images/about/about-product-sample-lab.webp"
+              alt="Sodium metasilicate product sample in laboratory"
+              fill
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 540px, 100vw"
+            />
+          </div>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-3">
@@ -191,10 +171,15 @@ export default function AboutPage() {
               ))}
             </div>
             <div className="flex h-full flex-col lg:border-l lg:border-[#D7E6EF] lg:pl-6">
-              <ImagePlaceholder
-                label="Company history image placeholder"
-                className="min-h-[320px] flex-1"
-              />
+              <div className="relative min-h-[320px] flex-1 overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+                <Image
+                  src="/assets/images/about/about-production-workshop.png"
+                  alt="Zhongzhi production workshop and equipment"
+                  fill
+                  className="object-cover object-center"
+                  sizes="(min-width: 1024px) 360px, 100vw"
+                />
+              </div>
               <p className="mt-4 rounded-2xl border border-[#D7E6EF] bg-[#F8FCFE] p-4 text-sm leading-relaxed text-[#5A6570]">
                 Some historical images may show the former company name. Zhongzhi continues as the
                 same operating entity.
