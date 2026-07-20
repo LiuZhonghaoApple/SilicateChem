@@ -11,7 +11,6 @@ export const metadata = createMetadata({
   description:
     "Supporting sodium metasilicate notes for detergent, water treatment, and China procurement research. Continue to product specifications and RFQ when ready.",
   path: "/blog",
-  noIndex: true,
 });
 
 export default function BlogPage() {

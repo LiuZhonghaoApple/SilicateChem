@@ -1,6 +1,6 @@
 export const SITE = {
   name: "SilicateChem",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://silicatechem.com",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.silicatechem.com",
   company: "Shandong Zhongzhi Chemical Technology Co., Ltd.",
   tagline: "Sodium Metasilicate Manufacturer in China",
   description:

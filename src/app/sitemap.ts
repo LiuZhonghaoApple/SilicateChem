@@ -1,12 +1,13 @@
 import type { MetadataRoute } from "next";
 import { industryApplications } from "@/content/applications/industries";
+import { blogPosts } from "@/content/blog/posts";
 import { intentGuides } from "@/content/guides/intent-pages";
 import { products } from "@/content/products";
 import { SITE } from "@/lib/constants";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
 import { MONEY_PAGES } from "@/lib/seo-funnel";
 
-/** Indexable static pages — blog excluded (noindex). */
+/** Indexable static pages. */
 const INDEXABLE_STATIC = [
   "",
   "/about",
@@ -18,6 +19,7 @@ const INDEXABLE_STATIC = [
   "/products",
   "/guides",
   "/applications",
+  "/blog",
 ] as const;
 
 function priorityForPath(path: string): number {
@@ -27,6 +29,8 @@ function priorityForPath(path: string): number {
   if (path === "/products") return 0.85;
   if (path.startsWith("/guides/")) return 0.8;
   if (path === "/guides") return 0.75;
+  if (path.startsWith("/blog/")) return 0.7;
+  if (path === "/blog") return 0.7;
   if (path.startsWith("/applications/")) return 0.6;
   if (path === "/applications") return 0.65;
   if (
@@ -35,7 +39,8 @@ function priorityForPath(path: string): number {
     path === "/faq" ||
     path === "/export" ||
     path === "/certifications" ||
-    path === "/downloads"
+    path === "/downloads" ||
+    path === "/blog"
   )
     return 0.7;
   return 0.6;
@@ -44,7 +49,7 @@ function priorityForPath(path: string): number {
 function changeFrequencyForPath(path: string): MetadataRoute.Sitemap[number]["changeFrequency"] {
   if (path === "" || path === SEO_KEYWORDS.sodiumMetasilicate.path) return "weekly";
   if ((MONEY_PAGES as readonly string[]).includes(path) || path === "/products") return "weekly";
-  if (path.startsWith("/guides/") || path.startsWith("/applications/")) return "monthly";
+  if (path.startsWith("/guides/") || path.startsWith("/applications/") || path.startsWith("/blog/")) return "monthly";
   return "monthly";
 }
 
@@ -53,6 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const categoryPage = SEO_KEYWORDS.sodiumMetasilicate.path;
   const guidePages = intentGuides.map((g) => `/guides/${g.slug}`);
   const applicationPages = industryApplications.map((a) => `/applications/${a.slug}`);
+  const blogPages = blogPosts.map((p) => `/blog/${p.slug}`);
 
   const allPages = [
     ...INDEXABLE_STATIC,
@@ -60,6 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...productPages.filter((p) => p !== categoryPage),
     ...guidePages,
     ...applicationPages,
+    ...blogPages,
   ];
 
   const unique = [...new Set(allPages)];
