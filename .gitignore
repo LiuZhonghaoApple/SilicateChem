@@ -47,3 +47,6 @@ seo-monitoring/
 public/assets/images/home-hero-banner-static.png
 public/assets/images/home-hero-visual-bg.png
 public/images/home-hero-banner-static.png
+.vercel
+.env*
+public/assets/images/design-reference/
