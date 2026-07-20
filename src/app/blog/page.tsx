@@ -7,9 +7,9 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Technical Notes — Sodium Metasilicate",
+  title: "Sodium Metasilicate Blog — Procurement & Application Guides",
   description:
-    "Supporting sodium metasilicate notes for detergent, water treatment, and China procurement research. Continue to product specifications and RFQ when ready.",
+    "Sodium metasilicate blog for B2B buyers reviewing detergent applications, water treatment sourcing, China procurement, documents, packing, and RFQ preparation.",
   path: "/blog",
 });
 
@@ -23,15 +23,15 @@ export default function BlogPage() {
         ]}
       />
       <PageHeader
-        title="Technical Notes"
-        description="Short supporting notes for sodium metasilicate applications and procurement research. These pages support product evaluation but are not the main quotation pages."
+        title="Sodium Metasilicate Procurement Blog"
+        description="Long-tail buyer guides for detergent manufacturers, water treatment chemical producers, and importers reviewing sodium metasilicate grades, documents, packing, and RFQ details."
         breadcrumbs={[{ label: "Blog" }]}
       />
 
       <Section>
         <SectionHeader
-          title="Supporting Reading"
-          subtitle="Use these short notes to clarify application context, then continue to product specifications, documents, or quotation."
+          title="Buyer-Focused Articles"
+          subtitle="Use these articles to clarify application fit, grade selection, document requirements, packing questions, and quotation details before sending an RFQ."
         />
         <div className="grid gap-6 md:grid-cols-3">
           {blogPosts.map((post) => (
