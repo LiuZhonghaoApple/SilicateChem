@@ -10,7 +10,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata = createMetadata({
   title: "Frequently Asked Questions",
   description:
-    "FAQ for B2B buyers sourcing sodium metasilicate from China. MOQ, packaging, TDS/MSDS, purity, export, and factory-direct supply questions answered.",
+    "FAQ for B2B buyers sourcing sodium metasilicate. Grade selection, specifications, packaging, MSDS, COA, documents, MOQ, and quotation information.",
   path: "/faq",
 });
 
@@ -26,7 +26,7 @@ export default function FAQPage() {
       />
       <PageHeader
         title="Frequently Asked Questions"
-        description="Common questions from detergent manufacturers, chemical distributors, and importers sourcing sodium metasilicate from our Shandong factory."
+        description="Common sodium metasilicate procurement questions covering grades, forms, specifications, documents, packaging, shipment details, and RFQ requirements."
         breadcrumbs={[{ label: "FAQ" }]}
       />
 

@@ -5,47 +5,47 @@ export const faqItems: FAQItem[] = [
   {
     question: "What is your main sodium metasilicate product?",
     answer:
-      "Sodium metasilicate granules are our primary production and export grade. This product line receives the highest output volume from our Shandong factory and is supplied to detergent manufacturers and chemical distributors worldwide.",
+      "We supply sodium metasilicate grades for industrial procurement, including granules, anhydrous sodium metasilicate, sodium metasilicate pentahydrate, and nonahydrate by inquiry. Buyers normally confirm grade, form, packing, documents, and destination before quotation.",
   },
   {
-    question: "What is your annual production capacity?",
+    question: "Which specifications should buyers confirm before quotation?",
     answer:
-      "Our facility has an annual production capacity exceeding 100,000 tons across all sodium metasilicate and sodium silicate product lines. Granule production accounts for the largest share of output.",
+      "Key items include Na₂O, SiO₂, Fe, appearance, particle size or bulk density where applicable, whiteness, water-insoluble matter, packing, loading quantity, required documents, and destination port.",
   },
   {
-    question: "Do you sell factory-direct or through traders?",
+    question: "Which sodium metasilicate form should I choose?",
     answer:
-      "We are the manufacturer. All products are produced at our Shandong facility and sold factory-direct. We do not source from third-party factories or operate as a trading company.",
+      "Powder is commonly reviewed for dry blending, granules are easier for handling and dosing, and crystalline hydrate forms are selected when dissolution behavior or hydrate grade is important. Final selection should match the application and grade specification.",
   },
   {
     question: "What packaging options are available?",
     answer:
-      "Standard packaging includes 25 kg and 50 kg woven bags with PE liners, and 1,000 kg jumbo bags (FIBC). Custom labeling and pallet configurations are available for export orders.",
+      "Common options include 25 kg PP woven bags and jumbo bags. Printed bags, neutral bags, palletized loading, non-palletized loading, buyer labels, batch numbers, and handling marks can be confirmed before order.",
   },
   {
     question: "What is the minimum order quantity (MOQ)?",
     answer:
-      "MOQ depends on product grade and destination. For granules, we typically accept orders from one full container (approximately 20–25 tons). Sample quantities are available for specification evaluation. Contact us with your required volume for a specific quote.",
+      "MOQ depends on product grade, packing method, destination, and shipment plan. For accurate review, send the product grade, quantity, packing preference, destination port, and whether sample or full-container shipment is required.",
   },
   {
     question: "Can you provide TDS and MSDS documents?",
     answer:
-      `Yes. Technical Data Sheets (TDS) and Material Safety Data Sheets (MSDS) are available for all product grades. Submit a request through our contact form or email ${SITE.email}.`,
+      `Yes. MSDS, product documents, company credentials, and selected certificates are available from the Downloads page. Batch-specific COA, TDS, and SDS can be requested through the contact form or by email at ${SITE.email}.`,
   },
   {
-    question: "What purity and color consistency can we expect?",
+    question: "Can you provide batch-specific COA?",
     answer:
-      "Our granule and anhydrous grades are produced with iron content controlled at ≤ 0.02% to support white detergent formulations. Color is monitored batch to batch to maintain stable appearance in end products.",
+      "Batch-specific COA can be prepared according to order requirements. Buyers should confirm the required specification items before quotation so the correct document format and testing points can be reviewed.",
   },
   {
-    question: "Which countries do you export to?",
+    question: "What export documents may be needed?",
     answer:
-      "We export to buyers in Asia, the Middle East, Africa, South America, and other regions. Export documentation including COA, packing list, and commercial invoice is prepared per shipment.",
+      "Common shipment documents include commercial invoice, packing list, bill of lading, COA, MSDS/SDS, certificate files where applicable, and any buyer-specific document requirements confirmed before shipment.",
   },
   {
     question: "How do I request a quotation?",
     answer:
-      "Use the inquiry form on any product page or the Contact page. Include product grade, required quantity, destination country, and packaging preference. Our sales team responds within 1–2 business days.",
+      "Use the inquiry form on any product page or the Contact page. Include product grade, quantity, packing preference, destination port, application, and required documents. Our team normally responds within 1–2 business days.",
   },
   {
     question: "What is the difference between anhydrous and pentahydrate?",
@@ -55,10 +55,11 @@ export const faqItems: FAQItem[] = [
   {
     question: "Can I order multiple grades in one shipment?",
     answer:
-      "Yes. Combined container shipments of granules, anhydrous, pentahydrate, and sodium silicate are supported. This simplifies procurement for distributors stocking multiple grades.",
+      "Combined shipment review is possible depending on grade availability, packing, loading method, and destination. Send the requested grade list and quantities so the loading plan can be checked before quotation.",
   },
   {
-    question: "How long has your Shandong facility manufactured sodium metasilicate?",
-    answer: `${SITE.company} produces sodium metasilicate at a Shandong manufacturing site with decades of silicate industry experience. The same production facility, technical team, and product lines support continued factory-direct export supply under our current company name.`,
+    question: "How should sodium metasilicate be stored?",
+    answer:
+      "Sodium metasilicate should be stored in a dry, ventilated warehouse and protected from moisture. Storage requirements may vary by grade and packing, so buyers should review the MSDS/SDS and shipment documents before use.",
   },
 ];

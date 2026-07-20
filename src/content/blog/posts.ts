@@ -10,7 +10,7 @@ export const blogPosts: BlogPost[] = [
     slug: "detergent-industry-metasilicate",
     title: "Sodium Metasilicate for Detergent Industry Buyers",
     excerpt:
-      "Brief notes for detergent procurement teams sourcing granule grade sodium metasilicate factory-direct from China.",
+      "Brief notes for detergent procurement teams reviewing granule grade sodium metasilicate specifications, packing, and RFQ information.",
     date: "2026-01-10",
     readTime: "3 min",
     primaryKeyword: "sodium metasilicate detergent buyers",
@@ -22,7 +22,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Grade and Volume",
         paragraphs: [
           "Powder detergent lines typically procure sodium metasilicate granules in FCL volumes. Verify iron content and color stability before volume contracts.",
-          "For specifications, grade options, and factory-direct quotation, see our sodium metasilicate manufacturer page.",
+          "For specifications, grade options, packing, documents, and quotation requirements, see our sodium metasilicate product page.",
         ],
       },
     ],
@@ -43,7 +43,7 @@ export const blogPosts: BlogPost[] = [
         heading: "Grade Selection",
         paragraphs: [
           "Pentahydrate suits controlled dissolution in treatment blends. Granules work for dry-blend packages with bulk handling requirements.",
-          "Request factory-direct quotation with your grade, volume, and destination port on the manufacturer page.",
+          "Request quotation with your grade, volume, packing preference, destination port, and required documents on the product page.",
         ],
       },
     ],
@@ -52,7 +52,7 @@ export const blogPosts: BlogPost[] = [
     slug: "china-metasilicate-procurement",
     title: "Procuring Sodium Metasilicate from China — Quick Reference",
     excerpt:
-      "Supporting reference for importers: factory verification, documentation, and RFQ process for Chinese sodium metasilicate supply.",
+      "Supporting reference for importers: specification review, documents, packing, loading, and RFQ process for Chinese sodium metasilicate supply.",
     date: "2026-01-05",
     readTime: "3 min",
     primaryKeyword: "procure sodium metasilicate china",
@@ -64,7 +64,7 @@ export const blogPosts: BlogPost[] = [
         heading: "RFQ Process",
         paragraphs: [
           "Send grade, quantity, packaging, and destination port. Request sample COA and test sample before FCL commitment.",
-          "See our supplier selection and factory verification guides, then submit quotation request on the product page.",
+          "Review supplier selection and quotation guides, then submit product grade, packing, loading, and document requirements on the product page.",
         ],
       },
     ],

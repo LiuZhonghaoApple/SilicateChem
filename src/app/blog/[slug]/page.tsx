@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
-import { StrongCTA } from "@/components/conversion/ProductConversionSections";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/seo/JsonLd";
@@ -129,7 +128,21 @@ export default async function BlogPostPage({ params }: Props) {
         </div>
 
         <ProductFunnelBanner className="mt-10" />
-        <StrongCTA className="mt-6" />
+        <div className="mt-6 rounded-2xl border border-[#D7E6EF] bg-white p-6 text-center shadow-sm">
+          <h2 className="text-xl font-bold text-[#0B2D5B]">
+            Need sodium metasilicate quotation details?
+          </h2>
+          <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-[#5A6570]">
+            Send grade, quantity, packing, destination port and document requirements
+            for practical quotation review.
+          </p>
+          <Link
+            href="/contact?type=quote&product=Sodium%20Metasilicate"
+            className="mt-5 inline-flex items-center justify-center rounded bg-[#0B2D5B] px-5 py-3 text-sm font-bold text-white hover:bg-[#071F3F]"
+          >
+            Request Quote
+          </Link>
+        </div>
       </Section>
     </>
   );

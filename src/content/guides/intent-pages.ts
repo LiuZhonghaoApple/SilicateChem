@@ -1,6 +1,4 @@
 import type { IntentGuide } from "@/types";
-import { SITE } from "@/lib/constants";
-
 /** Layer 3 — commercial-intent guides only. Each page pushes to /products/sodium-metasilicate */
 export const intentGuides: IntentGuide[] = [
   {
@@ -8,23 +6,23 @@ export const intentGuides: IntentGuide[] = [
     title: "How to Select a Sodium Metasilicate Supplier",
     metaTitle: "Sodium Metasilicate Supplier Selection — B2B Procurement Guide",
     metaDescription:
-      "Procurement checklist for choosing a sodium metasilicate supplier: verify manufacturer, capacity, COA, samples, and export support before FCL orders.",
+      "Procurement checklist for choosing a sodium metasilicate supplier: grade specification, COA, MSDS, samples, packing, and shipment review before FCL orders.",
     primaryKeyword: "sodium metasilicate supplier selection",
     intro:
-      "B2B buyers evaluating sodium metasilicate suppliers must verify manufacturing capability, specification consistency, and export documentation — not only compare quoted prices. This guide covers the procurement decisions that affect long-term supply reliability.",
+      "B2B buyers evaluating sodium metasilicate suppliers should compare grade specification, document readiness, packing options, samples, and shipment requirements before comparing prices. This guide covers the procurement decisions that affect long-term supply reliability.",
     sections: [
       {
-        heading: "Manufacturer vs Trading Company",
+        heading: "Specification and Document Review",
         paragraphs: [
-          "Request production license, factory photos, and video inspection. Manufacturers explain granulation capacity, lead times, and batch QC from production schedules. Trading companies resell without controlling quality.",
-          `Factory-direct supply from ${SITE.company} eliminates intermediary markup and gives buyers direct access to specification control.`,
+          "Request TDS, MSDS/SDS, sample COA, and product samples before volume orders. Confirm Na₂O, SiO₂, Fe, appearance, particle size or bulk density, and water-insoluble matter for the selected grade.",
+          "Use the same specification, packing method, Incoterms, destination port, and required documents when comparing quotations from different suppliers.",
         ],
       },
       {
         heading: "Pre-Order Verification Checklist",
         paragraphs: [
           "Before volume contracts: request TDS, MSDS, sample COA, and test samples in your application. Confirm iron content, particle size, and color stability match your formulation requirements.",
-          "For recurring FCL orders, confirm annual capacity supports your volume — 100,000+ tons indicates scale for detergent and chemical distributor contracts.",
+          "For recurring FCL orders, confirm grade availability, lead time, packing method, loading quantity, and whether batch COA records can be provided across shipments.",
         ],
       },
     ],
@@ -44,30 +42,30 @@ export const intentGuides: IntentGuide[] = [
     title: "Sodium Metasilicate Price Factors — Factory Quotation Guide",
     metaTitle: "Sodium Metasilicate Price Factors — What Affects Factory Quotations",
     metaDescription:
-      "Industrial factors affecting sodium metasilicate pricing: grade, volume, packaging, shipping terms, and factory-direct vs trader supply.",
+      "Industrial factors affecting sodium metasilicate pricing: grade, volume, packaging, loading method, shipping terms, documents, and destination port.",
     primaryKeyword: "sodium metasilicate price factors",
     intro:
-      "Sodium metasilicate quotations vary by grade, order volume, packaging, and shipping terms. Understanding factory pricing structure helps procurement teams compare offers accurately and avoid hidden trader margins.",
+      "Sodium metasilicate quotations vary by grade, order volume, packaging, loading method, required documents, and shipping terms. Understanding these variables helps procurement teams compare offers accurately.",
     sections: [
       {
-        heading: "What Drives Factory-Direct Pricing",
+        heading: "What Drives Sodium Metasilicate Pricing",
         paragraphs: [
           "Grade selection (granules, anhydrous, pentahydrate) affects raw material processing and production allocation. Granules account for highest output and typically offer the most competitive per-ton pricing at FCL volume.",
           "Order volume is the primary cost driver: single FCL vs multi-container annual contracts. Packaging (25 kg bags vs FIBC jumbo bags) and destination port (FOB vs CIF) also affect landed cost.",
         ],
       },
       {
-        heading: "Factory vs Trader Pricing",
+        heading: "How to Compare Quotations",
         paragraphs: [
-          "Trading companies add intermediary margin without controlling batch quality. Factory-direct quotations from Shandong include production cost, packaging, and export documentation — without trader markup.",
-          "Request quotations with identical specifications (grade, packaging, Incoterms, destination) when comparing suppliers.",
+          "Request quotations with identical grade, specification, packaging, Incoterms, destination port, loading plan, and document requirements when comparing suppliers.",
+          "A lower price may not be comparable if it excludes certificate files, batch COA, pallet requirements, inland cost, export handling, or the preferred loading method.",
         ],
       },
     ],
     faq: [
       {
         question: "Why do sodium metasilicate prices vary between suppliers?",
-        answer: "Grade, volume, packaging, shipping terms, and whether the supplier is a manufacturer or trader all affect quoted price.",
+        answer: "Grade, volume, packaging, shipping terms, loading method, document requirements, and destination port all affect quoted price.",
       },
     ],
   },
@@ -76,7 +74,7 @@ export const intentGuides: IntentGuide[] = [
     title: "Sodium Metasilicate Uses in Detergent Manufacturing",
     metaTitle: "Sodium Metasilicate Uses in Detergent Industry — Buyer Guide",
     metaDescription:
-      "How detergent manufacturers use sodium metasilicate as an alkaline builder. Grade selection, procurement volume, and factory-direct supply from China.",
+      "How detergent manufacturers use sodium metasilicate as an alkaline builder. Grade selection, granules, specifications, packing, and RFQ information.",
     primaryKeyword: "sodium metasilicate uses detergent industry",
     intro:
       "Detergent manufacturers are the largest buyers of sodium metasilicate globally. Granule grade is standard for powder detergent blending lines — providing alkalinity, oil emulsification, and soil deflocculation in phosphate-free formulations.",
@@ -92,7 +90,7 @@ export const intentGuides: IntentGuide[] = [
         heading: "Procurement for Detergent Plants",
         paragraphs: [
           "Verify iron content ≤ 0.02% for white powder compatibility. Confirm batch color consistency and COA per shipment before volume contracts.",
-          "Factory-direct FCL supply from a Chinese manufacturer reduces cost versus EU/US distribution channels at equivalent specifications.",
+          "For FCL procurement, compare suppliers using the same grade, particle size, packing method, destination port, and required documents.",
         ],
       },
     ],
@@ -139,30 +137,30 @@ export const intentGuides: IntentGuide[] = [
     title: "How to Choose a Sodium Metasilicate Factory in China",
     metaTitle: "How to Choose a Sodium Metasilicate Factory in China — Verification Guide",
     metaDescription:
-      "Verify a Chinese sodium metasilicate factory: production capacity, QC system, export documentation, and factory-direct supply vs trading companies.",
+      "Review a Chinese sodium metasilicate supply source: grade specification, QC documents, packing, loading, export documents, and quotation requirements.",
     primaryKeyword: "how to choose sodium metasilicate factory china",
     intro:
-      "Selecting a reliable Chinese sodium metasilicate factory requires on-site or video verification of production capability, QC processes, and export experience — not just comparing email quotations.",
+      "Selecting a reliable Chinese sodium metasilicate supply source requires more than comparing email quotations. Buyers should verify product specification control, document readiness, packing options, and shipment communication before FCL orders.",
     sections: [
       {
-        heading: "Factory Verification Steps",
+        heading: "Supplier Verification Steps",
         paragraphs: [
-          "Confirm the supplier operates the production site: request business license, production photos, and video walkthrough of granulation and packaging lines.",
+          "Request business license, company credentials, product photos, packing references, and a video or photo review when needed.",
           "Evaluate QC capability: batch testing for SiO₂, Na₂O, iron, and color. Request historical COA samples for specification consistency review.",
         ],
       },
       {
-        heading: "Export and Volume Capability",
+        heading: "Shipment and Document Review",
         paragraphs: [
-          "For FCL contracts, confirm annual capacity (100,000+ tons supports volume buyers). Verify export documentation experience to your destination market.",
-          `Factory-direct orders from ${SITE.company} include COA, TDS, and MSDS per shipment with combined multi-grade FCL options.`,
+          "For FCL contracts, confirm lead time, packing method, container loading plan, and export documentation experience to your destination market.",
+          "Ask whether COA, TDS, MSDS, certificate files, and combined multi-grade FCL options can be confirmed before order placement.",
         ],
       },
     ],
     faq: [
       {
         question: "How do I verify a manufacturer vs trader?",
-        answer: "Request factory photos, production license, video inspection, and batch COA with production traceability.",
+        answer: "Request business credentials, production or packing evidence, sample COA, MSDS, TDS, and a clear explanation of grade specification and loading plan.",
       },
     ],
   },
