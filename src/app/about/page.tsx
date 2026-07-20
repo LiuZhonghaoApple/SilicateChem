@@ -228,8 +228,8 @@ export default function AboutPage() {
               Need to verify product grade or documents?
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-[#5A6570] md:text-base">
-              Contact Zhongzhi for product specifications, MSDS, COA, and factory-direct quotation
-              support.
+              Contact Zhongzhi for product specifications, MSDS, COA, TDS, packing details, and
+              quotation support.
             </p>
           </div>
           <Link

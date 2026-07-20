@@ -29,7 +29,6 @@ type HomepageProductCard = {
   imageAlt: string;
   href: string;
   quoteProduct: string;
-  temporaryImage?: boolean;
 };
 
 type HomepageFormCard = {
@@ -66,13 +65,12 @@ const metasilicateGradeCards: HomepageProductCard[] = [
     englishName: "Sodium Metasilicate Nonahydrate",
     chineseName: "九水偏硅酸钠",
     label: "Available by Inquiry",
-    description: "Inquiry-based supply using the metasilicate series page until the grade page is ready.",
-    image: "/assets/images/product-cards/sodium-metasilicate-nonahydrate-placeholder.png",
-    imageAlt: "Temporary sodium metasilicate series image for nonahydrate inquiry",
-    // TODO: replace placeholder image and link after creating real nonahydrate product page.
+    description:
+      "Inquiry-based hydrate grade review. Confirm specification, availability, packing and documents before quotation.",
+    image: "/assets/images/product-cards/sodium-metasilicate-series.png",
+    imageAlt: "Sodium metasilicate series product sample for nonahydrate inquiry",
     href: "/products/sodium-metasilicate",
     quoteProduct: "Sodium Metasilicate Nonahydrate",
-    temporaryImage: true,
   },
 ];
 
@@ -475,11 +473,6 @@ export default function HomePage() {
                     <p className="mt-3 flex-1 text-sm leading-relaxed text-[#5A6570]">
                       {card.description}
                     </p>
-                    {card.temporaryImage && (
-                      <p className="mt-3 text-xs font-semibold text-[#8A6D1D]">
-                        Temporary series image pending real nonahydrate product photo.
-                      </p>
-                    )}
                     <div className="mt-5 flex flex-wrap items-center gap-3">
                       <Link
                         href={card.href}
@@ -618,7 +611,7 @@ export default function HomePage() {
       <Section>
         <SectionHeader
           title="Who We Serve"
-          subtitle="Explore the buyer profiles and industries Zhongzhi supports with factory-direct sodium metasilicate supply."
+          subtitle="Explore the buyer profiles and industries Zhongzhi supports with sodium metasilicate grades, documents, packing guidance, and RFQ preparation."
         />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {buyerProfileUseCases.map((useCase) => (

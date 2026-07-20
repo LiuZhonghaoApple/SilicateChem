@@ -95,7 +95,7 @@ export function HomepageFactoryProofSection() {
         href="/about"
         className="mt-6 inline-block text-sm font-bold text-[#2E7D9A] hover:underline"
       >
-        View full factory proof →
+        View company profile →
       </Link>
     </>
   );
