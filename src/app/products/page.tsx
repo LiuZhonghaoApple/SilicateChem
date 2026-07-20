@@ -77,14 +77,20 @@ const productForms = [
   {
     title: "Powder",
     description: "Better for fast dissolution and formulation blending.",
+    image: "/assets/images/product-cards/instant-powder.png",
+    imageAlt: "Sodium metasilicate powder form",
   },
   {
     title: "Granules",
     description: "Better for handling, dosing, storage, packaging and industrial use.",
+    image: "/assets/images/product-cards/anhydrous-Granular.png",
+    imageAlt: "Sodium metasilicate granules form",
   },
   {
     title: "Crystal",
     description: "Used for selected hydrated sodium metasilicate grades.",
+    image: "/assets/images/product-cards/product-form-crystal.png",
+    imageAlt: "Sodium metasilicate crystal form",
   },
 ];
 
@@ -312,6 +318,15 @@ export default function ProductsPage() {
               href="/products/sodium-metasilicate"
               className="block rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2A86A5] hover:bg-[#F8FCFE] hover:shadow-md"
             >
+              <div className="relative mb-5 aspect-[4/3] overflow-hidden rounded-xl bg-[#F4F6F8]">
+                <Image
+                  src={form.image}
+                  alt={form.imageAlt}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
               <h3 className="text-xl font-bold text-[#0B2D5B]">{form.title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-[#5A6570]">{form.description}</p>
               <p className="mt-5 text-sm font-bold text-[#2A86A5]">View form options →</p>

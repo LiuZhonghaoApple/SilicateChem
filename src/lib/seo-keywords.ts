@@ -16,14 +16,14 @@ export const SEO_KEYWORDS = {
   sodiumMetasilicate: {
     path: "/products/sodium-metasilicate",
     primary: "sodium metasilicate",
-    title: "Sodium Metasilicate Manufacturer & Supplier — Factory Direct China",
+    title: "Sodium Metasilicate Specifications, Grades & RFQ",
     description:
-      "Factory-direct sodium metasilicate from Shandong, China. Manufacturer and supplier of granules, anhydrous, and pentahydrate grades. 100,000+ tons capacity. Request quotation.",
+      "Sodium metasilicate product information: CAS numbers, formula, anhydrous, pentahydrate, granules, specifications, applications, packing, MSDS, COA and RFQ.",
     keywords: [
-      "sodium metasilicate manufacturer",
-      "sodium metasilicate supplier",
-      "sodium metasilicate factory",
-      "sodium metasilicate china",
+      "sodium metasilicate specifications",
+      "sodium metasilicate CAS",
+      "sodium metasilicate MSDS",
+      "sodium metasilicate COA",
     ],
   },
   /** Grade pages — specification keywords only */
@@ -32,7 +32,7 @@ export const SEO_KEYWORDS = {
     primary: "sodium metasilicate granules",
     title: "Sodium Metasilicate Granules — Specifications & Export Grade",
     description:
-      "Sodium metasilicate granules specifications: CAS 6834-92-0, SiO₂ ≥ 46%, uniform particle size. Bulk export grade from Chinese manufacturer.",
+      "Sodium metasilicate granules specifications: CAS 6834-92-0, Na₂SiO₃, particle size, appearance, packing, MSDS, COA and quotation information.",
   },
   anhydrous: {
     path: "/products/sodium-metasilicate-anhydrous",
@@ -50,10 +50,10 @@ export const SEO_KEYWORDS = {
   },
   sodiumSilicate: {
     path: "/products/sodium-silicate",
-    primary: "sodium silicate manufacturer",
-    title: "Sodium Silicate Manufacturer — China Factory Direct",
+    primary: "liquid sodium silicate",
+    title: "Liquid Sodium Silicate — Specifications & RFQ",
     description:
-      "Sodium silicate manufacturer in Shandong, China. Liquid and solid grades. Combined shipment with sodium metasilicate.",
+      "Liquid sodium silicate product information: CAS 1344-09-8, modulus, appearance, packing options, industrial applications and RFQ details.",
   },
 } as const;
 

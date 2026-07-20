@@ -1,27 +1,30 @@
 import Link from "next/link";
-import { StrongCTA } from "@/components/conversion/ProductConversionSections";
-import { SITE } from "@/lib/constants";
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
-import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 
 export function ProductFunnelBanner({ className = "" }: { className?: string }) {
-  const product = sodiumMetasilicateCategory.inquiryProductName;
   return (
-    <div className={`rounded-lg border border-[#2E7D9A]/30 bg-[#2E7D9A]/5 p-6 ${className}`}>
-      <h3 className="font-bold text-[#0B2D5B]">Source Sodium Metasilicate Factory-Direct</h3>
-      <p className="mt-2 text-sm text-[#5A6570] leading-relaxed">
-        {SITE.company} manufactures all grades at our China facility.
-        View specifications, grades, and request factory-direct quotation.
+    <div className={`rounded-2xl border border-[#D7E6EF] bg-[#F4F8FB] p-6 ${className}`}>
+      <h3 className="text-lg font-bold text-[#0B2D5B]">
+        Continue to Sodium Metasilicate Specifications
+      </h3>
+      <p className="mt-2 text-sm leading-relaxed text-[#5A6570]">
+        Review grades, forms, key buying specs, available documents, and RFQ
+        information before requesting quotation.
       </p>
-      <div className="mt-4 flex flex-wrap gap-4">
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row">
         <Link
           href={METASILICATE_CATEGORY_PATH}
-          className="text-sm font-semibold text-[#2E7D9A] hover:underline"
+          className="inline-flex items-center justify-center rounded bg-[#0B2D5B] px-5 py-3 text-sm font-bold text-white hover:bg-[#071F3F]"
         >
-          Sodium metasilicate manufacturer & supplier →
+          View Product Specifications
+        </Link>
+        <Link
+          href="/contact?type=quote&product=Sodium%20Metasilicate"
+          className="inline-flex items-center justify-center rounded border border-[#0B2D5B] px-5 py-3 text-sm font-bold text-[#0B2D5B] hover:bg-white"
+        >
+          Request Quote
         </Link>
       </div>
-      <StrongCTA product={product} className="mt-4" />
     </div>
   );
 }

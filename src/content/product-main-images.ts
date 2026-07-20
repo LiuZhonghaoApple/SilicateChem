@@ -4,18 +4,27 @@ export type ProductMainImage = {
 };
 
 const genericMetasilicateImage: ProductMainImage = {
-  src: "/assets/images/factory-proof/finished-goods-warehouse.png",
-  alt: "Packed sodium metasilicate products in finished goods warehouse",
+  src: "/assets/images/product-cards/anhydrous-Granular.png",
+  alt: "Sodium metasilicate series product sample",
 };
 
 export const PRODUCT_MAIN_IMAGES: Record<string, ProductMainImage> = {
   "sodium-metasilicate": genericMetasilicateImage,
-  "sodium-metasilicate-granules": genericMetasilicateImage,
-  "sodium-metasilicate-pentahydrate": genericMetasilicateImage,
-  "sodium-metasilicate-anhydrous": genericMetasilicateImage,
+  "sodium-metasilicate-granules": {
+    src: "/assets/images/product-cards/anhydrous-Granular.png",
+    alt: "Granular sodium metasilicate product sample",
+  },
+  "sodium-metasilicate-pentahydrate": {
+    src: "/assets/images/product-cards/sodium-metasilicate-pentahydrate.png",
+    alt: "Sodium metasilicate pentahydrate product sample",
+  },
+  "sodium-metasilicate-anhydrous": {
+    src: "/assets/images/product-cards/sodium-metasilicate-anhydrous.png",
+    alt: "Anhydrous sodium metasilicate product sample",
+  },
   "sodium-silicate": {
-    src: "/assets/images/factory-proof/production-equipment.png",
-    alt: "Silicate production equipment at Zhongzhi factory",
+    src: "/assets/images/product-cards/liquid-01.png",
+    alt: "Liquid sodium silicate related product line",
   },
 };
 

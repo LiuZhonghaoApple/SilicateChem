@@ -1,16 +1,15 @@
 import { SEO_KEYWORDS, METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
-import { SITE } from "@/lib/constants";
 import type { FAQItem, ProductAdvantage } from "@/types";
 
 export const sodiumMetasilicateCategory = {
   name: "Sodium Metasilicate",
   path: METASILICATE_CATEGORY_PATH,
   summary:
-    "Factory-direct sodium metasilicate manufacturer and supplier in Shandong, China. Granules, anhydrous, and pentahydrate grades for detergent, cleaning, and industrial chemical buyers worldwide.",
+    "Sodium metasilicate product hub covering CAS numbers, formula, available grades, powder / granule / crystal forms, specifications, applications, packing, documents and RFQ details.",
   description: [
-    "Sodium metasilicate (Na₂SiO₃) is our core product line. We manufacture all grades at our Shandong facility — not through traders — with annual output exceeding 100,000 tons.",
-    "Global B2B buyers source factory-direct for bulk FCL supply, consistent batch specifications, stable color, and export documentation including COA, TDS, and MSDS per shipment.",
-    "Request quotation with your grade, quantity, packaging, and destination port. Response within 1–2 business days.",
+    "Sodium metasilicate is an inorganic silicate product used in detergent, cleaning, textile, ceramic, water treatment and industrial processing applications.",
+    "Buyers normally compare hydrate grade, form, Na₂O, SiO₂, Fe, particle size, appearance, packing and document availability before requesting quotation.",
+    "Use this page to select anhydrous, pentahydrate, granules or inquiry-based nonahydrate requirements, then request COA, TDS, SDS / MSDS and quotation details.",
   ],
   grades: [
     {
@@ -31,11 +30,11 @@ export const sodiumMetasilicateCategory = {
   ],
   buyerDecision: {
     whyChina: [
-      "Factory-direct pricing without trader intermediary margin",
-      "100,000+ tons annual capacity supports recurring FCL contracts",
-      "Iron content controlled at ≤ 0.02% for white detergent compatibility",
-      "Export documentation (COA, TDS, MSDS) issued per shipment",
-      "Combined multi-grade FCL from single manufacturer contact",
+      "Compare quotations using the same grade, packing, destination port and document requirement",
+      "Confirm Na₂O, SiO₂, Fe, particle size, appearance and water insoluble matter before order",
+      "Iron content controlled at ≤ 0.02% for relevant detergent-grade specifications",
+      "COA, TDS, SDS / MSDS and certificate files can be requested according to order needs",
+      "Combined grade inquiry can be reviewed when buyers need multiple sodium metasilicate forms",
     ],
     priceStructure: [
       "Grade: granules (highest volume / best FCL pricing), anhydrous, or pentahydrate",
@@ -74,55 +73,55 @@ export const sodiumMetasilicateCategory = {
     },
   ],
   trustSystem: [
-    { label: "Production capacity", value: SITE.capacity },
-    { label: "Supply model", value: "Factory direct — manufacturer, not trader" },
-    { label: "Export capability", value: "Asia, Middle East, Africa, South America" },
-    { label: "QC system", value: "Batch COA — SiO₂, Na₂O, Fe ≤ 0.02%, color" },
+    { label: "Product scope", value: "Anhydrous, pentahydrate, granules, nonahydrate by inquiry" },
+    { label: "Key identifiers", value: "CAS 6834-92-0 / 10213-79-3, Na₂SiO₃" },
+    { label: "Spec review", value: "Na₂O, SiO₂, Fe, particle size, appearance, insoluble matter" },
+    { label: "Documents", value: "MSDS, COA, TDS, certificates and product brochure" },
   ],
   comparisonRows: [
     {
-      factor: "Pricing",
-      chinaFactory: "Factory-direct — no trader margin",
-      traders: "Intermediary markup on factory cost",
-      overseas: "Higher regional distribution premiums",
+      factor: "Grade identification",
+      chinaFactory: "CAS, formula and hydrate form confirmed before quotation",
+      traders: "May quote by generic product name only",
+      overseas: "Usually clear, but often with higher regional distribution cost",
     },
     {
-      factor: "Production capacity",
-      chinaFactory: "100,000+ tons/year at single site",
-      traders: "No production control",
-      overseas: "Limited regional capacity",
+      factor: "Specification review",
+      chinaFactory: "Na₂O, SiO₂, Fe, particle size and appearance reviewed by grade",
+      traders: "Depends on upstream source data",
+      overseas: "Specification data usually available, cost may differ",
     },
     {
-      factor: "Specification control",
-      chinaFactory: "In-house QC, batch COA per shipment",
-      traders: "Depends on upstream factory",
-      overseas: "Varies; premium for equivalent spec",
+      factor: "Document availability",
+      chinaFactory: "MSDS, COA, TDS and certificates can be requested by order",
+      traders: "Document source may vary",
+      overseas: "Document package depends on distributor inventory",
     },
     {
-      factor: "Bulk FCL supply",
-      chinaFactory: "Standard MOQ ~20–25 MT",
-      traders: "Same source, higher price",
-      overseas: "Higher per-ton cost at same volume",
+      factor: "Packing confirmation",
+      chinaFactory: "25 kg bag, neutral / printed bag and jumbo bag options reviewed by RFQ",
+      traders: "Packing may need re-confirmation",
+      overseas: "Regional packing options may be limited",
     },
     {
-      factor: "Export documentation",
-      chinaFactory: "COA, TDS, MSDS included",
-      traders: "Documentation fees common",
-      overseas: "Full import documentation costs",
+      factor: "RFQ comparison",
+      chinaFactory: "Compare grade, packing, quantity, destination and documents together",
+      traders: "Price may omit document or packing differences",
+      overseas: "Compare landed cost and lead time",
     },
     {
       factor: "Multi-grade orders",
-      chinaFactory: "Granules + anhydrous + pentahydrate + silicate",
-      traders: "Often single-SKU resellers",
-      overseas: "Limited grade range per supplier",
+      chinaFactory: "Granules, anhydrous, pentahydrate and sodium silicate can be reviewed together",
+      traders: "Grade range depends on sourcing network",
+      overseas: "Grade range depends on local inventory",
     },
   ],
   factoryAdvantages: [
-    "100,000+ tons annual production capacity across all metasilicate grades",
-    "Factory-direct supply — manufacturer, not a trading company",
+    "CAS and formula information available by hydrate grade",
+    "Powder, granule and crystal forms available for selected specifications",
     "Iron content controlled at ≤ 0.02% for white detergent compatibility",
-    "Batch COA, TDS, and MSDS provided per export shipment",
-    "Combined FCL orders: granules + anhydrous + pentahydrate + sodium silicate",
+    "Batch COA, TDS, SDS / MSDS and certificates available by request",
+    "RFQ review can cover grade, quantity, packing, destination and documents",
   ],
   whyChoose: [
     {
@@ -153,9 +152,9 @@ export const sodiumMetasilicateCategory = {
         "We produce granules, anhydrous, and pentahydrate at our Shandong facility. Granules account for the highest production volume. See each grade page for specifications.",
     },
     {
-      question: "Are you a manufacturer or trading company?",
+      question: "What CAS numbers should buyers check?",
       answer:
-        `We are the manufacturer. ${SITE.company} operates the production site and sells factory-direct to global B2B buyers.`,
+        "Anhydrous sodium metasilicate is commonly identified by CAS 6834-92-0. Sodium metasilicate pentahydrate is identified by CAS 10213-79-3. Confirm the CAS number against the selected grade.",
     },
     {
       question: "What is the MOQ for sodium metasilicate?",
@@ -165,7 +164,7 @@ export const sodiumMetasilicateCategory = {
     {
       question: "Can you provide COA and TDS?",
       answer:
-        `Yes. Certificate of Analysis per batch/shipment. TDS and MSDS available on request via our contact form or at ${SITE.email}.`,
+        "Yes. COA, TDS, SDS / MSDS and certificate files can be requested with grade, quantity, packing and destination details.",
     },
   ] as FAQItem[],
   seo: SEO_KEYWORDS.sodiumMetasilicate,
