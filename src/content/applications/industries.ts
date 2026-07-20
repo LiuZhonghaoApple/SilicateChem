@@ -6,10 +6,10 @@ export const industryApplications: IndustryApplication[] = [
     title: "Sodium Metasilicate for the Detergent Industry",
     metaTitle: "Sodium Metasilicate for Detergent Manufacturing",
     metaDescription:
-      "Sodium metasilicate supply for laundry and dishwashing detergent manufacturers. Granule grade, stable color, factory-direct from China.",
+      "Sodium metasilicate for laundry and dishwashing detergent manufacturers. Granule grade, stable color, specifications, packing, and RFQ information.",
     primaryKeyword: "sodium metasilicate detergent industry",
     intro:
-      "Detergent manufacturers are the largest buyers of sodium metasilicate globally. We supply granule, anhydrous, and pentahydrate grades factory-direct from Shandong for powder and institutional detergent production.",
+      "Detergent manufacturers use sodium metasilicate in powder and institutional cleaning formulations where alkalinity, particle form, color, iron content, and dissolution behavior affect production performance.",
     howUsed: [
       "Alkaline builder in laundry and dishwashing powder formulations",
       "Oil emulsification and soil deflocculation during wash cycles",
@@ -19,8 +19,8 @@ export const industryApplications: IndustryApplication[] = [
     benefits: [
       "Stable color and iron ≤ 0.02% for white powder detergents",
       "Uniform granule size for consistent automated dosing",
-      "Factory-direct pricing without trader margin",
-      "Bulk FCL supply with COA per shipment",
+      "COA, MSDS, TDS and packing details available for review",
+      "Bulk shipment review based on grade, packing, quantity, and destination",
     ],
     productRecommendation:
       "Sodium metasilicate granules are our highest-output grade — recommended for most powder detergent lines. Anhydrous suits low-moisture dry blends.",
@@ -51,7 +51,7 @@ export const industryApplications: IndustryApplication[] = [
       "Predictable dissolution with pentahydrate grade",
       "Bulk packaging: 25 kg / 50 kg bags and FIBC jumbo bags",
       "Export documentation for international distributors",
-      "Single-factory supply for multiple metasilicate grades",
+      "Grade, packing, loading quantity, and document requirements confirmed before RFQ",
     ],
     productRecommendation:
       "Pentahydrate for controlled dissolution applications. Granules for dry-blend stability and bulk handling.",
@@ -68,7 +68,7 @@ export const industryApplications: IndustryApplication[] = [
     title: "Sodium Metasilicate for the Textile Industry",
     metaTitle: "Sodium Metasilicate for Textile Processing",
     metaDescription:
-      "Sodium metasilicate for textile scouring, bleaching auxiliaries, and fabric processing. Factory supply from China.",
+      "Sodium metasilicate for textile scouring, bleaching auxiliaries, and fabric processing. Grade selection, documents, packing, and RFQ information.",
     primaryKeyword: "sodium metasilicate textile industry",
     intro:
       "Textile processors use sodium metasilicate in scouring, bleaching auxiliaries, and fabric preparation chemicals where controlled alkalinity supports fiber cleaning and processing.",
@@ -80,9 +80,9 @@ export const industryApplications: IndustryApplication[] = [
     ],
     benefits: [
       "Consistent batch specifications for process stability",
-      "Multiple grades available from one manufacturer",
       "Bulk export supply for chemical distributors serving textile mills",
       "COA and TDS documentation per shipment",
+      "Grade and dissolution behavior reviewed according to process requirement",
     ],
     productRecommendation:
       "Pentahydrate and granule grades depending on dissolution requirements. Contact us with your process specifications.",
@@ -99,7 +99,7 @@ export const industryApplications: IndustryApplication[] = [
     title: "Sodium Metasilicate for the Paper Industry",
     metaTitle: "Sodium Metasilicate for Paper & Pulp Processing",
     metaDescription:
-      "Sodium metasilicate applications in paper and pulp processing. Alkaline processing aid supply from a Chinese factory.",
+      "Sodium metasilicate applications in paper and pulp processing. Alkaline processing aid, grade selection, packing, documents, and RFQ information.",
     primaryKeyword: "sodium metasilicate paper industry",
     intro:
       "Paper and pulp operations use sodium metasilicate as an alkaline processing aid in deinking, pulping auxiliaries, and equipment cleaning formulations within the mill chemical program.",
@@ -110,13 +110,13 @@ export const industryApplications: IndustryApplication[] = [
       "Component in multi-chemical mill treatment packages",
     ],
     benefits: [
-      "Industrial-scale production capacity for recurring orders",
-      "Factory-direct communication on specification requirements",
+      "Specification review for recurring paper and pulp chemical orders",
+      "Packing and loading details confirmed according to order requirement",
       "Export packaging suitable for long-distance shipment",
       "Combined orders with detergent-grade metasilicate for distributors",
     ],
     productRecommendation:
-      "Grade selection depends on your mill process. Submit your specification requirements for factory-direct quotation.",
+      "Grade selection depends on your mill process. Submit your specification requirements for quotation review.",
     faq: [
       {
         question: "What is the MOQ for paper industry buyers?",

@@ -5,6 +5,7 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { FAQSchema, BreadcrumbSchema } from "@/components/seo/JsonLd";
 import { FAQBlock } from "@/components/seo/FunnelSections";
 import { FunnelLinksSidebar } from "@/components/seo/FunnelLinks";
+import { ApplicationIcon } from "@/components/applications/ApplicationIcon";
 import {
   industryApplications,
   getIndustryApplicationBySlug,
@@ -12,9 +13,7 @@ import {
 import { METASILICATE_CATEGORY_PATH } from "@/lib/seo-keywords";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
-import { StrongCTA } from "@/components/conversion/ProductConversionSections";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
-import { FactoryTrustSystem } from "@/components/trust/FactoryTrustSystem";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -41,6 +40,13 @@ export default async function ApplicationPage({ params }: Props) {
 
   const path = `/applications/${app.slug}`;
   const product = sodiumMetasilicateCategory.inquiryProductName;
+  const rfqItems = [
+    "Application or formulation type",
+    "Recommended grade to review",
+    "Target specification or current material standard",
+    "Order quantity and packing preference",
+    "Destination port and required documents",
+  ];
 
   return (
     <>
@@ -63,6 +69,25 @@ export default async function ApplicationPage({ params }: Props) {
       <Section>
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
+            <div className="rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm">
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                <ApplicationIcon slug={app.slug} className="shrink-0" />
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2E7D9A]">
+                    Application Brief
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold tracking-tight text-[#0B2D5B]">
+                    Sodium metasilicate selection for this industry
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-[#5A6570]">
+                    This page focuses on product use, grade selection, buying notes,
+                    and quotation details for the application. Company background and
+                    manufacturing overview are covered on the About page.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             <div>
               <SectionHeader title="How Sodium Metasilicate Is Used" />
               <ul className="space-y-2">
@@ -95,7 +120,7 @@ export default async function ApplicationPage({ params }: Props) {
                   href={METASILICATE_CATEGORY_PATH}
                   className="text-sm font-semibold text-[#2E7D9A] hover:underline"
                 >
-                  Sodium metasilicate manufacturer page →
+                  Sodium metasilicate specifications page →
                 </Link>
                 {app.recommendedGradeSlug && (
                   <Link
@@ -107,21 +132,37 @@ export default async function ApplicationPage({ params }: Props) {
                 )}
               </div>
             </div>
+            <div className="rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm">
+              <h2 className="text-xl font-bold text-[#0B2D5B]">
+                RFQ Details for This Application
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-[#5A6570]">
+                Application-based quotations should confirm grade, usage conditions,
+                packing and documentation before price comparison.
+              </p>
+              <ul className="mt-5 grid gap-2 sm:grid-cols-2">
+                {rfqItems.map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-[#5A6570]">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2E7D9A]" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div>
               <h2 className="text-xl font-bold text-[#0B2D5B] mb-4">FAQ</h2>
               <FAQBlock items={app.faq} />
             </div>
-            <StrongCTA product={product} />
           </div>
           <FunnelLinksSidebar />
         </div>
       </Section>
       <Section background="grey">
-        <FactoryTrustSystem variant="full" product={product} />
-      </Section>
-      <Section background="grey">
         <div className="max-w-xl mx-auto">
-          <h2 className="text-lg font-bold text-[#0B2D5B] mb-4">Request Quotation</h2>
+          <h2 className="text-lg font-bold text-[#0B2D5B] mb-4">
+            Request Application-Based Quotation
+          </h2>
           <InquiryFormWrapper defaultProduct={product} defaultRequestType="quote" />
         </div>
       </Section>
