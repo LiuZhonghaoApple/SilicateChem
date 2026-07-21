@@ -206,12 +206,14 @@ export function ArticleSchema({
   url,
   datePublished,
   dateModified,
+  image,
 }: {
   title: string;
   description: string;
   url: string;
   datePublished: string;
   dateModified: string;
+  image?: string;
 }) {
   return (
     <JsonLd
@@ -224,6 +226,14 @@ export function ArticleSchema({
         url,
         datePublished,
         dateModified,
+        ...(image
+          ? {
+              image: {
+                "@type": "ImageObject",
+                url: image,
+              },
+            }
+          : {}),
         inLanguage: "en",
         mainEntityOfPage: {
           "@type": "WebPage",

@@ -257,6 +257,309 @@ export const blogPosts: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: "sodium-metasilicate-distributor-guide",
+    title: "Sodium Metasilicate Distributor Sourcing Guide",
+    metaTitle: "Sodium Metasilicate Distributor Guide",
+    excerpt:
+      "Buyer guide for sodium metasilicate distributors planning bulk grades, packaging, documents, landed cost, inventory, and recurring supplier support.",
+    date: "2026-07-22",
+    readTime: "9 min",
+    primaryKeyword: "sodium metasilicate distributor",
+    keywords: [
+      "bulk sodium metasilicate supplier",
+      "sodium metasilicate wholesale",
+      "sodium metasilicate packaging",
+      "sodium metasilicate export documents",
+      "sodium metasilicate distributor sourcing",
+    ],
+    heroImage: {
+      src: "/assets/images/products/packing-loading/packing-blue-bag.png",
+      alt: "Bulk sodium metasilicate packaging for chemical distributors",
+      caption:
+        "Packaging format, marking, moisture protection and loading method should be confirmed for every distributor RFQ.",
+      fit: "contain",
+    },
+    keyTakeaways: [
+      "Build the product range around customer applications and handling needs, not around one generic sodium metasilicate name.",
+      "Compare quotations using the same grade, specification, packaging, loading plan, Incoterm and document package.",
+      "Request controlled TDS, SDS/MSDS, sample COA and batch COA support before committing to recurring inventory.",
+      "Evaluate supplier continuity, response discipline and claim handling alongside the per-ton quotation.",
+    ],
+    productLinks: [hub, granules, anhydrous, pentahydrate],
+    faq: [
+      {
+        question: "Which grades should a sodium metasilicate distributor stock?",
+        answer:
+          "The right range depends on customer applications. Distributors commonly review granules for dry blending and lower-dust handling, anhydrous grades where concentrated alkalinity is required, and pentahydrate where a hydrated form and its dissolution behavior fit the customer's process. Confirm every choice against the applicable grade specification and customer testing.",
+      },
+      {
+        question: "What documents should a bulk sodium metasilicate supplier provide?",
+        answer:
+          "Initial distributor review normally includes TDS, SDS or MSDS, sample COA, packing details and company credentials. Batch COA and shipment documents should be confirmed for the actual order. Additional certificates must be matched to the destination market and customer requirement.",
+      },
+      {
+        question: "How should distributors compare sodium metasilicate quotations?",
+        answer:
+          "Use the same grade, specification, bag size, pallet requirement, container quantity, Incoterm, destination port and document package. Separate product value, packaging, inland handling and ocean freight where possible so non-equivalent offers are not compared as if they were identical.",
+      },
+      {
+        question: "Can different sodium metasilicate grades be combined in one shipment?",
+        answer:
+          "A combined loading plan may be possible, but it must be confirmed against production availability, minimum quantity per grade, packing dimensions, container weight and separation requirements. Send the proposed grade mix during RFQ instead of assuming it is available.",
+      },
+      {
+        question: "What information should a distributor include in an RFQ?",
+        answer:
+          "Include each grade and quantity, target specification, bag and pallet requirements, private-label needs, destination port, preferred Incoterm, required documents, shipment timing and expected annual demand. This allows the supplier to review a practical loading and supply plan.",
+      },
+    ],
+    sections: [
+      {
+        heading: "Why distributor sourcing is different from an end-user purchase",
+        paragraphs: [
+          "A sodium metasilicate distributor buys for more than one downstream customer. The purchasing decision must support resale, warehouse handling, document requests, repeat availability and consistent specifications across several applications. A product that works for one factory may not be the right stock item for the full customer base.",
+          "For this reason, distributor sourcing should begin with customer segments and recurring requirements. Detergent producers, industrial cleaning formulators, textile processors and water-treatment chemical companies may ask for different forms, particle characteristics, packing or technical documents. The portfolio must be defined before asking for a wholesale quotation.",
+        ],
+      },
+      {
+        heading: "How a sodium metasilicate distributor should plan grades",
+        paragraphs: [
+          "Avoid listing only a generic product name. Separate sodium metasilicate granules, anhydrous sodium metasilicate and sodium metasilicate pentahydrate in the purchasing specification. Each form can have different handling, dissolution, storage and customer-application implications.",
+          "A focused opening portfolio is usually easier to control than a long catalogue of loosely defined grades. Start with the products supported by repeat customer demand, then validate specifications and samples with the customers most likely to reorder.",
+        ],
+        bullets: [
+          "Map each proposed grade to the applications and customers expected to buy it.",
+          "Record required Na2O, SiO2, appearance, Fe and insoluble-matter limits from the applicable specification.",
+          "Confirm particle size or bulk density when dosing, dust or dry-blend behavior matters.",
+          "Keep customer-specific requirements separate from the supplier's standard grade description.",
+        ],
+      },
+      {
+        heading: "Specification control and batch consistency",
+        image: {
+          src: "/assets/images/factory-proof/finished-goods-warehouse.png",
+          alt: "Finished sodium metasilicate inventory prepared for distributor supply",
+          caption:
+            "Recurring distribution depends on controlled grade identification, packing and shipment records across orders.",
+          fit: "cover",
+        },
+        paragraphs: [
+          "Distributors carry the risk of supplying several customers from one imported lot. Before building inventory, compare the supplier's TDS and sample COA with the limits promised to customers. When a customer provides its own specification, request a line-by-line confirmation instead of relying on a similar grade name.",
+          "For repeat orders, ask how batch identification, test results and COA format will be maintained. Any requested limit outside the standard specification should be confirmed in writing before the purchase order. Samples support evaluation, but they do not replace batch-specific order documents.",
+        ],
+      },
+      {
+        heading: "Packaging, labels and warehouse handling",
+        paragraphs: [
+          "Sodium metasilicate packaging affects warehouse efficiency, moisture protection, resale presentation and delivered cost. Confirm the bag material, net weight, liner, sealing method, batch marking and pallet configuration before comparing prices. Neutral bags, supplier-branded bags and distributor-branded bags require different artwork and lead-time review.",
+          "The distributor should also confirm whether the bags will be sold as imported or repacked locally. Local regulations, workplace labeling, language requirements and customer instructions remain the buyer's responsibility and should be checked for the destination market.",
+        ],
+        bullets: [
+          "Bag size and construction",
+          "Neutral, supplier or private-label printing",
+          "Palletized or non-palletized loading",
+          "Batch number and production-date marking",
+          "Moisture protection during storage and inland delivery",
+        ],
+      },
+      {
+        heading: "Documents that support distributor sales",
+        paragraphs: [
+          "A distributor needs documents for both internal approval and downstream customer support. The basic review package normally includes TDS, SDS or MSDS, sample COA, packing information and company credentials. Batch COA, commercial invoice, packing list and shipment documents are tied to the actual order.",
+          "Do not advertise a certificate or regulatory status until the exact document scope, issuer, validity and product coverage have been checked. If a customer needs a special statement or COA test item, send the request before quotation so feasibility and cost can be reviewed.",
+        ],
+      },
+      {
+        heading: "Compare landed cost, not only the factory price",
+        image: {
+          src: "/assets/images/products/packing-loading/loading-small-bag.png",
+          alt: "Small-bag sodium metasilicate loading for wholesale distribution",
+          caption:
+            "Bag dimensions, pallet choice and container loading plan influence the distributor's landed cost per saleable unit.",
+          fit: "contain",
+        },
+        paragraphs: [
+          "A low ex-factory price may not create the lowest landed cost. Packaging, pallet use, container utilization, origin handling, freight, insurance, import charges, local delivery and financing time all affect the cost of saleable inventory. Compare offers on the same Incoterm and destination basis.",
+          "Inventory cost also includes slow-moving grades and the risk of holding the wrong packaging. Ask for a loading proposal by grade and calculate landed cost per metric ton and per bag before confirming the mix.",
+        ],
+      },
+      {
+        heading: "Supplier support for recurring distributor orders",
+        paragraphs: [
+          "Distributor relationships require predictable communication after the first order. Review how the supplier confirms production, packing, inspection, loading and shipment documents. Ask how specification questions and quality claims are documented and escalated.",
+          "Annual demand information can help both sides discuss production allocation and shipment cadence, but commercial commitments should be based on confirmed quotations and purchase terms. Do not treat an indicative conversation as guaranteed capacity or fixed pricing.",
+        ],
+      },
+      {
+        heading: "Distributor RFQ checklist",
+        paragraphs: [
+          "A complete RFQ reduces repeated clarification and makes supplier quotations easier to compare. Send the same request package to every shortlisted source and record all exceptions before approving the purchase order.",
+        ],
+        bullets: [
+          "Grade, form and target specification for every SKU",
+          "Trial quantity, FCL mix and expected annual demand",
+          "Bag, label, liner, pallet and marking requirements",
+          "Destination port, Incoterm and requested shipment window",
+          "TDS, SDS/MSDS, sample COA, batch COA and certificate requirements",
+          "Sample-testing plan and customer-specific limits",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "sodium-metasilicate-pentahydrate-market-buyers",
+    title: "Sodium Metasilicate Pentahydrate Market — Buyer Guide",
+    metaTitle: "Sodium Metasilicate Pentahydrate Market",
+    excerpt:
+      "Buyer-focused review of the sodium metasilicate pentahydrate market, quotation drivers, specifications, supply continuity, contracts, and FCL RFQ planning.",
+    date: "2026-07-22",
+    readTime: "9 min",
+    primaryKeyword: "sodium metasilicate pentahydrate market",
+    keywords: [
+      "sodium metasilicate pentahydrate price",
+      "sodium metasilicate pentahydrate price trend",
+      "bulk sodium metasilicate pentahydrate supplier",
+      "sodium metasilicate pentahydrate specification",
+      "sodium metasilicate pentahydrate sourcing",
+    ],
+    heroImage: {
+      src: "/assets/images/product-cards/sodium-metasilicate-pentahydrate.png",
+      alt: "Sodium metasilicate pentahydrate market product for bulk buyers",
+      caption:
+        "Bulk buyers should connect market and price research to a confirmed grade specification, packing plan and destination basis.",
+      fit: "contain",
+    },
+    keyTakeaways: [
+      "Market research is useful only when quotations are normalized to the same specification, packing, volume, Incoterm and destination.",
+      "A quoted pentahydrate price is a dated commercial offer, not a universal market benchmark or future-price guarantee.",
+      "Technical approval should cover the applicable specification, sample evaluation, document package and batch COA expectations.",
+      "Recurring buyers should evaluate shipment cadence, safety stock and supplier communication before negotiating annual volume.",
+    ],
+    productLinks: [pentahydrate, hub, granules],
+    faq: [
+      {
+        question: "What affects the sodium metasilicate pentahydrate market price?",
+        answer:
+          "The quotation can change with specification, order volume, packaging, pallet requirement, production timing, inland handling, Incoterm, destination freight, document requests and payment terms. Compare offers issued for the same date and commercial basis.",
+      },
+      {
+        question: "Can buyers use an online pentahydrate price as a purchase benchmark?",
+        answer:
+          "An online indication can support initial budgeting, but it may exclude the required grade, packing, freight, export handling or quotation validity. A usable benchmark requires a current written quotation matched to the buyer's specification and destination.",
+      },
+      {
+        question: "Which specification items should pentahydrate buyers review?",
+        answer:
+          "Review the confirmed product identity and grade specification, including appearance, Na2O, SiO2, Fe and water-insoluble matter, plus any application-specific requirement. Exact limits must come from the selected TDS and order confirmation rather than a generic market description.",
+      },
+      {
+        question: "How can buyers reduce pentahydrate supply risk?",
+        answer:
+          "Approve the grade and sample before volume purchase, define acceptable specification limits, confirm batch COA support, plan realistic shipment lead time, maintain appropriate safety stock and keep order forecasts separate from binding purchase commitments.",
+      },
+      {
+        question: "What should be included in a pentahydrate RFQ?",
+        answer:
+          "Include target specification, application, quantity, packing, pallet requirement, destination port, Incoterm, shipment timing, required documents, sample needs and any current COA or specification used for comparison.",
+      },
+    ],
+    sections: [
+      {
+        heading: "How buyers should read the sodium metasilicate pentahydrate market",
+        paragraphs: [
+          "The sodium metasilicate pentahydrate market is not one universal price list. Industrial cleaning formulators, water-treatment chemical producers, textile processors, distributors and other buyers may request different specifications, packing and shipment terms. Market research should therefore begin with the exact buying requirement.",
+          "Search results and market summaries can indicate that suppliers and demand exist, but they do not confirm a usable delivered price. Procurement teams need a dated quotation tied to product specification, order volume, destination and validity period before using it for budgeting or supplier comparison.",
+        ],
+      },
+      {
+        heading: "Define the buying specification before requesting market prices",
+        paragraphs: [
+          "Pentahydrate should not be compared with anhydrous sodium metasilicate or granules as if the forms were interchangeable. Hydration state, physical form, handling and dissolution requirements can affect application fit. Confirm the selected grade with the technical team before asking the purchasing team to benchmark prices.",
+          "If the buyer is replacing an existing source, provide the current TDS, COA or internal specification for review. The supplier can then identify whether its standard grade appears suitable for testing or whether additional confirmation is required.",
+        ],
+        bullets: [
+          "Product name, formula and required physical form",
+          "Na2O, SiO2, appearance, Fe and insoluble-matter requirements",
+          "Application and dissolution or handling expectations",
+          "Bag, pallet, label and moisture-protection requirements",
+          "Required TDS, SDS/MSDS, COA and certificate files",
+        ],
+      },
+      {
+        heading: "Main drivers behind a pentahydrate quotation",
+        paragraphs: [
+          "A sodium metasilicate pentahydrate price reflects more than the material name. Specification, order size, production schedule, bag construction, palletization, private labeling, loading plan and document requirements can change the commercial offer. FOB and CIF quotations also allocate logistics costs differently.",
+          "Freight and destination charges may change independently of the product value. For this reason, a pentahydrate price trend should be recorded with the quotation date, Incoterm, destination, validity and shipment window. Comparing figures without that context can produce a misleading purchasing conclusion.",
+        ],
+      },
+      {
+        heading: "Build a quotation comparison that procurement can audit",
+        image: {
+          src: "/assets/images/about/quality-lab.png",
+          alt: "Quality review for sodium metasilicate pentahydrate specifications",
+          caption:
+            "Price comparison should follow technical confirmation of the grade, document set and sample-testing requirements.",
+          fit: "cover",
+        },
+        paragraphs: [
+          "Use one comparison sheet for every shortlisted supplier. Normalize the technical and commercial fields before ranking offers. Mark missing information as an open item rather than assuming it is included.",
+        ],
+        bullets: [
+          "Grade and confirmed specification",
+          "Quantity per shipment and expected annual volume",
+          "Packing, pallet and labeling configuration",
+          "Loading quantity and Incoterm",
+          "Destination port and freight basis",
+          "Documents, sample support and quotation validity",
+          "Payment terms and requested shipment date",
+        ],
+      },
+      {
+        heading: "Quality documents and sample approval",
+        paragraphs: [
+          "Initial technical review normally uses the supplier's TDS, SDS or MSDS, sample COA and a representative sample. The buyer should test the sample in the intended formulation or process before a volume order. Any customer-specific limit should be confirmed as part of the purchasing specification.",
+          "The sample COA is evidence for the reviewed sample, not a guarantee that every future batch will have identical numerical results. Define the agreed specification range and request a batch COA for the actual shipment.",
+        ],
+      },
+      {
+        heading: "Supply continuity and contract planning",
+        paragraphs: [
+          "Recurring buyers should evaluate how order forecasts, production timing and shipment cadence will be communicated. A supplier may use forecast volume for planning, but each order still requires a confirmed specification, quotation, lead time and purchase commitment.",
+          "Annual contracts should state how commercial reviews, packaging changes and document requirements are handled. Buyers should avoid assuming that an indicative annual price remains fixed when freight, packing or commercial conditions change.",
+        ],
+      },
+      {
+        heading: "Inventory, packaging and delivered cost",
+        image: {
+          src: "/assets/images/products/packing-loading/packing-red-bag.png",
+          alt: "25 kg sodium metasilicate pentahydrate packaging for bulk procurement",
+          caption:
+            "Packaging and pallet decisions affect moisture protection, warehouse handling, container use and landed cost.",
+          fit: "contain",
+        },
+        paragraphs: [
+          "Purchase price must be considered together with safety stock, warehouse conditions and expected consumption. Ordering too little can expose production to delay, while ordering too much can increase working capital and storage risk. The appropriate inventory policy depends on consumption, lead time and the buyer's operating conditions.",
+          "Confirm bag size, liner, palletization and loading plan before calculating delivered cost. The cheapest per-ton offer may not be the best operational choice if the packaging does not suit the warehouse or production line.",
+        ],
+      },
+      {
+        heading: "Pentahydrate buyer RFQ checklist",
+        paragraphs: [
+          "Send a complete and consistent RFQ to obtain a quotation that can be used for technical and commercial approval. If price monitoring is required, keep the specification and quotation basis unchanged across review dates.",
+        ],
+        bullets: [
+          "Application and target pentahydrate specification",
+          "Trial, FCL or annual quantity",
+          "Bag, pallet, label and marking requirements",
+          "Destination port, Incoterm and shipment window",
+          "TDS, SDS/MSDS, sample COA, batch COA and certificates required",
+          "Current product reference or COA used for comparison",
+          "Quotation validity and payment-term request",
+        ],
+      },
+    ],
+  },
 ];
 
 export function getBlogPostBySlug(slug: string): BlogPost | undefined {

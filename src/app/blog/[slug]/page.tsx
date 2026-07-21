@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -21,9 +22,12 @@ export async function generateMetadata({ params }: Props) {
   const post = getBlogPostBySlug(slug);
   if (!post) return {};
   return createMetadata({
-    title: post.title,
+    title: post.metaTitle ?? post.title,
     description: post.excerpt,
     path: `/blog/${post.slug}`,
+    primaryKeyword: post.primaryKeyword,
+    keywords: post.keywords,
+    image: post.heroImage ? `${SITE.url}${post.heroImage.src}` : undefined,
   });
 }
 
@@ -42,6 +46,7 @@ export default async function BlogPostPage({ params }: Props) {
         url={`${SITE.url}${path}`}
         datePublished={post.date}
         dateModified={dateModified}
+        image={post.heroImage ? `${SITE.url}${post.heroImage.src}` : undefined}
       />
       <FAQSchema items={post.faq} />
       <BreadcrumbSchema
@@ -76,16 +81,74 @@ export default async function BlogPostPage({ params }: Props) {
           <time dateTime={dateModified}>Updated {formatContentDate(dateModified)}</time>
         </div>
 
+        {post.heroImage ? (
+          <figure className="mb-10 overflow-hidden rounded-2xl border border-[#D7E6EF] bg-[#F4F6F8] shadow-sm">
+            <div className="relative aspect-[16/9]">
+              <Image
+                src={post.heroImage.src}
+                alt={post.heroImage.alt}
+                fill
+                priority
+                sizes="(min-width: 1024px) 1100px, 100vw"
+                className={post.heroImage.fit === "contain" ? "object-contain" : "object-cover"}
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] bg-white px-5 py-3 text-sm text-[#64748B]">
+              {post.heroImage.caption}
+            </figcaption>
+          </figure>
+        ) : null}
+
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
+            {post.keyTakeaways?.length ? (
+              <aside className="rounded-2xl border border-[#B8DCE8] bg-[#F4FBFD] p-6">
+                <h2 className="text-xl font-bold text-[#0B2D5B]">Buyer Takeaways</h2>
+                <ul className="mt-4 space-y-2 text-sm leading-relaxed text-[#475569]">
+                  {post.keyTakeaways.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2E7D9A]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            ) : null}
+
             {post.sections.map((section) => (
               <div key={section.heading}>
                 <h2 className="text-xl font-bold text-[#0B2D5B]">{section.heading}</h2>
+                {section.image ? (
+                  <figure className="mt-5 overflow-hidden rounded-xl border border-[#D7E6EF] bg-[#F4F6F8]">
+                    <div className="relative aspect-[16/9]">
+                      <Image
+                        src={section.image.src}
+                        alt={section.image.alt}
+                        fill
+                        sizes="(min-width: 1024px) 760px, 100vw"
+                        className={section.image.fit === "contain" ? "object-contain" : "object-cover"}
+                      />
+                    </div>
+                    <figcaption className="border-t border-[#D7E6EF] bg-white px-4 py-2.5 text-xs text-[#64748B]">
+                      {section.image.caption}
+                    </figcaption>
+                  </figure>
+                ) : null}
                 {section.paragraphs.map((p, i) => (
                   <p key={i} className="mt-3 text-[#5A6570] leading-relaxed">
                     {p}
                   </p>
                 ))}
+                {section.bullets?.length ? (
+                  <ul className="mt-4 space-y-2 rounded-xl border border-[#E2E6EA] bg-[#F8FAFC] p-5 text-sm leading-relaxed text-[#475569]">
+                    {section.bullets.map((item) => (
+                      <li key={item} className="flex gap-3">
+                        <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2E7D9A]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
             ))}
 

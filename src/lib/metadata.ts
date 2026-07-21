@@ -8,6 +8,7 @@ type PageMeta = {
   /** Single primary keyword for this page — avoids cannibalization */
   primaryKeyword?: string;
   keywords?: readonly string[];
+  image?: string;
   /** Mid-funnel pages: noindex but follow links to authority sink */
   noIndex?: boolean;
 };
@@ -18,12 +19,13 @@ export function createMetadata({
   path,
   primaryKeyword,
   keywords = [],
+  image,
   noIndex = false,
 }: PageMeta): Metadata {
   const url = `${SITE.url}${path}`;
   const fullTitle = `${title} | ${SITE.name}`;
   const pageTitle = path === "/" ? { absolute: fullTitle } : title;
-  const ogImage = `${SITE.url}/images/og-image.svg`;
+  const ogImage = image ?? `${SITE.url}/images/og-image.svg`;
 
   const keywordList = primaryKeyword
     ? [primaryKeyword, ...keywords.filter((k) => k !== primaryKeyword)]

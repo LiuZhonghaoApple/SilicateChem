@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PageHeader, PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
@@ -9,7 +10,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata = createMetadata({
   title: "Sodium Metasilicate Blog — Procurement & Application Guides",
   description:
-    "Sodium metasilicate blog for B2B buyers reviewing detergent applications, water treatment sourcing, China procurement, documents, packing, and RFQ preparation.",
+    "Sodium metasilicate blog for distributors, importers, formulators and procurement teams reviewing grades, markets, applications, documents, packing, and RFQs.",
   path: "/blog",
 });
 
@@ -24,7 +25,7 @@ export default function BlogPage() {
       />
       <PageHeader
         title="Sodium Metasilicate Procurement Blog"
-        description="Long-tail buyer guides for detergent manufacturers, water treatment chemical producers, and importers reviewing sodium metasilicate grades, documents, packing, and RFQ details."
+        description="Buyer guides for chemical distributors, importers, detergent manufacturers, formulators and procurement teams reviewing sodium metasilicate grades, markets, documents, packing, and RFQ details."
         breadcrumbs={[{ label: "Blog" }]}
       />
 
@@ -39,6 +40,17 @@ export default function BlogPage() {
               key={post.slug}
               className="flex h-full flex-col rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2A86A5] hover:shadow-[0_16px_34px_rgba(42,134,165,0.12)]"
             >
+              {post.heroImage ? (
+                <div className="relative -mx-6 -mt-6 mb-5 aspect-[16/10] overflow-hidden rounded-t-2xl bg-[#F4F6F8]">
+                  <Image
+                    src={post.heroImage.src}
+                    alt={post.heroImage.alt}
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className={post.heroImage.fit === "contain" ? "object-contain" : "object-cover"}
+                  />
+                </div>
+              ) : null}
               <div className="flex flex-wrap items-center gap-3 text-xs text-[#5A6570]">
                 <time dateTime={post.date}>
                   {new Date(post.date).toLocaleDateString("en-US", {

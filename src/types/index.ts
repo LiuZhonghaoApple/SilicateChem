@@ -33,14 +33,31 @@ export type Product = {
 export type BlogPost = {
   slug: string;
   title: string;
+  metaTitle?: string;
   excerpt: string;
   date: string;
   readTime: string;
   primaryKeyword: string;
   keywords: string[];
+  heroImage?: BlogImage;
+  keyTakeaways?: string[];
   productLinks: { slug: string; label: string }[];
   faq: FAQItem[];
-  sections: { heading: string; paragraphs: string[] }[];
+  sections: BlogSection[];
+};
+
+export type BlogImage = {
+  src: string;
+  alt: string;
+  caption: string;
+  fit?: "cover" | "contain";
+};
+
+export type BlogSection = {
+  heading: string;
+  paragraphs: string[];
+  bullets?: string[];
+  image?: BlogImage;
 };
 
 export type FAQItem = {

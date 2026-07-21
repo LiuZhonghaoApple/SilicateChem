@@ -114,6 +114,18 @@ const procurementArticle: ContextualLink = {
   kind: "Article",
 };
 
+const distributorArticle: ContextualLink = {
+  href: "/blog/sodium-metasilicate-distributor-guide",
+  label: "Sodium Metasilicate Distributor Sourcing Guide",
+  kind: "Article",
+};
+
+const pentahydrateMarketArticle: ContextualLink = {
+  href: "/blog/sodium-metasilicate-pentahydrate-market-buyers",
+  label: "Sodium Metasilicate Pentahydrate Market Buyer Guide",
+  kind: "Article",
+};
+
 export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
   "/products/sodium-metasilicate": [
     granules,
@@ -122,6 +134,8 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     supplierGuide,
     detergentApplication,
     documents,
+    distributorArticle,
+    pentahydrateMarketArticle,
   ],
   "/products/sodium-metasilicate-granules": [
     hub,
@@ -130,6 +144,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     detergentArticle,
     priceGuide,
     documents,
+    distributorArticle,
   ],
   "/products/sodium-metasilicate-anhydrous": [
     hub,
@@ -146,6 +161,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     waterArticle,
     supplierGuide,
     documents,
+    pentahydrateMarketArticle,
   ],
   "/products/sodium-silicate": [
     hub,
@@ -158,8 +174,22 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
   "/applications/water-treatment": [hub, pentahydrate, waterArticle, supplierGuide, documents],
   "/applications/textile-industry": [hub, pentahydrate, supplierGuide, certifications, documents],
   "/applications/paper-industry": [hub, priceGuide, supplierGuide, certifications, documents],
-  "/guides/supplier-selection": [hub, factoryGuide, procurementArticle, certifications, documents],
-  "/guides/price-factors": [hub, granules, supplierGuide, procurementArticle, documents],
+  "/guides/supplier-selection": [
+    hub,
+    factoryGuide,
+    procurementArticle,
+    distributorArticle,
+    certifications,
+    documents,
+  ],
+  "/guides/price-factors": [
+    hub,
+    granules,
+    supplierGuide,
+    procurementArticle,
+    pentahydrateMarketArticle,
+    documents,
+  ],
   "/guides/uses-detergent": [
     hub,
     granules,
@@ -172,7 +202,30 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
   "/guides/how-to-choose-china-factory": [hub, supplierGuide, procurementArticle, certifications, documents],
   "/blog/detergent-industry-metasilicate": [hub, granules, detergentApplication, detergentGuide, documents],
   "/blog/water-treatment-metasilicate": [hub, pentahydrate, waterApplication, supplierGuide, documents],
-  "/blog/china-metasilicate-procurement": [hub, factoryGuide, supplierGuide, certifications, documents],
+  "/blog/china-metasilicate-procurement": [
+    hub,
+    factoryGuide,
+    supplierGuide,
+    distributorArticle,
+    certifications,
+    documents,
+  ],
+  "/blog/sodium-metasilicate-distributor-guide": [
+    hub,
+    granules,
+    anhydrous,
+    pentahydrate,
+    supplierGuide,
+    documents,
+  ],
+  "/blog/sodium-metasilicate-pentahydrate-market-buyers": [
+    hub,
+    pentahydrate,
+    priceGuide,
+    waterApplication,
+    supplierGuide,
+    documents,
+  ],
 };
 
 export function getContextualInternalLinks(path: string): ContextualLink[] {
