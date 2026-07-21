@@ -19,6 +19,12 @@ export function ContactDirectLinks() {
         </TrackedWhatsApp>
       </li>
       <li>
+        <span className="block text-xs font-semibold uppercase text-[#0B2D5B]">Telephone</span>
+        <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="hover:text-[#2E7D9A]">
+          {SITE.phone}
+        </a>
+      </li>
+      <li>
         <span className="block text-xs font-semibold uppercase text-[#0B2D5B]">Location</span>
         {SITE.location}
       </li>

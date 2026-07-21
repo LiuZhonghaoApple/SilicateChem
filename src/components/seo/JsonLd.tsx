@@ -24,6 +24,7 @@ export function OrganizationSchema() {
         url: SITE.url,
         logo: `${SITE.url}/images/logo.svg`,
         email: SITE.email,
+        telephone: SITE.phone,
         address: {
           "@type": "PostalAddress",
           addressLocality: "Shandong",

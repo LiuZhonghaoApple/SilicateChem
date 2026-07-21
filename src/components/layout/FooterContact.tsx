@@ -16,6 +16,11 @@ export function FooterContact() {
           WhatsApp: {SITE.whatsapp}
         </TrackedWhatsApp>
       </li>
+      <li>
+        <a href={`tel:${SITE.phone.replace(/\s/g, "")}`} className="hover:text-white">
+          Telephone: {SITE.phone}
+        </a>
+      </li>
       <li>{SITE.location}</li>
     </>
   );
