@@ -67,13 +67,40 @@ export function FloatingContactWidget() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end md:bottom-24 md:right-6">
+    <div className="fixed right-4 top-52 z-50 md:right-6 md:top-40">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors hover:bg-[#1FBD59]"
+        aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"}
+        aria-expanded={open}
+        aria-controls="whatsapp-chat-panel"
+      >
+        {open ? (
+          <span className="text-2xl leading-none">×</span>
+        ) : (
+          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.8}
+              d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.44L3 20.5l1.56-4.82A8.5 8.5 0 1 1 20.5 11.5Z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.8}
+              d="M8.6 8.2c.8 2.45 2.75 4.4 5.2 5.2l1.2-1.2 2.2.7v2.1c0 .55-.45 1-1 1A8.2 8.2 0 0 1 8 7.8c0-.55.45-1 1-1h2.1l.7 2.2-1.2 1.2"
+            />
+          </svg>
+        )}
+      </button>
       {open && (
         <div
           id="whatsapp-chat-panel"
           role="dialog"
           aria-label="WhatsApp contact"
-          className="mb-3 w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-[#DDE7E1] bg-white shadow-2xl"
+          className="absolute right-0 top-[calc(100%+0.75rem)] w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-[#DDE7E1] bg-white shadow-2xl"
         >
           <div className="flex items-center gap-3 rounded-t-2xl bg-[#128C7E] px-4 py-3 text-white">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
@@ -112,33 +139,6 @@ export function FloatingContactWidget() {
           </div>
         </div>
       )}
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-colors hover:bg-[#1FBD59]"
-        aria-label={open ? "Close WhatsApp chat" : "Open WhatsApp chat"}
-        aria-expanded={open}
-        aria-controls="whatsapp-chat-panel"
-      >
-        {open ? (
-          <span className="text-2xl leading-none">×</span>
-        ) : (
-          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.8}
-              d="M20.5 11.5a8.5 8.5 0 0 1-12.6 7.44L3 20.5l1.56-4.82A8.5 8.5 0 1 1 20.5 11.5Z"
-            />
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.8}
-              d="M8.6 8.2c.8 2.45 2.75 4.4 5.2 5.2l1.2-1.2 2.2.7v2.1c0 .55-.45 1-1 1A8.2 8.2 0 0 1 8 7.8c0-.55.45-1 1-1h2.1l.7 2.2-1.2 1.2"
-            />
-          </svg>
-        )}
-      </button>
     </div>
   );
 }
