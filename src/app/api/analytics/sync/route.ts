@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { isAuthorizedCronRequest } from "@/lib/cron-auth";
 import { isDatabaseConfigured } from "@/lib/db";
-import { submitLatestUrlsToIndexNow } from "@/lib/geo/indexnow";
+import { syncReportingData } from "@/lib/reporting/sync";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
 export async function GET(request: Request) {
   if (!process.env.CRON_SECRET) {
@@ -29,15 +30,16 @@ export async function GET(request: Request) {
   }
 
   try {
-    const result = await submitLatestUrlsToIndexNow("vercel_cron");
+    const result = await syncReportingData("vercel_cron");
     return NextResponse.json(result, {
       headers: { "Cache-Control": "no-store" },
     });
   } catch (error) {
-    console.error("[GEO] IndexNow submission failed", error);
+    console.error("[REPORTING] Daily sync failed", error);
     return NextResponse.json(
-      { error: "IndexNow submission failed" },
+      { error: "Daily reporting sync failed" },
       { status: 502, headers: { "Cache-Control": "no-store" } }
     );
   }
 }
+

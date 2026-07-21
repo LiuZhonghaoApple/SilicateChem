@@ -6,7 +6,10 @@ import { products } from "@/content/products";
 import { SITE } from "@/lib/constants";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
 import { MONEY_PAGES } from "@/lib/seo-funnel";
-import { getContentLastModifiedDate } from "@/lib/content-freshness";
+import {
+  assertContentFreshnessCoverage,
+  getContentLastModifiedDate,
+} from "@/lib/content-freshness";
 
 /** Indexable static pages. */
 const INDEXABLE_STATIC = [
@@ -71,6 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const unique = [...new Set(allPages)];
+  assertContentFreshnessCoverage(unique);
 
   return unique.map((path) => ({
     url: `${SITE.url}${path}`,

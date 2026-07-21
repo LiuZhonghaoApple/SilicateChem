@@ -87,6 +87,91 @@ const statements = [
     response_body TEXT,
     success BOOLEAN NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS reporting_sync_runs (
+    id BIGSERIAL PRIMARY KEY,
+    provider TEXT NOT NULL CHECK (provider IN ('site', 'ga4', 'gsc')),
+    status TEXT NOT NULL CHECK (status IN ('success', 'failed', 'not_configured')),
+    trigger TEXT NOT NULL,
+    window_start DATE NOT NULL,
+    window_end DATE NOT NULL,
+    row_count INTEGER NOT NULL DEFAULT 0,
+    error TEXT,
+    completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS ga4_daily_metrics (
+    metric_date DATE PRIMARY KEY,
+    sessions INTEGER NOT NULL DEFAULT 0,
+    total_users INTEGER NOT NULL DEFAULT 0,
+    new_users INTEGER NOT NULL DEFAULT 0,
+    engaged_sessions INTEGER NOT NULL DEFAULT 0,
+    screen_page_views INTEGER NOT NULL DEFAULT 0,
+    engagement_rate DOUBLE PRECISION NOT NULL DEFAULT 0,
+    key_events DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS ga4_source_daily (
+    metric_date DATE NOT NULL,
+    source TEXT NOT NULL,
+    medium TEXT NOT NULL,
+    channel_group TEXT NOT NULL,
+    sessions INTEGER NOT NULL DEFAULT 0,
+    total_users INTEGER NOT NULL DEFAULT 0,
+    key_events DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (metric_date, source, medium, channel_group)
+  )`,
+  `CREATE TABLE IF NOT EXISTS ga4_page_daily (
+    metric_date DATE NOT NULL,
+    page_path TEXT NOT NULL,
+    sessions INTEGER NOT NULL DEFAULT 0,
+    total_users INTEGER NOT NULL DEFAULT 0,
+    screen_page_views INTEGER NOT NULL DEFAULT 0,
+    key_events DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (metric_date, page_path)
+  )`,
+  `CREATE TABLE IF NOT EXISTS gsc_daily_metrics (
+    metric_date DATE PRIMARY KEY,
+    clicks DOUBLE PRECISION NOT NULL DEFAULT 0,
+    impressions DOUBLE PRECISION NOT NULL DEFAULT 0,
+    ctr DOUBLE PRECISION NOT NULL DEFAULT 0,
+    position DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS gsc_query_daily (
+    metric_date DATE NOT NULL,
+    query TEXT NOT NULL,
+    clicks DOUBLE PRECISION NOT NULL DEFAULT 0,
+    impressions DOUBLE PRECISION NOT NULL DEFAULT 0,
+    ctr DOUBLE PRECISION NOT NULL DEFAULT 0,
+    position DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (metric_date, query)
+  )`,
+  `CREATE TABLE IF NOT EXISTS gsc_page_daily (
+    metric_date DATE NOT NULL,
+    page TEXT NOT NULL,
+    clicks DOUBLE PRECISION NOT NULL DEFAULT 0,
+    impressions DOUBLE PRECISION NOT NULL DEFAULT 0,
+    ctr DOUBLE PRECISION NOT NULL DEFAULT 0,
+    position DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (metric_date, page)
+  )`,
+  `CREATE TABLE IF NOT EXISTS gsc_site_snapshots (
+    snapshot_date DATE PRIMARY KEY,
+    sitemap_submitted INTEGER NOT NULL DEFAULT 0,
+    sitemap_indexed INTEGER NOT NULL DEFAULT 0,
+    sitemap_errors INTEGER NOT NULL DEFAULT 0,
+    sitemap_warnings INTEGER NOT NULL DEFAULT 0,
+    checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS site_daily_snapshots (
+    snapshot_date DATE PRIMARY KEY,
+    public_page_count INTEGER NOT NULL DEFAULT 0,
+    updated_page_count INTEGER NOT NULL DEFAULT 0,
+    checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
   `CREATE INDEX IF NOT EXISTS crm_leads_submitted_at_idx ON crm_leads (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_leads_status_idx ON crm_leads (status, submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_leads_product_idx ON crm_leads (product, submitted_at DESC)`,
@@ -99,6 +184,11 @@ const statements = [
   `CREATE INDEX IF NOT EXISTS admin_audit_created_idx ON admin_audit_logs (created_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_submitted_idx ON geo_indexnow_submissions (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_fingerprint_idx ON geo_indexnow_submissions (content_fingerprint, success)`,
+  `CREATE INDEX IF NOT EXISTS reporting_sync_provider_idx ON reporting_sync_runs (provider, completed_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS ga4_source_daily_date_idx ON ga4_source_daily (metric_date DESC, sessions DESC)`,
+  `CREATE INDEX IF NOT EXISTS ga4_page_daily_date_idx ON ga4_page_daily (metric_date DESC, screen_page_views DESC)`,
+  `CREATE INDEX IF NOT EXISTS gsc_query_daily_date_idx ON gsc_query_daily (metric_date DESC, impressions DESC)`,
+  `CREATE INDEX IF NOT EXISTS gsc_page_daily_date_idx ON gsc_page_daily (metric_date DESC, impressions DESC)`,
 ];
 
 for (const statement of statements) {

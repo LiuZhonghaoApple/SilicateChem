@@ -21,7 +21,7 @@ export default async function ProtectedAdminLayout({
             <Link href="/admin" className="text-lg font-bold">
               SilicateChem 管理后台
             </Link>
-            <p className="text-xs text-white/65">询盘CRM · 精准来源归因</p>
+            <p className="text-xs text-white/65">询盘CRM · SEO/GEO · 精准来源归因</p>
           </div>
           <div className="flex items-center gap-3 text-sm">
             <span className="hidden text-white/75 sm:inline">{session.username}</span>
@@ -43,7 +43,9 @@ export default async function ProtectedAdminLayout({
             <Link href="/admin/inquiries" className="rounded-lg px-3 py-2.5 text-[#0B2D5B] hover:bg-[#EAF4FA]">
               询盘管理
             </Link>
-            <span className="rounded-lg px-3 py-2.5 text-[#94A3B8]">SEO与流量（第二阶段）</span>
+            <Link href="/admin/analytics" className="rounded-lg px-3 py-2.5 text-[#0B2D5B] hover:bg-[#EAF4FA]">
+              SEO与流量
+            </Link>
           </nav>
         </aside>
         <section className="min-w-0">{children}</section>

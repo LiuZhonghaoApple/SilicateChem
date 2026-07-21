@@ -1,26 +1,29 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/constants";
+import {
+  AI_CRAWLER_POLICY,
+  AI_CRAWLER_PROTECTED_PATHS,
+} from "@/lib/seo/ai-crawler-policy";
 
 export default function robots(): MetadataRoute.Robots {
-  const protectedPaths = ["/api/", "/admin/", "/v5-debug", "/v6-debug"];
-
   return {
     rules: [
-      {
-        // Search/citation access for ChatGPT is allowed.
-        userAgent: "OAI-SearchBot",
-        allow: "/",
-        disallow: protectedPaths,
-      },
-      {
-        // Search visibility is separate from model-training access.
-        userAgent: "GPTBot",
-        disallow: "/",
-      },
+      ...AI_CRAWLER_POLICY.map((crawler) =>
+        crawler.access === "allow"
+          ? {
+              userAgent: crawler.userAgent,
+              allow: "/",
+              disallow: [...AI_CRAWLER_PROTECTED_PATHS],
+            }
+          : {
+              userAgent: crawler.userAgent,
+              disallow: "/",
+            }
+      ),
       {
         userAgent: "*",
         allow: "/",
-        disallow: protectedPaths,
+        disallow: [...AI_CRAWLER_PROTECTED_PATHS],
       },
     ],
     sitemap: `${SITE.url}/sitemap.xml`,
