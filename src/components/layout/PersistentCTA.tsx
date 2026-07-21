@@ -73,9 +73,9 @@ export function FloatingContactWidget() {
           id="whatsapp-chat-panel"
           role="dialog"
           aria-label="WhatsApp contact"
-          className="mb-3 w-[calc(100vw-2rem)] max-w-xs overflow-hidden rounded-2xl border border-[#DDE7E1] bg-white shadow-2xl"
+          className="mb-3 w-[calc(100vw-2rem)] max-w-xs rounded-2xl border border-[#DDE7E1] bg-white shadow-2xl"
         >
-          <div className="flex items-center gap-3 bg-[#128C7E] px-4 py-3 text-white">
+          <div className="flex items-center gap-3 rounded-t-2xl bg-[#128C7E] px-4 py-3 text-white">
             <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15">
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path
