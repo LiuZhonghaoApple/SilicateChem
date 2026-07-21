@@ -10,7 +10,11 @@ export type AnalyticsEvent =
   | "page_view_by_source"
   | "whatsapp_click"
   | "email_click"
-  | "cta_click";
+  | "cta_click"
+  | "ai_advisor_open"
+  | "ai_advisor_question"
+  | "ai_advisor_answer"
+  | "ai_advisor_handoff";
 
 export type CtaType = "quote" | "sample" | "tds" | "contact";
 
@@ -172,6 +176,25 @@ export function trackEmailClick(params: ContactTrackingParams): void {
     funnel_layer: inferFunnelLayer(params.pagePath),
     event_category: "engagement",
     event_label: params.location ?? "mailto",
+  });
+}
+
+export function trackAiAdvisorEvent(params: {
+  event:
+    | "ai_advisor_open"
+    | "ai_advisor_question"
+    | "ai_advisor_answer"
+    | "ai_advisor_handoff";
+  pagePath: string;
+  label?: string;
+}): void {
+  emit(params.event, {
+    page_path: params.pagePath,
+    page_source: params.pagePath,
+    funnel_layer: inferFunnelLayer(params.pagePath),
+    event_category:
+      params.event === "ai_advisor_handoff" ? "conversion" : "engagement",
+    event_label: params.label ?? "procurement_advisor",
   });
 }
 

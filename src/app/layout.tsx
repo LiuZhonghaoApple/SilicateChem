@@ -8,6 +8,7 @@ import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { ClarityScript } from "@/components/analytics/ClarityScript";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { OrganizationSchema } from "@/components/seo/JsonLd";
+import { ProcurementAdvisor } from "@/components/ai/ProcurementAdvisor";
 import { SITE } from "@/lib/constants";
 import "./globals.css";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
         <Footer />
         <StickyQuoteBar />
         <FloatingContactWidget />
+        <ProcurementAdvisor />
         <Suspense fallback={null}>
           <PageViewTracker />
         </Suspense>
