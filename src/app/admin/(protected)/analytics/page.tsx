@@ -15,6 +15,7 @@ import {
 } from "@/lib/reporting/repository";
 import { formatAdminDate } from "@/lib/crm/presentation";
 import { syncReportingAction } from "./actions";
+import GeoMonitoringPanel from "./GeoMonitoringPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -258,7 +259,8 @@ export default async function AnalyticsDashboardPage() {
         <div className="flex flex-wrap items-center justify-between gap-3"><h2 className="font-bold text-[#0B2D5B]">AI Crawler 策略矩阵</h2><p className="text-xs text-[#64748B]">默认规则：公开内容允许；API、后台和调试路径禁止。</p></div>
         <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">{AI_CRAWLER_POLICY.map((crawler) => <article key={crawler.userAgent} className="rounded-lg border border-[#E2E8F0] p-4"><div className="flex items-center justify-between gap-3"><p className="font-mono text-sm font-bold text-[#0B2D5B]">{crawler.userAgent}</p><span className={`rounded-full px-2.5 py-1 text-xs font-bold ${crawler.access === "allow" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}>{crawler.access === "allow" ? "允许" : "禁止"}</span></div><p className="mt-2 text-xs text-[#64748B]">{crawler.provider} · {crawler.purpose}</p>{crawler.note ? <p className="mt-2 text-xs text-amber-700">{crawler.note}</p> : null}</article>)}</div>
       </section>
+
+      <GeoMonitoringPanel />
     </div>
   );
 }
-

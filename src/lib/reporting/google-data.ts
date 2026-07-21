@@ -5,12 +5,14 @@ import {
 } from "@/lib/reporting/config";
 import type {
   Ga4DailyRow,
+  Ga4LandingSourceRow,
   Ga4PageRow,
   Ga4SourceRow,
   GscDailyRow,
   GscPageRow,
   GscQueryRow,
   GscSitemapSnapshot,
+  GscUrlInspectionRow,
 } from "@/lib/reporting/types";
 
 type Ga4ApiRow = {
@@ -101,8 +103,9 @@ export async function fetchGa4Data(params: {
   daily: Ga4DailyRow[];
   sources: Ga4SourceRow[];
   pages: Ga4PageRow[];
+  landingSources: Ga4LandingSourceRow[];
 }> {
-  const [dailyRows, sourceRows, pageRows] = await Promise.all([
+  const [dailyRows, sourceRows, pageRows, landingSourceRows] = await Promise.all([
     runGa4Report({
       ...params,
       dimensions: ["date"],
@@ -125,6 +128,17 @@ export async function fetchGa4Data(params: {
       ...params,
       dimensions: ["date", "pagePath"],
       metrics: ["sessions", "totalUsers", "screenPageViews", "keyEvents"],
+    }),
+    runGa4Report({
+      ...params,
+      dimensions: [
+        "date",
+        "sessionSource",
+        "sessionMedium",
+        "sessionDefaultChannelGroup",
+        "landingPagePlusQueryString",
+      ],
+      metrics: ["sessions", "totalUsers", "keyEvents"],
     }),
   ]);
 
@@ -154,6 +168,16 @@ export async function fetchGa4Data(params: {
       sessions: numberValue(row.sessions),
       totalUsers: numberValue(row.totalUsers),
       screenPageViews: numberValue(row.screenPageViews),
+      keyEvents: numberValue(row.keyEvents),
+    })),
+    landingSources: landingSourceRows.map((row) => ({
+      date: ga4Date(row.date),
+      source: row.sessionSource || "(not set)",
+      medium: row.sessionMedium || "(not set)",
+      channelGroup: row.sessionDefaultChannelGroup || "Unassigned",
+      landingPage: row.landingPagePlusQueryString || "/",
+      sessions: numberValue(row.sessions),
+      totalUsers: numberValue(row.totalUsers),
       keyEvents: numberValue(row.keyEvents),
     })),
   };
@@ -201,17 +225,101 @@ function gscMetrics(row: GscApiRow): Omit<GscDailyRow, "date"> {
   };
 }
 
+async function inspectGscUrl(
+  accessToken: string,
+  inspectedUrl: string
+): Promise<GscUrlInspectionRow> {
+  const response = await fetch(
+    "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        inspectionUrl: inspectedUrl,
+        siteUrl: GSC_SITE_URL,
+        languageCode: "en-US",
+      }),
+      cache: "no-store",
+    }
+  );
+  const data = (await response.json()) as {
+    inspectionResult?: {
+      indexStatusResult?: {
+        verdict?: string;
+        coverageState?: string;
+        robotsTxtState?: string;
+        indexingState?: string;
+        lastCrawlTime?: string;
+        pageFetchState?: string;
+        googleCanonical?: string;
+        userCanonical?: string;
+        crawledAs?: string;
+      };
+    };
+    error?: { message?: string };
+  };
+  if (!response.ok) {
+    throw new Error(
+      `GSC URL Inspection failed for ${inspectedUrl} (${response.status}): ${data.error?.message ?? "unknown error"}`
+    );
+  }
+
+  const status = data.inspectionResult?.indexStatusResult;
+  if (!status) throw new Error(`GSC URL Inspection returned no index status for ${inspectedUrl}`);
+  return {
+    inspectedUrl,
+    verdict: status.verdict ?? "VERDICT_UNSPECIFIED",
+    coverageState: status.coverageState ?? "Unknown",
+    robotsTxtState: status.robotsTxtState ?? "ROBOTS_TXT_STATE_UNSPECIFIED",
+    indexingState: status.indexingState ?? "INDEXING_STATE_UNSPECIFIED",
+    lastCrawlTime: status.lastCrawlTime ?? null,
+    pageFetchState: status.pageFetchState ?? "PAGE_FETCH_STATE_UNSPECIFIED",
+    googleCanonical: status.googleCanonical ?? null,
+    userCanonical: status.userCanonical ?? null,
+    crawledAs: status.crawledAs ?? "CRAWLING_USER_AGENT_UNSPECIFIED",
+  };
+}
+
+async function inspectGscUrls(
+  accessToken: string,
+  urls: readonly string[]
+): Promise<GscUrlInspectionRow[]> {
+  const rows: GscUrlInspectionRow[] = [];
+  const errors: Error[] = [];
+  const batchSize = 4;
+
+  for (let index = 0; index < urls.length; index += batchSize) {
+    const batch = await Promise.allSettled(
+      urls.slice(index, index + batchSize).map((url) => inspectGscUrl(accessToken, url))
+    );
+    for (const result of batch) {
+      if (result.status === "fulfilled") rows.push(result.value);
+      else errors.push(result.reason instanceof Error ? result.reason : new Error(String(result.reason)));
+    }
+  }
+
+  if (urls.length > 0 && rows.length === 0) {
+    throw errors[0] ?? new Error("GSC URL Inspection returned no results");
+  }
+  return rows;
+}
+
 export async function fetchGscData(params: {
   accessToken: string;
   startDate: string;
   endDate: string;
+  inspectionUrls: readonly string[];
 }): Promise<{
   daily: GscDailyRow[];
   queries: GscQueryRow[];
   pages: GscPageRow[];
   sitemap: GscSitemapSnapshot;
+  inspections: GscUrlInspectionRow[];
 }> {
-  const [dailyRows, queryRows, pageRows, sitemapResponse] = await Promise.all([
+  const [dailyRows, queryRows, pageRows, sitemapResponse, inspections] = await Promise.all([
     queryGsc({ ...params, dimensions: ["date"] }),
     queryGsc({ ...params, dimensions: ["date", "query"] }),
     queryGsc({ ...params, dimensions: ["date", "page"] }),
@@ -222,6 +330,7 @@ export async function fetchGscData(params: {
         cache: "no-store",
       }
     ),
+    inspectGscUrls(params.accessToken, params.inspectionUrls),
   ]);
 
   const sitemapData = (await sitemapResponse.json()) as {
@@ -267,6 +376,6 @@ export async function fetchGscData(params: {
       ...gscMetrics(row),
     })),
     sitemap,
+    inspections,
   };
 }
-

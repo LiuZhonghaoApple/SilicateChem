@@ -31,6 +31,17 @@ export type Ga4PageRow = {
   keyEvents: number;
 };
 
+export type Ga4LandingSourceRow = {
+  date: string;
+  source: string;
+  medium: string;
+  channelGroup: string;
+  landingPage: string;
+  sessions: number;
+  totalUsers: number;
+  keyEvents: number;
+};
+
 export type GscDailyRow = {
   date: string;
   clicks: number;
@@ -49,6 +60,19 @@ export type GscSitemapSnapshot = {
   warnings: number;
 };
 
+export type GscUrlInspectionRow = {
+  inspectedUrl: string;
+  verdict: string;
+  coverageState: string;
+  robotsTxtState: string;
+  indexingState: string;
+  lastCrawlTime: string | null;
+  pageFetchState: string;
+  googleCanonical: string | null;
+  userCanonical: string | null;
+  crawledAs: string;
+};
+
 export type ProviderSyncResult = {
   provider: ReportingProvider;
   status: ReportingSyncStatus;
@@ -57,4 +81,3 @@ export type ProviderSyncResult = {
   endDate: string;
   error?: string;
 };
-

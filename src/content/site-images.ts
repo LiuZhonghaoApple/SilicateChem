@@ -115,13 +115,15 @@ export function getGalleryImageForCategory(_category: GalleryCategoryKey): strin
   return siteImages.galleryByCategory[_category];
 }
 
-export function getProductImageForSlug(_slug: string): never {
+export function getProductImageForSlug(slug: string): never {
+  void slug;
   throw new Error(
     "[site-images] getProductImageForSlug is disabled — image system PENDING."
   );
 }
 
-export function getProductGalleryForSlug(_slug: string): undefined {
+export function getProductGalleryForSlug(slug: string): undefined {
+  void slug;
   return undefined;
 }
 

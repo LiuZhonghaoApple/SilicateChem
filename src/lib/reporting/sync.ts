@@ -3,10 +3,12 @@ import { getContentReleaseTimeline } from "@/lib/content-freshness";
 import { getGoogleReportingConfiguration } from "@/lib/reporting/config";
 import { getGoogleAccessToken } from "@/lib/reporting/google-auth";
 import { fetchGa4Data, fetchGscData } from "@/lib/reporting/google-data";
+import { getGeoContentRegistry } from "@/lib/seo/geo-content-registry";
 import {
   recordReportingSyncRun,
   upsertGa4Data,
   upsertGscData,
+  upsertGeoContentRegistry,
   upsertSiteSnapshot,
 } from "@/lib/reporting/repository";
 import type { ProviderSyncResult } from "@/lib/reporting/types";
@@ -53,12 +55,19 @@ async function finishRun(params: {
 async function syncSiteData(trigger: string, today: string): Promise<ProviderSyncResult> {
   try {
     const entries = sitemap();
-    const release = getContentReleaseTimeline().find((item) => item.date === today);
-    await upsertSiteSnapshot({
-      snapshotDate: today,
-      publicPageCount: entries.length,
-      updatedPageCount: release?.count ?? 0,
+    const paths = entries.map((entry) => {
+      const path = new URL(entry.url).pathname;
+      return path === "/" ? "" : path;
     });
+    const release = getContentReleaseTimeline().find((item) => item.date === today);
+    await Promise.all([
+      upsertSiteSnapshot({
+        snapshotDate: today,
+        publicPageCount: entries.length,
+        updatedPageCount: release?.count ?? 0,
+      }),
+      upsertGeoContentRegistry(getGeoContentRegistry(paths)),
+    ]);
     return finishRun({
       trigger,
       result: {
@@ -124,6 +133,7 @@ async function syncGsc(params: {
   startDate: string;
   endDate: string;
   snapshotDate: string;
+  inspectionUrls: readonly string[];
 }): Promise<ProviderSyncResult> {
   try {
     const data = await fetchGscData(params);
@@ -197,6 +207,7 @@ export async function syncReportingData(trigger: string): Promise<{
   const gscEndDate = shiftDate(today, -2);
   const ga4StartDate = shiftDate(ga4EndDate, -(ROLLING_WINDOW_DAYS - 1));
   const gscStartDate = shiftDate(gscEndDate, -(ROLLING_WINDOW_DAYS - 1));
+  const inspectionUrls = sitemap().map((entry) => entry.url);
   const siteResult = await syncSiteData(trigger, today);
   const configuration = getGoogleReportingConfiguration();
 
@@ -237,6 +248,7 @@ export async function syncReportingData(trigger: string): Promise<{
       startDate: gscStartDate,
       endDate: gscEndDate,
       snapshotDate: today,
+      inspectionUrls,
     }),
   ]);
 

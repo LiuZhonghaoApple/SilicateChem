@@ -130,6 +130,18 @@ const statements = [
     synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (metric_date, page_path)
   )`,
+  `CREATE TABLE IF NOT EXISTS ga4_landing_source_daily (
+    metric_date DATE NOT NULL,
+    source TEXT NOT NULL,
+    medium TEXT NOT NULL,
+    channel_group TEXT NOT NULL,
+    landing_page TEXT NOT NULL,
+    sessions INTEGER NOT NULL DEFAULT 0,
+    total_users INTEGER NOT NULL DEFAULT 0,
+    key_events DOUBLE PRECISION NOT NULL DEFAULT 0,
+    synced_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (metric_date, source, medium, channel_group, landing_page)
+  )`,
   `CREATE TABLE IF NOT EXISTS gsc_daily_metrics (
     metric_date DATE PRIMARY KEY,
     clicks DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -166,11 +178,47 @@ const statements = [
     sitemap_warnings INTEGER NOT NULL DEFAULT 0,
     checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`,
+  `CREATE TABLE IF NOT EXISTS gsc_url_inspection_snapshots (
+    snapshot_date DATE NOT NULL,
+    inspected_url TEXT NOT NULL,
+    verdict TEXT NOT NULL,
+    coverage_state TEXT NOT NULL,
+    robots_txt_state TEXT NOT NULL,
+    indexing_state TEXT NOT NULL,
+    last_crawl_time TIMESTAMPTZ,
+    page_fetch_state TEXT NOT NULL,
+    google_canonical TEXT,
+    user_canonical TEXT,
+    crawled_as TEXT NOT NULL,
+    checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (snapshot_date, inspected_url)
+  )`,
   `CREATE TABLE IF NOT EXISTS site_daily_snapshots (
     snapshot_date DATE PRIMARY KEY,
     public_page_count INTEGER NOT NULL DEFAULT 0,
     updated_page_count INTEGER NOT NULL DEFAULT 0,
     checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
+  `CREATE TABLE IF NOT EXISTS geo_citation_observations (
+    id BIGSERIAL PRIMARY KEY,
+    observed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    provider TEXT NOT NULL CHECK (provider IN ('chatgpt', 'copilot', 'perplexity', 'claude', 'gemini', 'other')),
+    question TEXT NOT NULL,
+    cited_url TEXT,
+    cited_page_path TEXT,
+    result_status TEXT NOT NULL CHECK (result_status IN ('cited', 'not_cited', 'incorrect')),
+    answer_note TEXT,
+    created_by TEXT NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS geo_content_reviews (
+    page_path TEXT PRIMARY KEY,
+    content_version TEXT NOT NULL,
+    evidence_source TEXT NOT NULL,
+    review_status TEXT NOT NULL DEFAULT 'source_linked' CHECK (review_status IN ('source_linked', 'reviewed', 'needs_update')),
+    reviewed_by TEXT,
+    reviewed_at TIMESTAMPTZ,
+    notes TEXT,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`,
   `CREATE INDEX IF NOT EXISTS crm_leads_submitted_at_idx ON crm_leads (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_leads_status_idx ON crm_leads (status, submitted_at DESC)`,
@@ -187,8 +235,12 @@ const statements = [
   `CREATE INDEX IF NOT EXISTS reporting_sync_provider_idx ON reporting_sync_runs (provider, completed_at DESC)`,
   `CREATE INDEX IF NOT EXISTS ga4_source_daily_date_idx ON ga4_source_daily (metric_date DESC, sessions DESC)`,
   `CREATE INDEX IF NOT EXISTS ga4_page_daily_date_idx ON ga4_page_daily (metric_date DESC, screen_page_views DESC)`,
+  `CREATE INDEX IF NOT EXISTS ga4_landing_source_date_idx ON ga4_landing_source_daily (metric_date DESC, sessions DESC)`,
   `CREATE INDEX IF NOT EXISTS gsc_query_daily_date_idx ON gsc_query_daily (metric_date DESC, impressions DESC)`,
   `CREATE INDEX IF NOT EXISTS gsc_page_daily_date_idx ON gsc_page_daily (metric_date DESC, impressions DESC)`,
+  `CREATE INDEX IF NOT EXISTS gsc_inspection_date_idx ON gsc_url_inspection_snapshots (snapshot_date DESC, verdict)`,
+  `CREATE INDEX IF NOT EXISTS geo_citation_observed_idx ON geo_citation_observations (observed_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS geo_citation_provider_idx ON geo_citation_observations (provider, result_status, observed_at DESC)`,
 ];
 
 for (const statement of statements) {

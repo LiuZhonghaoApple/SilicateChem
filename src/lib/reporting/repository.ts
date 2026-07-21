@@ -1,12 +1,14 @@
 import { getDatabase } from "@/lib/db";
 import type {
   Ga4DailyRow,
+  Ga4LandingSourceRow,
   Ga4PageRow,
   Ga4SourceRow,
   GscDailyRow,
   GscPageRow,
   GscQueryRow,
   GscSitemapSnapshot,
+  GscUrlInspectionRow,
   ReportingProvider,
   ReportingSyncStatus,
 } from "@/lib/reporting/types";
@@ -33,6 +35,7 @@ export async function upsertGa4Data(params: {
   daily: Ga4DailyRow[];
   sources: Ga4SourceRow[];
   pages: Ga4PageRow[];
+  landingSources: Ga4LandingSourceRow[];
 }): Promise<number> {
   const sql = getDatabase();
   const queries = [
@@ -75,6 +78,17 @@ export async function upsertGa4Data(params: {
       screen_page_views = EXCLUDED.screen_page_views,
       key_events = EXCLUDED.key_events,
       synced_at = NOW()`),
+    ...params.landingSources.map((row) => sql`INSERT INTO ga4_landing_source_daily (
+      metric_date, source, medium, channel_group, landing_page, sessions,
+      total_users, key_events, synced_at
+    ) VALUES (
+      ${row.date}, ${row.source}, ${row.medium}, ${row.channelGroup},
+      ${row.landingPage}, ${row.sessions}, ${row.totalUsers}, ${row.keyEvents}, NOW()
+    ) ON CONFLICT (metric_date, source, medium, channel_group, landing_page) DO UPDATE SET
+      sessions = EXCLUDED.sessions,
+      total_users = EXCLUDED.total_users,
+      key_events = EXCLUDED.key_events,
+      synced_at = NOW()`),
   ];
 
   if (queries.length > 0) await sql.transaction(queries);
@@ -86,6 +100,7 @@ export async function upsertGscData(params: {
   queries: GscQueryRow[];
   pages: GscPageRow[];
   sitemap: GscSitemapSnapshot;
+  inspections: GscUrlInspectionRow[];
   snapshotDate: string;
 }): Promise<number> {
   const sql = getDatabase();
@@ -135,6 +150,26 @@ export async function upsertGscData(params: {
       sitemap_errors = EXCLUDED.sitemap_errors,
       sitemap_warnings = EXCLUDED.sitemap_warnings,
       checked_at = NOW()`,
+    ...params.inspections.map((row) => sql`INSERT INTO gsc_url_inspection_snapshots (
+      snapshot_date, inspected_url, verdict, coverage_state, robots_txt_state,
+      indexing_state, last_crawl_time, page_fetch_state, google_canonical,
+      user_canonical, crawled_as, checked_at
+    ) VALUES (
+      ${params.snapshotDate}, ${row.inspectedUrl}, ${row.verdict}, ${row.coverageState},
+      ${row.robotsTxtState}, ${row.indexingState}, ${row.lastCrawlTime},
+      ${row.pageFetchState}, ${row.googleCanonical}, ${row.userCanonical},
+      ${row.crawledAs}, NOW()
+    ) ON CONFLICT (snapshot_date, inspected_url) DO UPDATE SET
+      verdict = EXCLUDED.verdict,
+      coverage_state = EXCLUDED.coverage_state,
+      robots_txt_state = EXCLUDED.robots_txt_state,
+      indexing_state = EXCLUDED.indexing_state,
+      last_crawl_time = EXCLUDED.last_crawl_time,
+      page_fetch_state = EXCLUDED.page_fetch_state,
+      google_canonical = EXCLUDED.google_canonical,
+      user_canonical = EXCLUDED.user_canonical,
+      crawled_as = EXCLUDED.crawled_as,
+      checked_at = NOW()`),
   ];
 
   if (queries.length > 0) await sql.transaction(queries);
@@ -155,6 +190,34 @@ export async function upsertSiteSnapshot(params: {
     public_page_count = EXCLUDED.public_page_count,
     updated_page_count = EXCLUDED.updated_page_count,
     checked_at = NOW()`;
+}
+
+export async function upsertGeoContentRegistry(
+  records: Array<{ pagePath: string; contentVersion: string; evidenceSource: string }>
+): Promise<number> {
+  const sql = getDatabase();
+  const queries = records.map((record) => sql`INSERT INTO geo_content_reviews (
+    page_path, content_version, evidence_source, review_status, updated_at
+  ) VALUES (
+    ${record.pagePath}, ${record.contentVersion}, ${record.evidenceSource}, 'source_linked', NOW()
+  ) ON CONFLICT (page_path) DO UPDATE SET
+    content_version = EXCLUDED.content_version,
+    evidence_source = EXCLUDED.evidence_source,
+    review_status = CASE
+      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN 'source_linked'
+      ELSE geo_content_reviews.review_status
+    END,
+    reviewed_by = CASE
+      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN NULL
+      ELSE geo_content_reviews.reviewed_by
+    END,
+    reviewed_at = CASE
+      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN NULL
+      ELSE geo_content_reviews.reviewed_at
+    END,
+    updated_at = NOW()`);
+  if (queries.length > 0) await sql.transaction(queries);
+  return queries.length;
 }
 
 export type ReportingOverview = {
@@ -469,3 +532,261 @@ export async function getLatestSiteSnapshot(): Promise<SiteSnapshotRow | null> {
   return result[0] ?? null;
 }
 
+export type GeoLandingPerformanceRow = {
+  provider: string;
+  landingPage: string;
+  sessions: number;
+  users: number;
+  keyEvents: number;
+  inquiries: number;
+};
+
+export async function getGeoLandingPerformance(days = 30): Promise<GeoLandingPerformanceRow[]> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `WITH traffic AS (
+      SELECT
+        CASE
+          WHEN LOWER(source) ~ '(chatgpt|openai)' THEN 'chatgpt'
+          WHEN LOWER(source) ~ 'perplexity' THEN 'perplexity'
+          WHEN LOWER(source) ~ '(claude|anthropic)' THEN 'claude'
+          WHEN LOWER(source) ~ 'copilot' THEN 'copilot'
+          WHEN LOWER(source) ~ 'gemini' THEN 'gemini'
+          WHEN LOWER(source) ~ 'grok' THEN 'grok'
+          ELSE 'other-ai'
+        END AS provider,
+        COALESCE(NULLIF(split_part(landing_page, '?', 1), ''), '/') AS landing_page,
+        SUM(sessions)::int AS sessions,
+        SUM(total_users)::int AS users,
+        SUM(key_events)::float8 AS "keyEvents"
+      FROM ga4_landing_source_daily
+      WHERE metric_date >= CURRENT_DATE - ($1::int - 1)
+        AND LOWER(source || ' ' || medium || ' ' || channel_group) ~
+          '(chatgpt|openai|perplexity|claude|anthropic|gemini|copilot|grok|ai.assistant)'
+      GROUP BY 1, 2
+    ), inquiries AS (
+      SELECT
+        CASE
+          WHEN LOWER(geo_source) ~ '(chatgpt|openai)' THEN 'chatgpt'
+          WHEN LOWER(geo_source) ~ 'perplexity' THEN 'perplexity'
+          WHEN LOWER(geo_source) ~ '(claude|anthropic)' THEN 'claude'
+          WHEN LOWER(geo_source) ~ 'copilot' THEN 'copilot'
+          WHEN LOWER(geo_source) ~ 'gemini' THEN 'gemini'
+          WHEN LOWER(geo_source) ~ 'grok' THEN 'grok'
+          ELSE 'other-ai'
+        END AS provider,
+        COALESCE(NULLIF(split_part(geo_landing_path, '?', 1), ''), '/') AS landing_page,
+        COUNT(*) FILTER (WHERE status <> 'spam')::int AS inquiries
+      FROM crm_leads
+      WHERE submitted_at >= NOW() - ($1::int * INTERVAL '1 day')
+        AND geo_source IS NOT NULL
+      GROUP BY 1, 2
+    ) SELECT
+      COALESCE(traffic.provider, inquiries.provider) AS provider,
+      COALESCE(traffic.landing_page, inquiries.landing_page) AS "landingPage",
+      COALESCE(traffic.sessions, 0)::int AS sessions,
+      COALESCE(traffic.users, 0)::int AS users,
+      COALESCE(traffic."keyEvents", 0)::float8 AS "keyEvents",
+      COALESCE(inquiries.inquiries, 0)::int AS inquiries
+    FROM traffic
+    FULL OUTER JOIN inquiries
+      ON inquiries.provider = traffic.provider AND inquiries.landing_page = traffic.landing_page
+    ORDER BY sessions DESC, inquiries DESC, "landingPage"`,
+    [days]
+  );
+  return rows as unknown as GeoLandingPerformanceRow[];
+}
+
+export type GscInspectionStatusRow = {
+  snapshotDate: string;
+  inspectedUrl: string;
+  verdict: string;
+  coverageState: string;
+  robotsTxtState: string;
+  indexingState: string;
+  lastCrawlTime: string | null;
+  pageFetchState: string;
+  googleCanonical: string | null;
+  userCanonical: string | null;
+};
+
+export async function getLatestGscInspectionStatus(): Promise<GscInspectionStatusRow[]> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    snapshot_date::text AS "snapshotDate",
+    inspected_url AS "inspectedUrl",
+    verdict,
+    coverage_state AS "coverageState",
+    robots_txt_state AS "robotsTxtState",
+    indexing_state AS "indexingState",
+    last_crawl_time AS "lastCrawlTime",
+    page_fetch_state AS "pageFetchState",
+    google_canonical AS "googleCanonical",
+    user_canonical AS "userCanonical"
+  FROM gsc_url_inspection_snapshots
+  WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM gsc_url_inspection_snapshots)
+  ORDER BY
+    CASE verdict WHEN 'PASS' THEN 1 WHEN 'NEUTRAL' THEN 2 ELSE 3 END,
+    inspected_url`;
+  return rows as unknown as GscInspectionStatusRow[];
+}
+
+export type IndexNowStatusRow = {
+  submittedAt: string;
+  trigger: string;
+  urlCount: number;
+  responseStatus: number;
+  success: boolean;
+};
+
+export async function getLatestIndexNowStatus(): Promise<IndexNowStatusRow | null> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    submitted_at AS "submittedAt",
+    trigger,
+    url_count AS "urlCount",
+    response_status AS "responseStatus",
+    success
+  FROM geo_indexnow_submissions
+  ORDER BY submitted_at DESC
+  LIMIT 1`;
+  return (rows as unknown as IndexNowStatusRow[])[0] ?? null;
+}
+
+export type GeoCitationObservation = {
+  id: number;
+  observedAt: string;
+  provider: string;
+  question: string;
+  citedUrl: string | null;
+  citedPagePath: string | null;
+  resultStatus: string;
+  answerNote: string | null;
+  createdBy: string;
+};
+
+export async function createGeoCitationObservation(params: {
+  provider: string;
+  question: string;
+  citedUrl?: string;
+  citedPagePath?: string;
+  resultStatus: string;
+  answerNote?: string;
+  createdBy: string;
+}): Promise<void> {
+  const sql = getDatabase();
+  await sql.transaction([
+    sql`INSERT INTO geo_citation_observations (
+      provider, question, cited_url, cited_page_path, result_status, answer_note, created_by
+    ) VALUES (
+      ${params.provider}, ${params.question}, ${params.citedUrl || null},
+      ${params.citedPagePath || null}, ${params.resultStatus},
+      ${params.answerNote || null}, ${params.createdBy}
+    )`,
+    sql`INSERT INTO admin_audit_logs (
+      action, entity_type, actor, metadata
+    ) VALUES (
+      'geo_citation_observation_created', 'geo_citation', ${params.createdBy},
+      ${JSON.stringify({ provider: params.provider, resultStatus: params.resultStatus })}::jsonb
+    )`,
+  ]);
+}
+
+export async function getGeoCitationObservations(limit = 20): Promise<GeoCitationObservation[]> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `SELECT
+      id,
+      observed_at AS "observedAt",
+      provider,
+      question,
+      cited_url AS "citedUrl",
+      cited_page_path AS "citedPagePath",
+      result_status AS "resultStatus",
+      answer_note AS "answerNote",
+      created_by AS "createdBy"
+    FROM geo_citation_observations
+    ORDER BY observed_at DESC
+    LIMIT $1`,
+    [limit]
+  );
+  return rows as unknown as GeoCitationObservation[];
+}
+
+export type GeoCitationSummary = {
+  total: number;
+  cited: number;
+  notCited: number;
+  incorrect: number;
+};
+
+export async function getGeoCitationSummary(days = 30): Promise<GeoCitationSummary> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `SELECT
+      COUNT(*)::int AS total,
+      COUNT(*) FILTER (WHERE result_status = 'cited')::int AS cited,
+      COUNT(*) FILTER (WHERE result_status = 'not_cited')::int AS "notCited",
+      COUNT(*) FILTER (WHERE result_status = 'incorrect')::int AS incorrect
+    FROM geo_citation_observations
+    WHERE observed_at >= NOW() - ($1::int * INTERVAL '1 day')`,
+    [days]
+  );
+  return (rows as unknown as GeoCitationSummary[])[0] ?? {
+    total: 0,
+    cited: 0,
+    notCited: 0,
+    incorrect: 0,
+  };
+}
+
+export type GeoContentReview = {
+  pagePath: string;
+  contentVersion: string;
+  evidenceSource: string;
+  reviewStatus: string;
+  reviewedBy: string | null;
+  reviewedAt: string | null;
+  notes: string | null;
+};
+
+export async function getGeoContentReviews(): Promise<GeoContentReview[]> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    page_path AS "pagePath",
+    content_version AS "contentVersion",
+    evidence_source AS "evidenceSource",
+    review_status AS "reviewStatus",
+    reviewed_by AS "reviewedBy",
+    reviewed_at AS "reviewedAt",
+    notes
+  FROM geo_content_reviews
+  ORDER BY
+    CASE review_status WHEN 'needs_update' THEN 1 WHEN 'source_linked' THEN 2 ELSE 3 END,
+    page_path`;
+  return rows as unknown as GeoContentReview[];
+}
+
+export async function updateGeoContentReview(params: {
+  pagePath: string;
+  reviewStatus: string;
+  notes?: string;
+  reviewedBy: string;
+}): Promise<void> {
+  const sql = getDatabase();
+  await sql.transaction([
+    sql`UPDATE geo_content_reviews SET
+      review_status = ${params.reviewStatus},
+      notes = ${params.notes || null},
+      reviewed_by = ${params.reviewedBy},
+      reviewed_at = NOW(),
+      updated_at = NOW()
+    WHERE page_path = ${params.pagePath}`,
+    sql`INSERT INTO admin_audit_logs (
+      action, entity_type, entity_id, actor, metadata
+    ) VALUES (
+      'geo_content_review_updated', 'geo_content', ${params.pagePath},
+      ${params.reviewedBy}, ${JSON.stringify({ reviewStatus: params.reviewStatus })}::jsonb
+    )`,
+  ]);
+}
