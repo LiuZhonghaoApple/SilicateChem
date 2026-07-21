@@ -88,7 +88,7 @@ export async function getBacklinkBaselines(): Promise<BacklinkBaseline[]> {
   const rows = await sql`SELECT DISTINCT ON (provider)
     id,
     provider,
-    observed_on AS "observedOn",
+    observed_on::text AS "observedOn",
     connection_status AS "connectionStatus",
     referring_domains AS "referringDomains",
     linking_pages AS "linkingPages",
@@ -97,7 +97,7 @@ export async function getBacklinkBaselines(): Promise<BacklinkBaseline[]> {
     evidence_url AS "evidenceUrl",
     note,
     observed_by AS "observedBy",
-    updated_at AS "updatedAt"
+    updated_at::text AS "updatedAt"
   FROM backlink_baseline_snapshots
   ORDER BY provider, observed_on DESC, updated_at DESC`;
   return rows as unknown as BacklinkBaseline[];
@@ -164,7 +164,7 @@ export async function listBacklinkOpportunities(
       b.source_page_url AS "sourcePageUrl",
       b.anchor_text AS "anchorText",
       b.link_rel AS "linkRel",
-      b.next_review_at AS "nextReviewAt",
+      b.next_review_at::text AS "nextReviewAt",
       b.notes,
       COALESCE(traffic.sessions, 0)::int AS sessions,
       COALESCE(traffic.users, 0)::int AS users,
