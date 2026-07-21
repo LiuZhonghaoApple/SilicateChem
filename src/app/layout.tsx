@@ -7,8 +7,10 @@ import { StickyQuoteBar, FloatingContactWidget } from "@/components/layout/Persi
 import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { ClarityScript } from "@/components/analytics/ClarityScript";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
+import { AttributionTracker } from "@/components/analytics/AttributionTracker";
 import { OrganizationSchema } from "@/components/seo/JsonLd";
 import { ProcurementAdvisor } from "@/components/ai/ProcurementAdvisor";
+import { RouteShell } from "@/components/layout/RouteShell";
 import { SITE } from "@/lib/constants";
 import "./globals.css";
 
@@ -29,20 +31,32 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen flex flex-col bg-white pb-20">
-        <AnalyticsScripts />
-        <ClarityScript />
-        <OrganizationSchema />
-        <Header />
-        <FastContactBar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <StickyQuoteBar />
-        <FloatingContactWidget />
-        <ProcurementAdvisor />
-        <Suspense fallback={null}>
-          <PageViewTracker />
-        </Suspense>
+      <body className="min-h-screen bg-white">
+        <RouteShell
+          publicBefore={
+            <>
+              <AnalyticsScripts />
+              <ClarityScript />
+              <OrganizationSchema />
+              <Header />
+              <FastContactBar />
+            </>
+          }
+          publicAfter={
+            <>
+              <Footer />
+              <StickyQuoteBar />
+              <FloatingContactWidget />
+              <ProcurementAdvisor />
+              <Suspense fallback={null}>
+                <AttributionTracker />
+                <PageViewTracker />
+              </Suspense>
+            </>
+          }
+        >
+          {children}
+        </RouteShell>
       </body>
     </html>
   );

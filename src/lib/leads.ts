@@ -20,11 +20,23 @@ export interface StructuredLead {
   classification: {
     inquiryType: InquiryClassification;
     sourcePage: string | null;
+    sourcePath: string | null;
     funnelLayer: FunnelLayer;
+  };
+  attribution: {
+    landingPage: string | null;
+    referrer: string | null;
+    utmSource: string | null;
+    utmMedium: string | null;
+    utmCampaign: string | null;
+    utmTerm: string | null;
+    utmContent: string | null;
+    visitorId: string | null;
   };
   message: string;
   meta: {
     userAgent: string | null;
+    ipHash: string | null;
     referer: string | null;
     siteUrl: string;
   };
@@ -55,7 +67,12 @@ function inferFunnelLayer(source?: string | null): FunnelLayer {
 
 export function buildStructuredLead(
   data: InquiryInput,
-  meta: { userAgent?: string | null; referer?: string | null; siteUrl: string }
+  meta: {
+    userAgent?: string | null;
+    ipHash?: string | null;
+    referer?: string | null;
+    siteUrl: string;
+  }
 ): StructuredLead {
   return {
     id: `lead_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
@@ -73,11 +90,23 @@ export function buildStructuredLead(
     classification: {
       inquiryType: classifyInquiryType(data.requestType),
       sourcePage: data.source ?? null,
+      sourcePath: data.sourcePath ?? null,
       funnelLayer: inferFunnelLayer(data.source),
+    },
+    attribution: {
+      landingPage: data.landingPage ?? null,
+      referrer: data.referrer ?? meta.referer ?? null,
+      utmSource: data.utmSource ?? null,
+      utmMedium: data.utmMedium ?? null,
+      utmCampaign: data.utmCampaign ?? null,
+      utmTerm: data.utmTerm ?? null,
+      utmContent: data.utmContent ?? null,
+      visitorId: data.visitorId ?? null,
     },
     message: data.message,
     meta: {
       userAgent: meta.userAgent ?? null,
+      ipHash: meta.ipHash ?? null,
       referer: meta.referer ?? null,
       siteUrl: meta.siteUrl,
     },

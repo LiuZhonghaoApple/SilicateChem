@@ -5,6 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
 import { trackInquiryByType } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
+import { getInquiryAttributionPayload } from "@/lib/attribution-client";
 import {
   TurnstileField,
   TURNSTILE_SITE_KEY,
@@ -19,7 +20,7 @@ const EMAIL_DELIVERY_FAILED_MSG =
 
 const VERIFICATION_FAILED_MSG = "Verification failed. Please try again.";
 
-type InquiryPayload = Record<string, string>;
+type InquiryPayload = Record<string, string | undefined>;
 
 export function InquiryForm({
   defaultProduct,
@@ -59,7 +60,7 @@ export function InquiryForm({
 
       const result = await res.json();
 
-      if (!res.ok || result.emailDelivered === false) {
+      if (!res.ok || (result.emailDelivered === false && result.stored !== true)) {
         setErrorMsg(
           res.status === 503 || result.emailDelivered === false
             ? EMAIL_DELIVERY_FAILED_MSG
@@ -117,14 +118,18 @@ export function InquiryForm({
     const form = e.currentTarget;
     const data = new FormData(form);
     const payload = Object.fromEntries(data.entries()) as InquiryPayload;
+    const attributedPayload = {
+      ...payload,
+      ...getInquiryAttributionPayload(pathname),
+    };
 
     if (TURNSTILE_SITE_KEY) {
-      pendingPayloadRef.current = payload;
+      pendingPayloadRef.current = attributedPayload;
       turnstileRef.current?.execute();
       return;
     }
 
-    await submitInquiry(payload, form);
+    await submitInquiry(attributedPayload, form);
   }
 
   if (state === "success") {

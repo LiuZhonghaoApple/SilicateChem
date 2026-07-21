@@ -6,6 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "db:migrate": "node scripts/migrate-crm.mjs",
     "lint": "next lint",
     "images:report": "python3 scripts/generate-image-deployment-report.mjs",
     "visual-trust:reports": "python3 scripts/generate-visual-trust-reports.py",
@@ -13,6 +14,7 @@
     "trust-images:report": "node scripts/generate-trust-image-binding-report.mjs"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "next": "^15.3.3",
