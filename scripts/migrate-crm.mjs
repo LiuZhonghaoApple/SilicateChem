@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import { readFile } from "node:fs/promises";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -220,6 +221,53 @@ const statements = [
     notes TEXT,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`,
+  `CREATE TABLE IF NOT EXISTS backlink_baseline_snapshots (
+    id BIGSERIAL PRIMARY KEY,
+    provider TEXT NOT NULL CHECK (provider IN ('gsc', 'bing')),
+    observed_on DATE NOT NULL,
+    connection_status TEXT NOT NULL CHECK (connection_status IN ('ready', 'processing', 'not_authenticated', 'error')),
+    referring_domains INTEGER,
+    linking_pages INTEGER,
+    sample_links INTEGER,
+    anchor_count INTEGER,
+    evidence_url TEXT NOT NULL,
+    note TEXT NOT NULL,
+    observed_by TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (provider, observed_on)
+  )`,
+  `CREATE TABLE IF NOT EXISTS backlink_opportunities (
+    id BIGSERIAL PRIMARY KEY,
+    source_domain TEXT NOT NULL UNIQUE,
+    source_name TEXT NOT NULL,
+    channel TEXT NOT NULL CHECK (channel IN ('association', 'trade-media', 'industry-directory', 'marketplace', 'partner')),
+    industry_focus TEXT NOT NULL,
+    region TEXT NOT NULL,
+    fit_score INTEGER NOT NULL CHECK (fit_score BETWEEN 0 AND 100),
+    priority TEXT NOT NULL CHECK (priority IN ('S', 'A', 'B')),
+    status TEXT NOT NULL DEFAULT 'qualified' CHECK (status IN ('candidate', 'qualified', 'contact-ready', 'contacted', 'accepted', 'live', 'rejected', 'lost')),
+    access_model TEXT NOT NULL,
+    cost_note TEXT,
+    evidence_url TEXT NOT NULL,
+    verification_note TEXT NOT NULL,
+    verified_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    planned_target_path TEXT,
+    suggested_asset TEXT,
+    next_action TEXT,
+    utm_source_key TEXT,
+    owner TEXT,
+    source_page_url TEXT,
+    anchor_text TEXT,
+    link_rel TEXT NOT NULL DEFAULT 'unknown' CHECK (link_rel IN ('unknown', 'follow', 'nofollow', 'sponsored', 'ugc')),
+    first_live_at TIMESTAMPTZ,
+    last_checked_at TIMESTAMPTZ,
+    next_review_at DATE,
+    http_status INTEGER,
+    notes TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
   `CREATE INDEX IF NOT EXISTS crm_leads_submitted_at_idx ON crm_leads (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_leads_status_idx ON crm_leads (status, submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_leads_product_idx ON crm_leads (product, submitted_at DESC)`,
@@ -241,10 +289,77 @@ const statements = [
   `CREATE INDEX IF NOT EXISTS gsc_inspection_date_idx ON gsc_url_inspection_snapshots (snapshot_date DESC, verdict)`,
   `CREATE INDEX IF NOT EXISTS geo_citation_observed_idx ON geo_citation_observations (observed_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_citation_provider_idx ON geo_citation_observations (provider, result_status, observed_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS backlink_baseline_provider_idx ON backlink_baseline_snapshots (provider, observed_on DESC)`,
+  `CREATE INDEX IF NOT EXISTS backlink_opportunity_status_idx ON backlink_opportunities (status, priority, fit_score DESC)`,
+  `CREATE INDEX IF NOT EXISTS backlink_opportunity_target_idx ON backlink_opportunities (planned_target_path, status)`,
 ];
 
 for (const statement of statements) {
   await sql.query(statement);
 }
 
-console.log(`CRM migration complete (${statements.length} statements).`);
+const candidateFile = new URL("../src/data/backlink-candidates.json", import.meta.url);
+const candidates = JSON.parse(await readFile(candidateFile, "utf8"));
+
+if (!Array.isArray(candidates) || candidates.length !== 30) {
+  throw new Error("Backlink candidate seed must contain exactly 30 records.");
+}
+
+const uniqueDomains = new Set(candidates.map((candidate) => candidate.sourceDomain));
+if (uniqueDomains.size !== candidates.length) {
+  throw new Error("Backlink candidate source domains must be unique.");
+}
+
+const seedQueries = candidates.map((candidate) => sql`INSERT INTO backlink_opportunities (
+  source_domain, source_name, channel, industry_focus, region, fit_score,
+  priority, status, access_model, cost_note, evidence_url, verification_note,
+  planned_target_path, suggested_asset, next_action, utm_source_key
+) VALUES (
+  ${candidate.sourceDomain}, ${candidate.sourceName}, ${candidate.channel},
+  ${candidate.industryFocus}, ${candidate.region}, ${candidate.fitScore},
+  ${candidate.priority}, 'qualified', ${candidate.accessModel}, ${candidate.costNote},
+  ${candidate.evidenceUrl}, ${candidate.verificationNote},
+  ${candidate.plannedTargetPath}, ${candidate.suggestedAsset}, ${candidate.nextAction},
+  ${candidate.sourceDomain}
+) ON CONFLICT (source_domain) DO UPDATE SET
+  source_name = EXCLUDED.source_name,
+  channel = EXCLUDED.channel,
+  industry_focus = EXCLUDED.industry_focus,
+  region = EXCLUDED.region,
+  fit_score = EXCLUDED.fit_score,
+  priority = EXCLUDED.priority,
+  access_model = EXCLUDED.access_model,
+  cost_note = EXCLUDED.cost_note,
+  evidence_url = EXCLUDED.evidence_url,
+  verification_note = EXCLUDED.verification_note,
+  verified_at = NOW(),
+  planned_target_path = COALESCE(backlink_opportunities.planned_target_path, EXCLUDED.planned_target_path),
+  suggested_asset = EXCLUDED.suggested_asset,
+  next_action = EXCLUDED.next_action,
+  utm_source_key = COALESCE(backlink_opportunities.utm_source_key, EXCLUDED.utm_source_key),
+  updated_at = NOW()`);
+
+seedQueries.push(
+  sql`INSERT INTO backlink_baseline_snapshots (
+    provider, observed_on, connection_status, evidence_url, note, observed_by
+  ) VALUES (
+    'gsc', '2026-07-22', 'processing',
+    'https://search.google.com/search-console/links?resource_id=https%3A%2F%2Fwww.silicatechem.com%2F',
+    'Verified property is available. The Links report is still processing data and the external-link export is disabled; counts must remain unknown instead of being recorded as zero.',
+    'codex-readonly-audit'
+  ) ON CONFLICT (provider, observed_on) DO NOTHING`,
+  sql`INSERT INTO backlink_baseline_snapshots (
+    provider, observed_on, connection_status, evidence_url, note, observed_by
+  ) VALUES (
+    'bing', '2026-07-22', 'not_authenticated',
+    'https://www.bing.com/webmasters/about?from=home',
+    'The current browser session is not authenticated in Bing Webmaster Tools. No account was created or connected because external registration is outside the approved scope.',
+    'codex-readonly-audit'
+  ) ON CONFLICT (provider, observed_on) DO NOTHING`
+);
+
+await sql.transaction(seedQueries);
+
+console.log(
+  `CRM migration complete (${statements.length} statements, ${candidates.length} backlink candidates).`
+);
