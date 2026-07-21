@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Section } from "@/components/ui/Section";
 import { ProductFunnelBanner } from "@/components/seo/FunnelSections";
-import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
+import { ContextualInternalLinks } from "@/components/seo/ContextualInternalLinks";
 import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/seo/JsonLd";
 import { blogPosts, getBlogPostBySlug } from "@/content/blog/posts";
 import { SITE } from "@/lib/constants";
@@ -129,7 +129,7 @@ export default async function BlogPostPage({ params }: Props) {
             )}
           </div>
 
-          <InternalProductLinks showFunnel />
+          <ContextualInternalLinks currentPath={path} />
         </div>
 
         <ProductFunnelBanner className="mt-10" />

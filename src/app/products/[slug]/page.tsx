@@ -8,6 +8,7 @@ import { products, getProductBySlug } from "@/content/products";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
+import { ContextualInternalLinks } from "@/components/seo/ContextualInternalLinks";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { ProductMainImage } from "@/components/products/ProductMainImage";
 import { getProductMainImage } from "@/content/product-main-images";
@@ -217,6 +218,7 @@ export default async function ProductPage({ params }: Props) {
               <ProductMainImage productSlug={product.slug} compact />
             </div>
             <InternalProductLinks />
+            <ContextualInternalLinks currentPath={productPath} />
             <div className="rounded-lg border border-[#E2E6EA] bg-white p-5">
               <h3 className="font-bold text-[#0B2D5B] text-sm">Quick Inquiry</h3>
               <InquiryFormWrapper
@@ -268,7 +270,10 @@ export default async function ProductPage({ params }: Props) {
               </Link>
             </div>
           </div>
-          <InternalProductLinks />
+          <ContextualInternalLinks
+            currentPath={productPath}
+            title="Applications, Guides & Documents"
+          />
         </div>
       </Section>
     </>

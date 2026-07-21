@@ -155,7 +155,7 @@ export default async function ApplicationPage({ params }: Props) {
               <FAQBlock items={app.faq} />
             </div>
           </div>
-          <FunnelLinksSidebar />
+          <FunnelLinksSidebar currentPath={path} />
         </div>
       </Section>
       <Section background="grey">

@@ -124,7 +124,7 @@ export default async function GuidePage({ params }: Props) {
               </div>
             </div>
           </div>
-          <FunnelLinksSidebar />
+          <FunnelLinksSidebar currentPath={path} />
         </div>
       </Section>
       <Section background="grey">

@@ -4,6 +4,7 @@ import { Section, SectionHeader } from "@/components/ui/Section";
 import { ProductMainImage } from "@/components/products/ProductMainImage";
 import { FAQSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
+import { ContextualInternalLinks } from "@/components/seo/ContextualInternalLinks";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 
 const quoteHref = "/contact?type=quote&product=Sodium%20Metasilicate";
@@ -264,18 +265,24 @@ export function MetasilicateCategoryPage() {
 
       <Section background="grey">
         <SectionHeader title="Frequently Asked Questions" />
-        <div className="max-w-3xl space-y-4">
-          {productFaq.map((item) => (
-            <details key={item.question} className="group rounded-lg border border-[#E2E6EA] bg-white">
-              <summary className="cursor-pointer px-5 py-4 font-semibold text-[#0B2D5B] list-none flex justify-between items-center">
-                {item.question}
-                <span className="ml-4 text-[#2E7D9A] group-open:rotate-45 transition-transform text-xl leading-none">+</span>
-              </summary>
-              <div className="px-5 pb-4 text-sm text-[#5A6570] leading-relaxed border-t border-[#E2E6EA] pt-3">
-                {item.answer}
-              </div>
-            </details>
-          ))}
+        <div className="grid gap-8 lg:grid-cols-[1fr_0.62fr]">
+          <div className="space-y-4">
+            {productFaq.map((item) => (
+              <details key={item.question} className="group rounded-lg border border-[#E2E6EA] bg-white">
+                <summary className="cursor-pointer px-5 py-4 font-semibold text-[#0B2D5B] list-none flex justify-between items-center">
+                  {item.question}
+                  <span className="ml-4 text-[#2E7D9A] group-open:rotate-45 transition-transform text-xl leading-none">+</span>
+                </summary>
+                <div className="px-5 pb-4 text-sm text-[#5A6570] leading-relaxed border-t border-[#E2E6EA] pt-3">
+                  {item.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+          <ContextualInternalLinks
+            currentPath="/products/sodium-metasilicate"
+            title="Buyer Knowledge & Applications"
+          />
         </div>
       </Section>
 

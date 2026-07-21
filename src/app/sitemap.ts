@@ -10,6 +10,7 @@ import {
   assertContentFreshnessCoverage,
   getContentLastModifiedDate,
 } from "@/lib/content-freshness";
+import { assertInternalLinkGraph } from "@/lib/seo/internal-link-graph";
 
 /** Indexable static pages. */
 const INDEXABLE_STATIC = [
@@ -75,6 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const unique = [...new Set(allPages)];
   assertContentFreshnessCoverage(unique);
+  assertInternalLinkGraph(unique);
 
   return unique.map((path) => ({
     url: `${SITE.url}${path}`,
