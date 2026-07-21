@@ -43,6 +43,9 @@ public/asset-preview/
 # Local SEO monitoring exports
 seo-monitoring/
 
+# Local dated handoff snapshots
+docs/*_handoff_*.md
+
 # Deprecated local hero image drafts
 public/assets/images/home-hero-banner-static.png
 public/assets/images/home-hero-visual-bg.png
