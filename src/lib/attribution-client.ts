@@ -8,6 +8,9 @@ export type InquiryAttributionPayload = {
   utmTerm?: string;
   utmContent?: string;
   visitorId?: string;
+  geoSource?: string;
+  geoReferrerHost?: string;
+  geoLandingPath?: string;
 };
 
 type StoredAttribution = Omit<InquiryAttributionPayload, "sourcePath">;
@@ -41,14 +44,56 @@ function currentCampaign(): Partial<StoredAttribution> {
   };
 }
 
+const GEO_SOURCE_PATTERNS: Array<{ source: string; patterns: string[] }> = [
+  { source: "chatgpt", patterns: ["chatgpt.com", "chat.openai.com", "openai"] },
+  { source: "perplexity", patterns: ["perplexity.ai", "perplexity"] },
+  { source: "bing_copilot", patterns: ["copilot.microsoft.com", "copilot.com", "bing_copilot"] },
+  { source: "claude", patterns: ["claude.ai", "anthropic"] },
+  { source: "gemini", patterns: ["gemini.google.com", "google_gemini"] },
+  { source: "grok", patterns: ["grok.com", "x.ai"] },
+  { source: "you", patterns: ["you.com"] },
+];
+
+function getReferrerHost(referrer?: string): string | undefined {
+  if (!referrer) return undefined;
+  try {
+    return new URL(referrer).hostname.toLowerCase().replace(/^www\./, "");
+  } catch {
+    return undefined;
+  }
+}
+
+function detectGeoAttribution(
+  referrer?: string,
+  utmSource?: string
+): Pick<StoredAttribution, "geoSource" | "geoReferrerHost" | "geoLandingPath"> {
+  const referrerHost = getReferrerHost(referrer);
+  const signals = [utmSource, referrerHost].filter(Boolean).join(" ").toLowerCase();
+  const match = GEO_SOURCE_PATTERNS.find(({ patterns }) =>
+    patterns.some((pattern) => signals.includes(pattern))
+  );
+
+  if (!match) return {};
+
+  return {
+    geoSource: match.source,
+    geoReferrerHost: referrerHost,
+    geoLandingPath: window.location.pathname,
+  };
+}
+
 export function captureInquiryAttribution(): void {
   if (typeof window === "undefined" || readStored()) return;
 
+  const campaign = currentCampaign();
+  const referrer = document.referrer || undefined;
+
   const initial: StoredAttribution = {
     landingPage: `${window.location.pathname}${window.location.search}`,
-    referrer: document.referrer || undefined,
+    referrer,
     visitorId: createVisitorId(),
-    ...currentCampaign(),
+    ...campaign,
+    ...detectGeoAttribution(referrer, campaign.utmSource),
   };
 
   try {
@@ -64,6 +109,7 @@ export function getInquiryAttributionPayload(
   captureInquiryAttribution();
   const stored = readStored() ?? {};
   const campaign = currentCampaign();
+  const currentGeo = detectGeoAttribution(document.referrer || undefined, campaign.utmSource);
 
   return {
     sourcePath,
@@ -75,5 +121,8 @@ export function getInquiryAttributionPayload(
     utmCampaign: campaign.utmCampaign ?? stored.utmCampaign,
     utmTerm: campaign.utmTerm ?? stored.utmTerm,
     utmContent: campaign.utmContent ?? stored.utmContent,
+    geoSource: currentGeo.geoSource ?? stored.geoSource,
+    geoReferrerHost: currentGeo.geoReferrerHost ?? stored.geoReferrerHost,
+    geoLandingPath: currentGeo.geoLandingPath ?? stored.geoLandingPath,
   };
 }

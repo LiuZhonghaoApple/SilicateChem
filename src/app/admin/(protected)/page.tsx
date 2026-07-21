@@ -1,6 +1,8 @@
 import Link from "next/link";
 import {
   getDashboardStats,
+  getGeoInquiryStats,
+  getLatestIndexNowSubmission,
   getProductInquiryStats,
   listLeads,
 } from "@/lib/crm/repository";
@@ -13,10 +15,12 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const [stats, recentLeads, productStats] = await Promise.all([
+  const [stats, recentLeads, productStats, geoStats, indexNowStatus] = await Promise.all([
     getDashboardStats(),
     listLeads({ limit: 8 }),
     getProductInquiryStats(),
+    getGeoInquiryStats(),
+    getLatestIndexNowSubmission(),
   ]);
 
   const cards = [
@@ -27,6 +31,7 @@ export default async function AdminDashboardPage() {
     { label: "已报价", value: stats.quotedCount },
     { label: "已成交", value: stats.wonCount },
     { label: "逾期跟进", value: stats.overdueCount, alert: stats.overdueCount > 0 },
+    { label: "AI来源询盘（30天）", value: stats.geoCount },
   ];
 
   return (
@@ -111,6 +116,56 @@ export default async function AdminDashboardPage() {
                 </div>
               ))}
             </div>
+          )}
+        </section>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <section className="rounded-xl border border-[#DCE4EA] bg-white shadow-sm">
+          <div className="border-b border-[#E2E8F0] px-5 py-4">
+            <h2 className="font-bold text-[#0B2D5B]">近30天 GEO / AI 来源询盘</h2>
+          </div>
+          {geoStats.length === 0 ? (
+            <p className="p-8 text-center text-sm text-[#64748B]">暂无 AI 引荐询盘。</p>
+          ) : (
+            <div className="divide-y divide-[#E2E8F0]">
+              {geoStats.map((item) => (
+                <div key={item.source} className="flex items-center justify-between px-5 py-3">
+                  <p className="font-semibold text-[#334155]">{item.source}</p>
+                  <span className="rounded-full bg-[#EAF4FA] px-2.5 py-1 text-xs font-bold text-[#0B2D5B]">
+                    {item.count}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+          <h2 className="font-bold text-[#0B2D5B]">IndexNow 状态</h2>
+          {indexNowStatus ? (
+            <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <dt className="text-xs font-bold uppercase text-[#64748B]">最近提交</dt>
+                <dd className="mt-1 text-sm text-[#334155]">{formatAdminDate(indexNowStatus.submittedAt)}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-bold uppercase text-[#64748B]">结果</dt>
+                <dd className={`mt-1 text-sm font-bold ${indexNowStatus.success ? "text-green-700" : "text-red-600"}`}>
+                  {indexNowStatus.success ? "成功" : "失败"} · HTTP {indexNowStatus.responseStatus}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-bold uppercase text-[#64748B]">URL数量</dt>
+                <dd className="mt-1 text-sm text-[#334155]">{indexNowStatus.urlCount}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-bold uppercase text-[#64748B]">触发方式</dt>
+                <dd className="mt-1 text-sm text-[#334155]">{indexNowStatus.trigger}</dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="mt-4 text-sm text-[#64748B]">尚未执行首次 IndexNow 提交。</p>
           )}
         </section>
       </div>

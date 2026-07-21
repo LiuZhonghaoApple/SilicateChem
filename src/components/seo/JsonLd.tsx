@@ -1,5 +1,8 @@
 import { SITE } from "@/lib/constants";
 
+const ORGANIZATION_ID = `${SITE.url}/#organization`;
+const WEBSITE_ID = `${SITE.url}/#website`;
+
 type JsonLdProps = {
   data: Record<string, unknown>;
 };
@@ -19,10 +22,16 @@ export function OrganizationSchema() {
       data={{
         "@context": "https://schema.org",
         "@type": "Organization",
+        "@id": ORGANIZATION_ID,
         name: SITE.company,
+        legalName: SITE.company,
         alternateName: SITE.name,
         url: SITE.url,
-        logo: `${SITE.url}/images/logo.svg`,
+        logo: {
+          "@type": "ImageObject",
+          "@id": `${SITE.url}/#logo`,
+          url: `${SITE.url}/images/logo.svg`,
+        },
         email: SITE.email,
         telephone: SITE.phone,
         address: {
@@ -32,6 +41,13 @@ export function OrganizationSchema() {
           addressCountry: "CN",
         },
         description: SITE.description,
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "sales",
+          telephone: SITE.phone,
+          email: SITE.email,
+          availableLanguage: ["English", "Chinese"],
+        },
         additionalProperty: [
           {
             "@type": "PropertyValue",
@@ -49,7 +65,23 @@ export function OrganizationSchema() {
           "Industrial chemical production",
           "Export packaging and documentation",
         ],
-        sameAs: [],
+      }}
+    />
+  );
+}
+
+export function WebSiteSchema() {
+  return (
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "@id": WEBSITE_ID,
+        url: SITE.url,
+        name: SITE.name,
+        description: SITE.description,
+        inLanguage: "en",
+        publisher: { "@id": ORGANIZATION_ID },
       }}
     />
   );
@@ -65,6 +97,7 @@ export function BreadcrumbSchema({
       data={{
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": `${items.at(-1)?.url ?? SITE.url}#breadcrumb`,
         itemListElement: items.map((item, i) => ({
           "@type": "ListItem",
           position: i + 1,
@@ -81,38 +114,64 @@ export function ProductSchema({
   description,
   url,
   sku,
+  image,
+  cas,
+  formula,
+  dateModified,
 }: {
   name: string;
   description: string;
   url: string;
   sku: string;
+  image?: string;
+  cas?: string;
+  formula?: string;
+  dateModified: string;
 }) {
   return (
     <JsonLd
       data={{
         "@context": "https://schema.org",
         "@type": "Product",
+        "@id": `${url}#product`,
         name,
         description,
         url,
         sku,
+        image,
+        category: "Industrial chemicals",
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${url}#webpage`,
+          url,
+          name,
+          description,
+          dateModified,
+          inLanguage: "en",
+          isPartOf: { "@id": WEBSITE_ID },
+          publisher: { "@id": ORGANIZATION_ID },
+        },
         brand: {
           "@type": "Brand",
-          name: SITE.company,
+          name: SITE.name,
         },
-        manufacturer: {
-          "@type": "Organization",
-          name: SITE.company,
-        },
-        offers: {
-          "@type": "Offer",
-          availability: "https://schema.org/InStock",
-          priceCurrency: "USD",
-          seller: {
-            "@type": "Organization",
-            name: SITE.company,
-          },
-        },
+        manufacturer: { "@id": ORGANIZATION_ID },
+        identifier: cas
+          ? {
+              "@type": "PropertyValue",
+              propertyID: "CAS Registry Number",
+              value: cas,
+            }
+          : undefined,
+        additionalProperty: formula
+          ? [
+              {
+                "@type": "PropertyValue",
+                name: "Chemical formula",
+                value: formula,
+              },
+            ]
+          : undefined,
       }}
     />
   );
@@ -146,32 +205,47 @@ export function ArticleSchema({
   description,
   url,
   datePublished,
+  dateModified,
 }: {
   title: string;
   description: string;
   url: string;
   datePublished: string;
+  dateModified: string;
 }) {
   return (
     <JsonLd
       data={{
         "@context": "https://schema.org",
         "@type": "Article",
+        "@id": `${url}#article`,
         headline: title,
         description,
         url,
         datePublished,
+        dateModified,
+        inLanguage: "en",
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${url}#webpage`,
+          url,
+          name: title,
+          description,
+          datePublished,
+          dateModified,
+          inLanguage: "en",
+          isPartOf: { "@id": WEBSITE_ID },
+          publisher: { "@id": ORGANIZATION_ID },
+        },
         author: {
-          "@type": "Organization",
-          name: SITE.company,
+          "@id": ORGANIZATION_ID,
         },
         publisher: {
-          "@type": "Organization",
-          name: SITE.company,
-          logo: {
-            "@type": "ImageObject",
-            url: `${SITE.url}/images/logo.svg`,
-          },
+          "@id": ORGANIZATION_ID,
+        },
+        about: {
+          "@type": "Thing",
+          name: "Sodium metasilicate procurement",
         },
       }}
     />

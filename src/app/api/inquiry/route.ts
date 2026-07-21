@@ -56,6 +56,9 @@ async function sendInquiryEmail(
     `Funnel: ${lead.classification.funnelLayer}`,
     `Landing page: ${lead.attribution.landingPage ?? "—"}`,
     `Referrer: ${lead.attribution.referrer ?? "—"}`,
+    `GEO source: ${lead.attribution.geoSource ?? "—"}`,
+    `GEO referrer host: ${lead.attribution.geoReferrerHost ?? "—"}`,
+    `GEO landing path: ${lead.attribution.geoLandingPath ?? "—"}`,
     `UTM: ${[
       lead.attribution.utmSource,
       lead.attribution.utmMedium,

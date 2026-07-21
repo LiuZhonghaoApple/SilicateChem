@@ -8,6 +8,8 @@ import { metasilicateCategoryBreadcrumbs, productBreadcrumbSchemaItems } from "@
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
+import { getProductMainImage } from "@/content/product-main-images";
+import { getContentLastModified } from "@/lib/content-freshness";
 
 export const metadata = createMetadata({
   title: SEO_KEYWORDS.sodiumMetasilicate.title,
@@ -20,6 +22,7 @@ export const metadata = createMetadata({
 export default function SodiumMetasilicatePage() {
   const cat = sodiumMetasilicateCategory;
   const path = cat.path;
+  const productImage = getProductMainImage("sodium-metasilicate");
 
   return (
     <>
@@ -28,6 +31,10 @@ export default function SodiumMetasilicatePage() {
         description={cat.summary}
         url={`${SITE.url}${path}`}
         sku="sodium-metasilicate"
+        image={`${SITE.url}${productImage.src}`}
+        cas="6834-92-0"
+        formula="Na₂SiO₃"
+        dateModified={getContentLastModified(path)}
       />
       <BreadcrumbSchema
         items={productBreadcrumbSchemaItems(cat.name, path, SITE.url)}

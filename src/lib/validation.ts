@@ -19,6 +19,9 @@ export const inquirySchema = z.object({
   utmTerm: z.string().max(300).optional(),
   utmContent: z.string().max(300).optional(),
   visitorId: z.string().max(100).optional(),
+  geoSource: z.string().max(80).optional(),
+  geoReferrerHost: z.string().max(255).optional(),
+  geoLandingPath: z.string().max(500).optional(),
   turnstileToken: z.string().max(4_000).optional(),
 });
 

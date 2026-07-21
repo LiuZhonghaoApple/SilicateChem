@@ -8,7 +8,7 @@ import { AnalyticsScripts } from "@/components/analytics/AnalyticsScripts";
 import { ClarityScript } from "@/components/analytics/ClarityScript";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 import { AttributionTracker } from "@/components/analytics/AttributionTracker";
-import { OrganizationSchema } from "@/components/seo/JsonLd";
+import { OrganizationSchema, WebSiteSchema } from "@/components/seo/JsonLd";
 import { ProcurementAdvisor } from "@/components/ai/ProcurementAdvisor";
 import { RouteShell } from "@/components/layout/RouteShell";
 import { SITE } from "@/lib/constants";
@@ -38,6 +38,7 @@ export default function RootLayout({
               <AnalyticsScripts />
               <ClarityScript />
               <OrganizationSchema />
+              <WebSiteSchema />
               <Header />
               <FastContactBar />
             </>

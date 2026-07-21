@@ -8,6 +8,7 @@ import { ArticleSchema, BreadcrumbSchema, FAQSchema } from "@/components/seo/Jso
 import { blogPosts, getBlogPostBySlug } from "@/content/blog/posts";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
+import { formatContentDate, getContentLastModified } from "@/lib/content-freshness";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -30,14 +31,17 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getBlogPostBySlug(slug);
   if (!post) notFound();
+  const path = `/blog/${post.slug}`;
+  const dateModified = getContentLastModified(path);
 
   return (
     <>
       <ArticleSchema
         title={post.title}
         description={post.excerpt}
-        url={`${SITE.url}/blog/${post.slug}`}
+        url={`${SITE.url}${path}`}
         datePublished={post.date}
+        dateModified={dateModified}
       />
       <FAQSchema items={post.faq} />
       <BreadcrumbSchema
@@ -68,6 +72,8 @@ export default async function BlogPostPage({ params }: Props) {
           </time>
           <span>·</span>
           <span>{post.readTime} read</span>
+          <span>·</span>
+          <time dateTime={dateModified}>Updated {formatContentDate(dateModified)}</time>
         </div>
 
         <div className="grid gap-10 lg:grid-cols-3">

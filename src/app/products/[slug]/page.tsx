@@ -10,6 +10,8 @@ import { createMetadata } from "@/lib/metadata";
 import { InternalProductLinks } from "@/components/seo/InternalProductLinks";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { ProductMainImage } from "@/components/products/ProductMainImage";
+import { getProductMainImage } from "@/content/product-main-images";
+import { getContentLastModified } from "@/lib/content-freshness";
 import {
   productBreadcrumbs,
   productBreadcrumbSchemaItems,
@@ -43,6 +45,7 @@ export default async function ProductPage({ params }: Props) {
 
   const isGrade = isMetasilicateGrade(slug);
   const productPath = `/products/${product.slug}`;
+  const productImage = getProductMainImage(product.slug);
   const related = products.filter((p) => p.slug !== product.slug);
   const quoteHref = `/contact?type=quote&product=${encodeURIComponent(product.name)}`;
   const rfqItems = [
@@ -61,6 +64,10 @@ export default async function ProductPage({ params }: Props) {
         description={product.summary}
         url={`${SITE.url}${productPath}`}
         sku={product.slug}
+        image={`${SITE.url}${productImage.src}`}
+        cas={product.cas}
+        formula={product.formula}
+        dateModified={getContentLastModified(productPath)}
       />
       <BreadcrumbSchema
         items={productBreadcrumbSchemaItems(

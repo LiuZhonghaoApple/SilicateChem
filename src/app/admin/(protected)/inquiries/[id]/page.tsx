@@ -107,6 +107,9 @@ export default async function InquiryDetailPage({
               <DetailItem label="UTM Campaign" value={lead.utmCampaign} />
               <DetailItem label="UTM Term" value={lead.utmTerm} />
               <DetailItem label="Visitor ID" value={lead.visitorId} />
+              <DetailItem label="GEO / AI 来源" value={lead.geoSource} />
+              <DetailItem label="AI Referrer Host" value={lead.geoReferrerHost} />
+              <DetailItem label="AI 首次落地路径" value={lead.geoLandingPath} />
             </dl>
           </section>
 

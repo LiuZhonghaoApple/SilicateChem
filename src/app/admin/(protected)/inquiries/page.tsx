@@ -74,6 +74,9 @@ export default async function InquiryListPage({
                 <td className="max-w-[230px] px-4 py-4">
                   <p className="truncate text-[#334155]">{lead.sourcePath ?? lead.sourcePage ?? "未知"}</p>
                   <p className="mt-1 truncate text-xs text-[#64748B]">{lead.utmSource ?? lead.referrer ?? "Direct / unknown"}</p>
+                  {lead.geoSource ? (
+                    <p className="mt-1 text-xs font-bold text-[#2E7D9A]">GEO · {lead.geoSource}</p>
+                  ) : null}
                 </td>
                 <td className="px-4 py-4">
                   <span className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-bold ${leadStatusClasses[lead.status]}`}>

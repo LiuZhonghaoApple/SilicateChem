@@ -42,6 +42,9 @@ export type CrmLead = {
   utmContent: string | null;
   visitorId: string | null;
   userAgent: string | null;
+  geoSource: string | null;
+  geoReferrerHost: string | null;
+  geoLandingPath: string | null;
   status: LeadStatus;
   priority: LeadPriority;
   owner: string | null;
@@ -94,6 +97,9 @@ const leadSelect = `
   utm_content AS "utmContent",
   visitor_id AS "visitorId",
   user_agent AS "userAgent",
+  geo_source AS "geoSource",
+  geo_referrer_host AS "geoReferrerHost",
+  geo_landing_path AS "geoLandingPath",
   status,
   priority,
   owner,
@@ -113,7 +119,8 @@ export async function createLeadRecord(lead: StructuredLead): Promise<void> {
       id, submitted_at, name, email, company, country, product, quantity,
       message, inquiry_type, source_page, source_path, funnel_layer,
       landing_page, referrer, utm_source, utm_medium, utm_campaign,
-      utm_term, utm_content, visitor_id, user_agent, ip_hash
+      utm_term, utm_content, visitor_id, user_agent, ip_hash,
+      geo_source, geo_referrer_host, geo_landing_path
     ) VALUES (
       ${lead.id}, ${lead.submittedAt}, ${lead.contact.name}, ${lead.contact.email},
       ${lead.contact.company}, ${lead.contact.country}, ${lead.interest.product},
@@ -123,7 +130,9 @@ export async function createLeadRecord(lead: StructuredLead): Promise<void> {
       ${lead.attribution.referrer}, ${lead.attribution.utmSource},
       ${lead.attribution.utmMedium}, ${lead.attribution.utmCampaign},
       ${lead.attribution.utmTerm}, ${lead.attribution.utmContent},
-      ${lead.attribution.visitorId}, ${lead.meta.userAgent}, ${lead.meta.ipHash}
+      ${lead.attribution.visitorId}, ${lead.meta.userAgent}, ${lead.meta.ipHash},
+      ${lead.attribution.geoSource}, ${lead.attribution.geoReferrerHost},
+      ${lead.attribution.geoLandingPath}
     )`,
     sql`INSERT INTO crm_lead_status_history (
       lead_id, from_status, to_status, note, changed_by
@@ -132,7 +141,10 @@ export async function createLeadRecord(lead: StructuredLead): Promise<void> {
       action, entity_type, entity_id, actor, metadata
     ) VALUES (
       ${"lead_created"}, ${"lead"}, ${lead.id}, ${"system"},
-      ${JSON.stringify({ sourcePath: lead.classification.sourcePath })}::jsonb
+      ${JSON.stringify({
+        sourcePath: lead.classification.sourcePath,
+        geoSource: lead.attribution.geoSource,
+      })}::jsonb
     )`,
   ]);
 }
@@ -158,6 +170,7 @@ export async function getDashboardStats(): Promise<{
   quotedCount: number;
   wonCount: number;
   overdueCount: number;
+  geoCount: number;
 }> {
   const sql = getDatabase();
   const rows = await sql`SELECT
@@ -170,7 +183,11 @@ export async function getDashboardStats(): Promise<{
     COUNT(*) FILTER (
       WHERE next_follow_up_at < NOW()
         AND status NOT IN ('won', 'lost', 'spam')
-    )::int AS "overdueCount"
+    )::int AS "overdueCount",
+    COUNT(*) FILTER (
+      WHERE submitted_at >= NOW() - INTERVAL '30 days'
+        AND geo_source IS NOT NULL
+    )::int AS "geoCount"
   FROM crm_leads`;
   const result = rows as unknown as Array<{
     total: number;
@@ -180,6 +197,7 @@ export async function getDashboardStats(): Promise<{
     quotedCount: number;
     wonCount: number;
     overdueCount: number;
+    geoCount: number;
   }>;
   return result[0] ?? {
     total: 0,
@@ -189,7 +207,46 @@ export async function getDashboardStats(): Promise<{
     quotedCount: 0,
     wonCount: 0,
     overdueCount: 0,
+    geoCount: 0,
   };
+}
+
+export async function getGeoInquiryStats(): Promise<
+  Array<{ source: string; count: number }>
+> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    geo_source AS source,
+    COUNT(*)::int AS count
+  FROM crm_leads
+  WHERE submitted_at >= NOW() - INTERVAL '30 days'
+    AND geo_source IS NOT NULL
+  GROUP BY geo_source
+  ORDER BY count DESC`;
+  return rows as unknown as Array<{ source: string; count: number }>;
+}
+
+export type IndexNowSubmissionStatus = {
+  submittedAt: string;
+  trigger: string;
+  urlCount: number;
+  responseStatus: number;
+  success: boolean;
+};
+
+export async function getLatestIndexNowSubmission(): Promise<IndexNowSubmissionStatus | null> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    submitted_at AS "submittedAt",
+    trigger,
+    url_count AS "urlCount",
+    response_status AS "responseStatus",
+    success
+  FROM geo_indexnow_submissions
+  ORDER BY submitted_at DESC
+  LIMIT 1`;
+  const result = rows as unknown as IndexNowSubmissionStatus[];
+  return result[0] ?? null;
 }
 
 export async function getProductInquiryStats(): Promise<

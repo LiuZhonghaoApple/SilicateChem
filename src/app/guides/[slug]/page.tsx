@@ -10,6 +10,7 @@ import { intentGuides, getIntentGuideBySlug } from "@/content/guides/intent-page
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
+import { formatContentDate, getContentLastModified } from "@/lib/content-freshness";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -35,6 +36,8 @@ export default async function GuidePage({ params }: Props) {
   if (!guide) notFound();
 
   const path = `/guides/${guide.slug}`;
+  const datePublished = "2026-06-18";
+  const dateModified = getContentLastModified(path);
 
   const product = sodiumMetasilicateCategory.inquiryProductName;
   const quoteHref = `/contact?type=quote&product=${encodeURIComponent(product)}`;
@@ -53,7 +56,8 @@ export default async function GuidePage({ params }: Props) {
         title={guide.title}
         description={guide.intro}
         url={`${SITE.url}${path}`}
-        datePublished="2026-01-01"
+        datePublished={datePublished}
+        dateModified={dateModified}
       />
       <FAQSchema items={guide.faq} />
       <BreadcrumbSchema
@@ -74,6 +78,11 @@ export default async function GuidePage({ params }: Props) {
       <Section>
         <div className="grid gap-10 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-8">
+            <p className="text-sm text-[#5A6570]">
+              Published <time dateTime={datePublished}>June 18, 2026</time>
+              {" · "}
+              Updated <time dateTime={dateModified}>{formatContentDate(dateModified)}</time>
+            </p>
             {guide.sections.map((s) => (
               <div key={s.heading}>
                 <h2 className="text-xl font-bold text-[#0B2D5B]">{s.heading}</h2>

@@ -32,6 +32,9 @@ export interface StructuredLead {
     utmTerm: string | null;
     utmContent: string | null;
     visitorId: string | null;
+    geoSource: string | null;
+    geoReferrerHost: string | null;
+    geoLandingPath: string | null;
   };
   message: string;
   meta: {
@@ -102,6 +105,9 @@ export function buildStructuredLead(
       utmTerm: data.utmTerm ?? null,
       utmContent: data.utmContent ?? null,
       visitorId: data.visitorId ?? null,
+      geoSource: data.geoSource ?? null,
+      geoReferrerHost: data.geoReferrerHost ?? null,
+      geoLandingPath: data.geoLandingPath ?? null,
     },
     message: data.message,
     meta: {

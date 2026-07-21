@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/geo/indexnow",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

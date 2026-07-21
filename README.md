@@ -59,8 +59,11 @@ public/images/
 ## SEO Features
 
 - Per-page metadata and canonical URLs
-- JSON-LD: Organization, Product, FAQ, Article, BreadcrumbList
-- Auto-generated `sitemap.xml` and `robots.txt`
+- JSON-LD: Organization, WebSite, Product, FAQ, Article, BreadcrumbList
+- Stable content-version dates in `sitemap.xml`
+- Explicit OAI-SearchBot access and separate GPTBot training policy
+- Daily deduplicated IndexNow submission through Vercel Cron
+- GEO / AI referral attribution on persisted inquiries
 
 ## Deploy
 
