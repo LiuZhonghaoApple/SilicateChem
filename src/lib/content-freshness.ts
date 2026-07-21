@@ -24,7 +24,7 @@ export const CONTENT_RELEASES: Readonly<Record<string, ContentRelease>> = {
   "/products": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/guides": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/applications": { lastModified: GEO_BASELINE_LAST_MODIFIED },
-  "/blog": { lastModified: "2026-07-22T06:45:00+08:00" },
+  "/blog": { lastModified: "2026-07-22T07:09:00+08:00" },
   "/products/sodium-metasilicate": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/products/sodium-metasilicate-granules": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/products/sodium-metasilicate-anhydrous": { lastModified: GEO_BASELINE_LAST_MODIFIED },

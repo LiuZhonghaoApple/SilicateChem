@@ -7,6 +7,8 @@ import { blogPosts } from "@/content/blog/posts";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
+const newestBlogPosts = [...blogPosts].sort((a, b) => b.date.localeCompare(a.date));
+
 export const metadata = createMetadata({
   title: "Sodium Metasilicate Blog — Procurement & Application Guides",
   description:
@@ -35,7 +37,7 @@ export default function BlogPage() {
           subtitle="Use these articles to clarify application fit, grade selection, document requirements, packing questions, and quotation details before sending an RFQ."
         />
         <div className="grid gap-6 md:grid-cols-3">
-          {blogPosts.map((post) => (
+          {newestBlogPosts.map((post) => (
             <article
               key={post.slug}
               className="flex h-full flex-col rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#2A86A5] hover:shadow-[0_16px_34px_rgba(42,134,165,0.12)]"
