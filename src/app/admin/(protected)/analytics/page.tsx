@@ -2,6 +2,8 @@ import { AI_CRAWLER_POLICY } from "@/lib/seo/ai-crawler-policy";
 import { getContentReleaseTimeline } from "@/lib/content-freshness";
 import { getGoogleReportingConfiguration } from "@/lib/reporting/config";
 import {
+  getConversionEventBreakdown,
+  getConversionEventFunnel,
   getGeoTrafficSources,
   getInquiryFunnel,
   getLatestSiteSnapshot,
@@ -69,6 +71,8 @@ export default async function AnalyticsDashboardPage() {
     pages,
     queries,
     searchPages,
+    conversionEvents,
+    conversionBreakdown,
     funnel,
     syncStatuses,
     siteSnapshot,
@@ -81,6 +85,8 @@ export default async function AnalyticsDashboardPage() {
     getPagePerformance(),
     getTopGscQueries(),
     getTopGscPages(),
+    getConversionEventFunnel(),
+    getConversionEventBreakdown(),
     getInquiryFunnel(),
     getLatestSyncStatuses(),
     getLatestSiteSnapshot(),
@@ -91,6 +97,17 @@ export default async function AnalyticsDashboardPage() {
   const statusMap = new Map(syncStatuses.map((item) => [item.provider, item]));
   const hasGa4Data = dataHealth.ga4ActiveDays > 0;
   const hasGscData = dataHealth.gscActiveDays > 0;
+  const conversionStages = [
+    { label: "网站会话", value: conversionEvents.sessions, rate: "GA4" },
+    { label: "AI 开启", value: conversionEvents.aiOpens, rate: ratio(conversionEvents.aiOpens, conversionEvents.sessions) },
+    { label: "AI 提问", value: conversionEvents.aiQuestions, rate: ratio(conversionEvents.aiQuestions, conversionEvents.aiOpens) },
+    { label: "AI 回答", value: conversionEvents.aiAnswers, rate: ratio(conversionEvents.aiAnswers, conversionEvents.aiQuestions) },
+    { label: "AI 转人工", value: conversionEvents.aiHandoffs, rate: ratio(conversionEvents.aiHandoffs, conversionEvents.aiAnswers) },
+    { label: "WhatsApp 点击", value: conversionEvents.whatsappClicks, rate: ratio(conversionEvents.whatsappClicks, conversionEvents.sessions) },
+    { label: "RFQ 启动", value: conversionEvents.rfqStarts, rate: ratio(conversionEvents.rfqStarts, conversionEvents.sessions) },
+    { label: "RFQ 提交", value: conversionEvents.rfqSubmits, rate: ratio(conversionEvents.rfqSubmits, conversionEvents.rfqStarts) },
+    { label: "CRM 询盘", value: conversionEvents.crmInquiries, rate: ratio(conversionEvents.crmInquiries, conversionEvents.rfqSubmits) },
+  ];
   const funnelStages = [
     { label: "网站会话", value: funnel.sessions, rate: "GA4" },
     { label: "产品页会话", value: funnel.productSessions, rate: ratio(funnel.productSessions, funnel.sessions) },
@@ -217,7 +234,52 @@ export default async function AnalyticsDashboardPage() {
       </section>
 
       <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
-        <h2 className="font-bold text-[#0B2D5B]">近30天询盘转化漏斗</h2>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="font-bold text-[#0B2D5B]">近30天 WhatsApp · AI · RFQ 转化闭环</h2>
+            <p className="mt-1 text-xs text-[#64748B]">网站事件直接落库并保留 GA4 镜像；只从本功能部署后开始累计，不回填历史点击。</p>
+          </div>
+          <span className="rounded-full bg-green-50 px-3 py-1 text-xs font-bold text-green-700">持久化事件</span>
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+          {conversionStages.map((stage) => (
+            <article key={stage.label} className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+              <p className="text-xs font-bold text-[#64748B]">{stage.label}</p>
+              <p className="mt-2 text-2xl font-bold text-[#0B2D5B]">{number(stage.value)}</p>
+              <p className="mt-1 text-xs text-[#2E7D9A]">转化 {stage.rate}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="overflow-hidden rounded-xl border border-[#DCE4EA] bg-white shadow-sm">
+        <div className="border-b border-[#E2E8F0] px-5 py-4">
+          <h2 className="font-bold text-[#0B2D5B]">转化触点来源与页面</h2>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead className="bg-[#F8FAFC] text-left text-xs text-[#64748B]">
+              <tr><th className="px-4 py-3">页面</th><th className="px-4 py-3">来源</th><th className="px-4 py-3">WhatsApp</th><th className="px-4 py-3">AI回答/转人工</th><th className="px-4 py-3">RFQ启动/提交</th></tr>
+            </thead>
+            <tbody className="divide-y divide-[#E2E8F0]">
+              {conversionBreakdown.length === 0 ? (
+                <tr><td colSpan={5} className="px-4 py-8 text-center text-[#64748B]">等待部署后的首批真实转化事件。</td></tr>
+              ) : conversionBreakdown.map((item) => (
+                <tr key={`${item.pagePath}-${item.source}`}>
+                  <td className="max-w-[360px] break-all px-4 py-3 font-semibold text-[#334155]">{item.pagePath}</td>
+                  <td className="px-4 py-3">{item.source}</td>
+                  <td className="px-4 py-3">{number(item.whatsappClicks)}</td>
+                  <td className="px-4 py-3">{number(item.aiAnswers)} / {number(item.aiHandoffs)}</td>
+                  <td className="px-4 py-3">{number(item.rfqStarts)} / {number(item.rfqSubmits)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+        <h2 className="font-bold text-[#0B2D5B]">近30天询盘业务漏斗</h2>
         <div className="mt-4 grid gap-3 md:grid-cols-3 xl:grid-cols-6">
           {funnelStages.map((stage, index) => (
             <article key={stage.label} className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4">

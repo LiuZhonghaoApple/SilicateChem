@@ -436,6 +436,98 @@ export async function getTopGscPages(days = 30, limit = 20): Promise<SearchPerfo
   return rows as unknown as SearchPerformanceRow[];
 }
 
+export type ConversionEventFunnel = {
+  sessions: number;
+  whatsappClicks: number;
+  aiOpens: number;
+  aiQuestions: number;
+  aiAnswers: number;
+  aiHandoffs: number;
+  rfqStarts: number;
+  rfqSubmits: number;
+  crmInquiries: number;
+};
+
+export async function getConversionEventFunnel(
+  days = 30
+): Promise<ConversionEventFunnel> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `WITH traffic AS (
+      SELECT COALESCE(SUM(sessions), 0)::int AS sessions
+      FROM ga4_daily_metrics
+      WHERE metric_date >= CURRENT_DATE - ($1::int - 1)
+    ), events AS (
+      SELECT
+        COUNT(*) FILTER (WHERE event_name = 'whatsapp_click')::int AS "whatsappClicks",
+        COUNT(*) FILTER (WHERE event_name = 'ai_advisor_open')::int AS "aiOpens",
+        COUNT(*) FILTER (WHERE event_name = 'ai_advisor_question')::int AS "aiQuestions",
+        COUNT(*) FILTER (WHERE event_name = 'ai_advisor_answer')::int AS "aiAnswers",
+        COUNT(*) FILTER (WHERE event_name = 'ai_advisor_handoff')::int AS "aiHandoffs",
+        COUNT(*) FILTER (WHERE event_name = 'rfq_start')::int AS "rfqStarts",
+        COUNT(*) FILTER (WHERE event_name = 'rfq_submit')::int AS "rfqSubmits"
+      FROM conversion_events
+      WHERE occurred_at >= NOW() - ($1::int * INTERVAL '1 day')
+    ), inquiries AS (
+      SELECT COUNT(*) FILTER (WHERE status <> 'spam')::int AS "crmInquiries"
+      FROM crm_leads
+      WHERE submitted_at >= NOW() - ($1::int * INTERVAL '1 day')
+    ) SELECT * FROM traffic CROSS JOIN events CROSS JOIN inquiries`,
+    [days]
+  );
+  return (rows as unknown as ConversionEventFunnel[])[0] ?? {
+    sessions: 0,
+    whatsappClicks: 0,
+    aiOpens: 0,
+    aiQuestions: 0,
+    aiAnswers: 0,
+    aiHandoffs: 0,
+    rfqStarts: 0,
+    rfqSubmits: 0,
+    crmInquiries: 0,
+  };
+}
+
+export type ConversionEventBreakdownRow = {
+  pagePath: string;
+  source: string;
+  whatsappClicks: number;
+  aiAnswers: number;
+  aiHandoffs: number;
+  rfqStarts: number;
+  rfqSubmits: number;
+};
+
+export async function getConversionEventBreakdown(
+  days = 30,
+  limit = 20
+): Promise<ConversionEventBreakdownRow[]> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `SELECT
+      page_path AS "pagePath",
+      COALESCE(NULLIF(geo_source, ''), NULLIF(utm_source, ''),
+        NULLIF(referrer_host, ''), 'direct / unknown') AS source,
+      COUNT(*) FILTER (WHERE event_name = 'whatsapp_click')::int AS "whatsappClicks",
+      COUNT(*) FILTER (WHERE event_name = 'ai_advisor_answer')::int AS "aiAnswers",
+      COUNT(*) FILTER (WHERE event_name = 'ai_advisor_handoff')::int AS "aiHandoffs",
+      COUNT(*) FILTER (WHERE event_name = 'rfq_start')::int AS "rfqStarts",
+      COUNT(*) FILTER (WHERE event_name = 'rfq_submit')::int AS "rfqSubmits"
+    FROM conversion_events
+    WHERE occurred_at >= NOW() - ($1::int * INTERVAL '1 day')
+    GROUP BY 1, 2
+    ORDER BY (
+      COUNT(*) FILTER (WHERE event_name IN (
+        'whatsapp_click', 'ai_advisor_answer', 'ai_advisor_handoff',
+        'rfq_start', 'rfq_submit'
+      ))
+    ) DESC, "pagePath"
+    LIMIT $2`,
+    [days, limit]
+  );
+  return rows as unknown as ConversionEventBreakdownRow[];
+}
+
 export type InquiryFunnel = {
   sessions: number;
   productSessions: number;

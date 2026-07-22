@@ -1,3 +1,5 @@
+import { persistConversionEvent } from "@/lib/conversion-events-client";
+
 /**
  * GA4 + GTM-ready analytics helpers.
  * Set NEXT_PUBLIC_GA4_ID and/or NEXT_PUBLIC_GTM_ID in production.
@@ -5,6 +7,7 @@
 
 export type AnalyticsEvent =
   | "rfq_submit"
+  | "rfq_start"
   | "sample_request"
   | "tds_download"
   | "page_view_by_source"
@@ -78,6 +81,7 @@ function emit(event: AnalyticsEvent, payload: Omit<DataLayerPayload, "event">): 
     event_category: payload.event_category,
     event_label: payload.event_label,
   });
+  persistConversionEvent(event, full);
   logDev(event, full as unknown as Record<string, unknown>);
 }
 
@@ -122,6 +126,24 @@ export function trackRfqSubmit(params: {
     funnel_layer: inferFunnelLayer(params.pagePath),
     event_category: "conversion",
     event_label: params.productInterest ?? "sodium metasilicate",
+  });
+}
+
+export function trackRfqStart(params: {
+  pagePath: string;
+  pageSource?: string;
+  productInterest?: string;
+  inquiryType?: InquiryType | string;
+  location?: string;
+}): void {
+  emit("rfq_start", {
+    page_path: params.pagePath,
+    page_source: params.pageSource,
+    product_interest: params.productInterest,
+    inquiry_type: params.inquiryType ?? "quote",
+    funnel_layer: inferFunnelLayer(params.pagePath),
+    event_category: "engagement",
+    event_label: params.location ?? "inquiry_form",
   });
 }
 
@@ -198,7 +220,7 @@ export function trackAiAdvisorEvent(params: {
   });
 }
 
-/** Track CTA button clicks (quote, sample, TDS, contact) and mirror conversion events */
+/** Track CTA intent without misclassifying a click as a completed inquiry. */
 export function trackCtaClick(params: ContactTrackingParams & { ctaType: CtaType }): void {
   const { ctaType, pagePath, pageSource, productInterest, location } = params;
   const tracking = { pagePath, pageSource, productInterest };
@@ -209,21 +231,14 @@ export function trackCtaClick(params: ContactTrackingParams & { ctaType: CtaType
     product_interest: productInterest,
     inquiry_type: ctaType,
     funnel_layer: inferFunnelLayer(pagePath),
-    event_category: "conversion",
+    event_category: "engagement",
     event_label: location ? `${ctaType}:${location}` : ctaType,
   });
 
-  if (ctaType === "sample") {
-    trackSampleRequest(tracking);
-    return;
-  }
-  if (ctaType === "tds") {
-    trackTdsDownload(tracking);
-    return;
-  }
-  trackRfqSubmit({
+  trackRfqStart({
     ...tracking,
-    inquiryType: ctaType === "contact" ? "contact" : "quote",
+    inquiryType: ctaType,
+    location,
   });
 }
 
@@ -249,6 +264,12 @@ export function trackInquiryByType(params: {
   productInterest?: string;
 }): void {
   const { requestType, pagePath, pageSource, productInterest } = params;
+  trackRfqSubmit({
+    pagePath,
+    pageSource,
+    productInterest,
+    inquiryType: requestType,
+  });
   if (requestType === "sample") {
     trackSampleRequest({ pagePath, pageSource, productInterest });
     return;
@@ -257,10 +278,4 @@ export function trackInquiryByType(params: {
     trackTdsDownload({ pagePath, pageSource, productInterest });
     return;
   }
-  trackRfqSubmit({
-    pagePath,
-    pageSource,
-    productInterest,
-    inquiryType: requestType === "contact" ? "contact" : "quote",
-  });
 }

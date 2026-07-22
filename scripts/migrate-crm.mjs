@@ -83,6 +83,28 @@ const statements = [
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     PRIMARY KEY (namespace, identifier_hash, bucket_start)
   )`,
+  `CREATE TABLE IF NOT EXISTS conversion_events (
+    id BIGSERIAL PRIMARY KEY,
+    event_id TEXT NOT NULL UNIQUE,
+    event_name TEXT NOT NULL CHECK (event_name IN (
+      'whatsapp_click', 'ai_advisor_open', 'ai_advisor_question',
+      'ai_advisor_answer', 'ai_advisor_handoff', 'rfq_start', 'rfq_submit'
+    )),
+    occurred_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    page_path TEXT NOT NULL,
+    page_source TEXT,
+    product_interest TEXT,
+    inquiry_type TEXT,
+    event_label TEXT,
+    visitor_id_hash TEXT,
+    landing_page TEXT,
+    referrer_host TEXT,
+    utm_source TEXT,
+    utm_medium TEXT,
+    utm_campaign TEXT,
+    geo_source TEXT,
+    client_ip_hash TEXT
+  )`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_source TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_referrer_host TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_landing_path TEXT`,
@@ -289,6 +311,9 @@ const statements = [
   `CREATE INDEX IF NOT EXISTS admin_audit_created_idx ON admin_audit_logs (created_at DESC)`,
   `CREATE INDEX IF NOT EXISTS security_rate_limits_expiry_idx ON security_rate_limits (bucket_end)`,
   `CREATE INDEX IF NOT EXISTS security_rate_limits_namespace_idx ON security_rate_limits (namespace, updated_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS conversion_events_name_time_idx ON conversion_events (event_name, occurred_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS conversion_events_page_time_idx ON conversion_events (page_path, occurred_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS conversion_events_source_time_idx ON conversion_events (utm_source, geo_source, occurred_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_submitted_idx ON geo_indexnow_submissions (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_fingerprint_idx ON geo_indexnow_submissions (content_fingerprint, success)`,
   `CREATE INDEX IF NOT EXISTS reporting_sync_provider_idx ON reporting_sync_runs (provider, completed_at DESC)`,

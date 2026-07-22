@@ -6,6 +6,7 @@ import { useRef, useState, type FormEvent } from "react";
 import { SITE } from "@/lib/constants";
 import {
   trackAiAdvisorEvent,
+  trackCtaClick,
   trackWhatsAppClick,
 } from "@/lib/analytics";
 
@@ -343,6 +344,19 @@ export function ProcurementAdvisor() {
               </a>
               <Link
                 href="/contact?type=quote&source=ai-advisor"
+                onClick={() => {
+                  trackAiAdvisorEvent({
+                    event: "ai_advisor_handoff",
+                    pagePath: pathname,
+                    label: "rfq",
+                  });
+                  trackCtaClick({
+                    ctaType: "quote",
+                    pagePath: pathname,
+                    pageSource: "ai-advisor",
+                    location: "ai_advisor_handoff",
+                  });
+                }}
                 className="rounded-lg border border-[#0B2D5B] px-3 py-2 text-center text-xs font-bold text-[#0B2D5B] hover:bg-[#F4F8FB]"
               >
                 Submit RFQ

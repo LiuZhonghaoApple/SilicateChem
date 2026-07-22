@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
-import { trackInquiryByType } from "@/lib/analytics";
+import { trackInquiryByType, trackRfqStart } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
 import { getInquiryAttributionPayload } from "@/lib/attribution-client";
 import {
@@ -37,6 +37,7 @@ export function InquiryForm({
   const formRef = useRef<HTMLFormElement>(null);
   const pendingPayloadRef = useRef<InquiryPayload | null>(null);
   const formStartedAtRef = useRef(Date.now());
+  const formStartTrackedRef = useRef(false);
 
   const ctx = getRfqContext(pathname);
   const product =
@@ -44,6 +45,18 @@ export function InquiryForm({
   const requestType =
     defaultRequestType ?? searchParams.get("type") ?? "quote";
   const source = searchParams.get("source") ?? ctx.source ?? pathname;
+
+  function handleFormStart() {
+    if (formStartTrackedRef.current) return;
+    formStartTrackedRef.current = true;
+    trackRfqStart({
+      pagePath: pathname,
+      pageSource: source || pathname,
+      productInterest: product || undefined,
+      inquiryType: requestType,
+      location: "inquiry_form",
+    });
+  }
 
   async function submitInquiry(
     payload: InquiryPayload,
@@ -82,6 +95,7 @@ export function InquiryForm({
       setState("success");
       form.reset();
       formStartedAtRef.current = Date.now();
+      formStartTrackedRef.current = false;
       turnstileRef.current?.reset();
     } catch {
       setErrorMsg("Network error. Please try again or email us directly.");
@@ -146,6 +160,7 @@ export function InquiryForm({
           type="button"
           onClick={() => {
             formStartedAtRef.current = Date.now();
+            formStartTrackedRef.current = false;
             setState("idle");
           }}
           className="mt-4 text-sm font-semibold text-[#2E7D9A] hover:underline"
@@ -161,7 +176,12 @@ export function InquiryForm({
   const labelClass = "block text-sm font-medium text-[#0B2D5B] mb-1";
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+    <form
+      ref={formRef}
+      onFocusCapture={handleFormStart}
+      onSubmit={handleSubmit}
+      className="space-y-4"
+    >
       <input type="hidden" name="source" value={source} />
       <div
         aria-hidden="true"
