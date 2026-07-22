@@ -70,7 +70,10 @@ export const TurnstileField = forwardRef<TurnstileFieldHandle, TurnstileFieldPro
 
         widgetIdRef.current = window.turnstile.render(containerRef.current, {
           sitekey: TURNSTILE_SITE_KEY,
-          size: "invisible",
+          // Current Turnstile API uses execution/appearance for a submit-time
+          // widget; `size: "invisible"` is no longer a valid render value.
+          execution: "execute",
+          appearance: "execute",
           callback: (token: string) => onSuccessRef.current(token),
           "error-callback": () => onErrorRef.current(),
           "expired-callback": () => onErrorRef.current(),
