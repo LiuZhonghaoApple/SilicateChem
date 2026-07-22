@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { SITE } from "@/lib/constants";
-import { getClientIp } from "@/lib/rate-limit";
+import {
+  consumePersistentRateLimit,
+  getClientIp,
+} from "@/lib/rate-limit";
 import {
   advisorFallback,
   buildKnowledgeContext,
@@ -46,31 +49,36 @@ const requestedHourlyLimit = Number(process.env.AI_ADVISOR_HOURLY_LIMIT ?? "10")
 const hourlyLimit = Number.isFinite(requestedHourlyLimit)
   ? Math.min(Math.max(requestedHourlyLimit, 1), 30)
   : 10;
-const rateWindowMs = 60 * 60 * 1_000;
+const requestedDailyLimit = Number(process.env.AI_ADVISOR_DAILY_LIMIT ?? "100");
+const dailyLimit = Number.isFinite(requestedDailyLimit)
+  ? Math.min(Math.max(requestedDailyLimit, 10), 1_000)
+  : 100;
 
-const globalForAdvisor = globalThis as typeof globalThis & {
-  silicateChemAdvisorBuckets?: Map<string, number[]>;
-};
+async function aiCallAllowed(ip: string, sessionId: string): Promise<boolean> {
+  const sessionLimit = await consumePersistentRateLimit({
+    namespace: "ai-session-hour",
+    identifier: `${ip}:${sessionId}`,
+    limit: hourlyLimit,
+    windowSeconds: 60 * 60,
+  });
+  if (!sessionLimit.allowed) return false;
 
-const requestBuckets =
-  globalForAdvisor.silicateChemAdvisorBuckets ?? new Map<string, number[]>();
+  const ipLimit = await consumePersistentRateLimit({
+    namespace: "ai-ip-hour",
+    identifier: ip,
+    limit: Math.max(30, hourlyLimit * 3),
+    windowSeconds: 60 * 60,
+  });
+  if (!ipLimit.allowed) return false;
 
-globalForAdvisor.silicateChemAdvisorBuckets = requestBuckets;
+  const globalLimit = await consumePersistentRateLimit({
+    namespace: "ai-global-day",
+    identifier: "all-visitors",
+    limit: dailyLimit,
+    windowSeconds: 24 * 60 * 60,
+  });
 
-function aiCallAllowed(key: string): boolean {
-  const now = Date.now();
-  const recent = (requestBuckets.get(key) ?? []).filter(
-    (timestamp) => now - timestamp < rateWindowMs
-  );
-
-  if (recent.length >= hourlyLimit) {
-    requestBuckets.set(key, recent);
-    return false;
-  }
-
-  recent.push(now);
-  requestBuckets.set(key, recent);
-  return true;
+  return globalLimit.allowed;
 }
 
 function requiresModel(message: string): boolean {
@@ -217,8 +225,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const rateKey = `${getClientIp(request)}:${sessionId}`;
-    if (!aiCallAllowed(rateKey)) {
+    if (!(await aiCallAllowed(getClientIp(request), sessionId))) {
       return NextResponse.json({
         answer:
           "The automated answer limit for this session has been reached. Please continue with our human sales team on WhatsApp for a verified response.",

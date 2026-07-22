@@ -16,6 +16,9 @@ import { inquirySchema } from "@/lib/validation";
 
 export const runtime = "nodejs";
 
+const MIN_FORM_FILL_MS = 2_500;
+const MAX_FORM_AGE_MS = 4 * 60 * 60 * 1_000;
+
 type EmailSendResult =
   | { ok: true }
   | { ok: false; reason: "missing_config" | "resend_error"; detail?: string };
@@ -119,6 +122,18 @@ export async function POST(request: Request) {
       const errors = result.error.flatten().fieldErrors;
       const firstError = Object.values(errors).flat()[0] ?? "Invalid form data";
       return NextResponse.json({ error: firstError }, { status: 400 });
+    }
+
+    const formAgeMs = Date.now() - result.data.formStartedAt;
+    if (
+      result.data.website?.trim() ||
+      formAgeMs < MIN_FORM_FILL_MS ||
+      formAgeMs > MAX_FORM_AGE_MS
+    ) {
+      return NextResponse.json(
+        { error: "Submission could not be verified. Please refresh and try again." },
+        { status: 400 }
+      );
     }
 
     const clientIp = getClientIp(request);

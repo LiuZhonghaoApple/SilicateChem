@@ -74,6 +74,15 @@ const statements = [
     metadata JSONB NOT NULL DEFAULT '{}'::JSONB,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
   )`,
+  `CREATE TABLE IF NOT EXISTS security_rate_limits (
+    namespace TEXT NOT NULL,
+    identifier_hash TEXT NOT NULL,
+    bucket_start TIMESTAMPTZ NOT NULL,
+    bucket_end TIMESTAMPTZ NOT NULL,
+    request_count INTEGER NOT NULL DEFAULT 0 CHECK (request_count >= 0),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    PRIMARY KEY (namespace, identifier_hash, bucket_start)
+  )`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_source TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_referrer_host TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_landing_path TEXT`,
@@ -278,6 +287,8 @@ const statements = [
   `CREATE INDEX IF NOT EXISTS crm_lead_notes_lead_idx ON crm_lead_notes (lead_id, created_at DESC)`,
   `CREATE INDEX IF NOT EXISTS crm_lead_history_lead_idx ON crm_lead_status_history (lead_id, changed_at DESC)`,
   `CREATE INDEX IF NOT EXISTS admin_audit_created_idx ON admin_audit_logs (created_at DESC)`,
+  `CREATE INDEX IF NOT EXISTS security_rate_limits_expiry_idx ON security_rate_limits (bucket_end)`,
+  `CREATE INDEX IF NOT EXISTS security_rate_limits_namespace_idx ON security_rate_limits (namespace, updated_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_submitted_idx ON geo_indexnow_submissions (submitted_at DESC)`,
   `CREATE INDEX IF NOT EXISTS geo_indexnow_fingerprint_idx ON geo_indexnow_submissions (content_fingerprint, success)`,
   `CREATE INDEX IF NOT EXISTS reporting_sync_provider_idx ON reporting_sync_runs (provider, completed_at DESC)`,

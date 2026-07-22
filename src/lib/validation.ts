@@ -23,6 +23,8 @@ export const inquirySchema = z.object({
   geoReferrerHost: z.string().max(255).optional(),
   geoLandingPath: z.string().max(500).optional(),
   turnstileToken: z.string().max(4_000).optional(),
+  website: z.string().max(200).optional(),
+  formStartedAt: z.coerce.number().int().positive(),
 });
 
 export type InquiryInput = z.infer<typeof inquirySchema>;

@@ -36,6 +36,7 @@ export function InquiryForm({
   const turnstileRef = useRef<TurnstileFieldHandle>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const pendingPayloadRef = useRef<InquiryPayload | null>(null);
+  const formStartedAtRef = useRef(Date.now());
 
   const ctx = getRfqContext(pathname);
   const product =
@@ -80,6 +81,7 @@ export function InquiryForm({
 
       setState("success");
       form.reset();
+      formStartedAtRef.current = Date.now();
       turnstileRef.current?.reset();
     } catch {
       setErrorMsg("Network error. Please try again or email us directly.");
@@ -121,6 +123,7 @@ export function InquiryForm({
     const attributedPayload = {
       ...payload,
       ...getInquiryAttributionPayload(pathname),
+      formStartedAt: String(formStartedAtRef.current),
     };
 
     if (TURNSTILE_SITE_KEY) {
@@ -141,7 +144,10 @@ export function InquiryForm({
         </p>
         <button
           type="button"
-          onClick={() => setState("idle")}
+          onClick={() => {
+            formStartedAtRef.current = Date.now();
+            setState("idle");
+          }}
           className="mt-4 text-sm font-semibold text-[#2E7D9A] hover:underline"
         >
           Submit another inquiry
@@ -157,6 +163,19 @@ export function InquiryForm({
   return (
     <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
       <input type="hidden" name="source" value={source} />
+      <div
+        aria-hidden="true"
+        className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"
+      >
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="name" className={labelClass}>

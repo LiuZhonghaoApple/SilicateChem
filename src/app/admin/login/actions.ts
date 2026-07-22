@@ -4,11 +4,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   authenticateAdmin,
-  canAttemptAdminLogin,
-  clearAdminLoginFailures,
   createAdminSession,
-  recordAdminLoginFailure,
 } from "@/lib/admin-auth";
+import {
+  consumePersistentRateLimit,
+  resetPersistentRateLimit,
+} from "@/lib/rate-limit";
 
 function loginKey(forwardedFor: string | null, realIp: string | null): string {
   return forwardedFor?.split(",")[0]?.trim() || realIp?.trim() || "unknown";
@@ -23,16 +24,22 @@ export async function loginAction(formData: FormData): Promise<void> {
     headerStore.get("x-real-ip")
   );
 
-  if (!canAttemptAdminLogin(key)) {
+  const rateLimit = await consumePersistentRateLimit({
+    namespace: "admin-login",
+    identifier: key,
+    limit: 5,
+    windowSeconds: 15 * 60,
+  });
+
+  if (!rateLimit.allowed) {
     redirect("/admin/login?error=locked");
   }
 
   if (!(await authenticateAdmin(username, password))) {
-    recordAdminLoginFailure(key);
     redirect("/admin/login?error=invalid");
   }
 
-  clearAdminLoginFailures(key);
+  await resetPersistentRateLimit({ namespace: "admin-login", identifier: key });
   await createAdminSession(username);
   redirect("/admin");
 }

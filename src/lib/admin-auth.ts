@@ -9,21 +9,11 @@ import { cookies } from "next/headers";
 const pbkdf2 = promisify(pbkdf2Callback);
 const SESSION_COOKIE = "silicatechem_admin_session";
 const SESSION_DURATION_SECONDS = 60 * 60 * 24 * 7;
-const LOGIN_WINDOW_MS = 15 * 60 * 1_000;
-const MAX_LOGIN_FAILURES = 5;
 
 type AdminSession = {
   username: string;
   expiresAt: number;
 };
-
-const globalForAdminAuth = globalThis as typeof globalThis & {
-  silicateChemAdminLoginFailures?: Map<string, number[]>;
-};
-
-const loginFailures =
-  globalForAdminAuth.silicateChemAdminLoginFailures ?? new Map<string, number[]>();
-globalForAdminAuth.silicateChemAdminLoginFailures = loginFailures;
 
 function sessionSecret(): string | null {
   return process.env.ADMIN_SESSION_SECRET ?? null;
@@ -117,21 +107,4 @@ export async function getAdminSession(): Promise<AdminSession | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE)?.value;
   return token ? decodeSession(token, secret) : null;
-}
-
-export function canAttemptAdminLogin(key: string): boolean {
-  const now = Date.now();
-  const recent = (loginFailures.get(key) ?? []).filter(
-    (timestamp) => now - timestamp < LOGIN_WINDOW_MS
-  );
-  loginFailures.set(key, recent);
-  return recent.length < MAX_LOGIN_FAILURES;
-}
-
-export function recordAdminLoginFailure(key: string): void {
-  loginFailures.set(key, [...(loginFailures.get(key) ?? []), Date.now()]);
-}
-
-export function clearAdminLoginFailures(key: string): void {
-  loginFailures.delete(key);
 }
