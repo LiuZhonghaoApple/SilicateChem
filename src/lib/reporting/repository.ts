@@ -504,6 +504,81 @@ export async function getLatestSyncStatuses(): Promise<SyncStatusRow[]> {
   return rows as unknown as SyncStatusRow[];
 }
 
+export type ReportingDataHealth = {
+  ga4FirstDate: string | null;
+  ga4LatestDate: string | null;
+  ga4ActiveDays: number;
+  ga4Sessions: number;
+  gscFirstDate: string | null;
+  gscLatestDate: string | null;
+  gscActiveDays: number;
+  gscImpressions: number;
+  latestInspectionDate: string | null;
+  inspectedUrls: number;
+  inquiries: number;
+  emailsSent: number;
+  emailsPending: number;
+  emailsFailed: number;
+};
+
+export async function getReportingDataHealth(
+  days = 30
+): Promise<ReportingDataHealth> {
+  const sql = getDatabase();
+  const rows = await sql.query(
+    `WITH ga4 AS (
+      SELECT
+        MIN(metric_date)::text AS "ga4FirstDate",
+        MAX(metric_date)::text AS "ga4LatestDate",
+        COUNT(*)::int AS "ga4ActiveDays",
+        COALESCE(SUM(sessions), 0)::int AS "ga4Sessions"
+      FROM ga4_daily_metrics
+      WHERE metric_date >= CURRENT_DATE - ($1::int - 1)
+    ), gsc AS (
+      SELECT
+        MIN(metric_date)::text AS "gscFirstDate",
+        MAX(metric_date)::text AS "gscLatestDate",
+        COUNT(*)::int AS "gscActiveDays",
+        COALESCE(SUM(impressions), 0)::float8 AS "gscImpressions"
+      FROM gsc_daily_metrics
+      WHERE metric_date >= CURRENT_DATE - ($1::int - 1)
+    ), inspections AS (
+      SELECT
+        MAX(snapshot_date)::text AS "latestInspectionDate",
+        COUNT(*) FILTER (
+          WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM gsc_url_inspection_snapshots)
+        )::int AS "inspectedUrls"
+      FROM gsc_url_inspection_snapshots
+    ), inquiries AS (
+      SELECT
+        COUNT(*) FILTER (WHERE status <> 'spam')::int AS inquiries,
+        COUNT(*) FILTER (WHERE status <> 'spam' AND email_delivery_status = 'sent')::int AS "emailsSent",
+        COUNT(*) FILTER (WHERE status <> 'spam' AND email_delivery_status = 'pending')::int AS "emailsPending",
+        COUNT(*) FILTER (WHERE status <> 'spam' AND email_delivery_status = 'failed')::int AS "emailsFailed"
+      FROM crm_leads
+      WHERE submitted_at >= NOW() - ($1::int * INTERVAL '1 day')
+    )
+    SELECT * FROM ga4 CROSS JOIN gsc CROSS JOIN inspections CROSS JOIN inquiries`,
+    [days]
+  );
+  return (rows as unknown as ReportingDataHealth[])[0] ?? {
+    ga4FirstDate: null,
+    ga4LatestDate: null,
+    ga4ActiveDays: 0,
+    ga4Sessions: 0,
+    gscFirstDate: null,
+    gscLatestDate: null,
+    gscActiveDays: 0,
+    gscImpressions: 0,
+    latestInspectionDate: null,
+    inspectedUrls: 0,
+    inquiries: 0,
+    emailsSent: 0,
+    emailsPending: 0,
+    emailsFailed: 0,
+  };
+}
+
 export type SiteSnapshotRow = {
   snapshotDate: string;
   publicPageCount: number;

@@ -7,6 +7,7 @@ import {
   getLatestSiteSnapshot,
   getLatestSyncStatuses,
   getPagePerformance,
+  getReportingDataHealth,
   getReportingOverview,
   getReportingTrend,
   getTopGscPages,
@@ -45,13 +46,19 @@ const syncStatusLabels = {
   success: "已同步",
   failed: "同步失败",
   not_configured: "待授权",
+  stale: "数据过期",
 } as const;
 
 const syncStatusClasses = {
   success: "bg-green-50 text-green-700 border-green-200",
   failed: "bg-red-50 text-red-700 border-red-200",
   not_configured: "bg-amber-50 text-amber-800 border-amber-200",
+  stale: "bg-orange-50 text-orange-800 border-orange-200",
 } as const;
+
+function isStale(completedAt: string): boolean {
+  return Date.now() - new Date(completedAt).getTime() > 36 * 60 * 60 * 1_000;
+}
 
 export default async function AnalyticsDashboardPage() {
   const [
@@ -65,6 +72,7 @@ export default async function AnalyticsDashboardPage() {
     funnel,
     syncStatuses,
     siteSnapshot,
+    dataHealth,
   ] = await Promise.all([
     getReportingOverview(),
     getReportingTrend(),
@@ -76,10 +84,13 @@ export default async function AnalyticsDashboardPage() {
     getInquiryFunnel(),
     getLatestSyncStatuses(),
     getLatestSiteSnapshot(),
+    getReportingDataHealth(),
   ]);
   const configuration = getGoogleReportingConfiguration();
   const releases = getContentReleaseTimeline();
   const statusMap = new Map(syncStatuses.map((item) => [item.provider, item]));
+  const hasGa4Data = dataHealth.ga4ActiveDays > 0;
+  const hasGscData = dataHealth.gscActiveDays > 0;
   const funnelStages = [
     { label: "网站会话", value: funnel.sessions, rate: "GA4" },
     { label: "产品页会话", value: funnel.productSessions, rate: ratio(funnel.productSessions, funnel.sessions) },
@@ -89,13 +100,13 @@ export default async function AnalyticsDashboardPage() {
     { label: "已成交", value: funnel.won, rate: ratio(funnel.won, funnel.quoted) },
   ];
   const cards = [
-    { label: "近30天会话", value: number(overview.sessions), note: "GA4" },
-    { label: "访客", value: number(overview.users), note: `新访客 ${number(overview.newUsers)}` },
-    { label: "浏览量", value: number(overview.pageViews), note: `互动率 ${percent(overview.engagementRate)}` },
-    { label: "关键事件", value: number(overview.keyEvents), note: "GA4 key events" },
-    { label: "Google 点击", value: number(overview.clicks), note: `曝光 ${number(overview.impressions)}` },
-    { label: "搜索 CTR", value: percent(overview.ctr), note: `平均排名 ${number(overview.position)}` },
-    { label: "公开页面", value: number(siteSnapshot?.publicPageCount ?? 0), note: "Sitemap" },
+    { label: "近30天会话", value: hasGa4Data ? number(overview.sessions) : "—", note: "GA4" },
+    { label: "访客", value: hasGa4Data ? number(overview.users) : "—", note: hasGa4Data ? `新访客 ${number(overview.newUsers)}` : "等待 GA4 同步" },
+    { label: "浏览量", value: hasGa4Data ? number(overview.pageViews) : "—", note: hasGa4Data ? `互动率 ${percent(overview.engagementRate)}` : "等待 GA4 同步" },
+    { label: "关键事件", value: hasGa4Data ? number(overview.keyEvents) : "—", note: "GA4 key events" },
+    { label: "Google 点击", value: hasGscData ? number(overview.clicks) : "—", note: hasGscData ? `曝光 ${number(overview.impressions)}` : "等待 GSC 同步" },
+    { label: "搜索 CTR", value: hasGscData ? percent(overview.ctr) : "—", note: hasGscData ? `平均排名 ${number(overview.position)}` : "等待 GSC 同步" },
+    { label: "公开页面", value: siteSnapshot ? number(siteSnapshot.publicPageCount) : "—", note: "Sitemap" },
     {
       label: "GSC 已收录",
       value: siteSnapshot?.sitemapIndexed == null ? "—" : number(siteSnapshot.sitemapIndexed),
@@ -131,12 +142,16 @@ export default async function AnalyticsDashboardPage() {
         {(["site", "ga4", "gsc"] as const).map((provider) => {
           const item = statusMap.get(provider);
           const status = item?.status ?? (provider === "site" ? "not_configured" : "not_configured");
+          const displayStatus =
+            status === "success" && item && isStale(item.completedAt)
+              ? "stale"
+              : status;
           return (
-            <article key={provider} className={`rounded-xl border p-4 ${syncStatusClasses[status]}`}>
+            <article key={provider} className={`rounded-xl border p-4 ${syncStatusClasses[displayStatus]}`}>
               <div className="flex items-center justify-between gap-3">
                 <p className="font-bold uppercase">{provider}</p>
                 <span className="rounded-full bg-white/70 px-2.5 py-1 text-xs font-bold">
-                  {item ? syncStatusLabels[status] : "尚未执行"}
+                  {item ? syncStatusLabels[displayStatus] : "尚未执行"}
                 </span>
               </div>
               <p className="mt-2 text-xs">
@@ -148,6 +163,47 @@ export default async function AnalyticsDashboardPage() {
             </article>
           );
         })}
+      </section>
+
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <article className="rounded-xl border border-[#DCE4EA] bg-white p-4 shadow-sm">
+          <p className="text-xs font-bold text-[#64748B]">GA4 数据证据</p>
+          <p className="mt-2 font-bold text-[#0B2D5B]">
+            {hasGa4Data ? `${dataHealth.ga4FirstDate} → ${dataHealth.ga4LatestDate}` : "暂无数据"}
+          </p>
+          <p className="mt-1 text-xs text-[#64748B]">
+            {hasGa4Data ? `${dataHealth.ga4ActiveDays} 个有数据日期 · ${number(dataHealth.ga4Sessions)} 会话` : "不以 0 代替未同步"}
+          </p>
+        </article>
+        <article className="rounded-xl border border-[#DCE4EA] bg-white p-4 shadow-sm">
+          <p className="text-xs font-bold text-[#64748B]">GSC 数据证据</p>
+          <p className="mt-2 font-bold text-[#0B2D5B]">
+            {hasGscData ? `${dataHealth.gscFirstDate} → ${dataHealth.gscLatestDate}` : "暂无数据"}
+          </p>
+          <p className="mt-1 text-xs text-[#64748B]">
+            {hasGscData ? `${dataHealth.gscActiveDays} 个有数据日期 · ${number(dataHealth.gscImpressions)} 曝光` : "不以 0 代替未同步"}
+          </p>
+        </article>
+        <article className="rounded-xl border border-[#DCE4EA] bg-white p-4 shadow-sm">
+          <p className="text-xs font-bold text-[#64748B]">GSC URL 检查</p>
+          <p className="mt-2 text-2xl font-bold text-[#0B2D5B]">
+            {dataHealth.latestInspectionDate ? number(dataHealth.inspectedUrls) : "—"}
+          </p>
+          <p className="mt-1 text-xs text-[#64748B]">
+            {dataHealth.latestInspectionDate ? `${dataHealth.latestInspectionDate} 检查快照` : "等待首次检查"}
+          </p>
+        </article>
+        <article className={`rounded-xl border bg-white p-4 shadow-sm ${dataHealth.emailsFailed > 0 ? "border-red-300" : "border-[#DCE4EA]"}`}>
+          <p className="text-xs font-bold text-[#64748B]">近30天询盘邮件</p>
+          <p className="mt-2 text-2xl font-bold text-[#0B2D5B]">
+            {dataHealth.inquiries > 0 ? `${dataHealth.emailsSent}/${dataHealth.inquiries}` : "暂无询盘"}
+          </p>
+          <p className={`mt-1 text-xs ${dataHealth.emailsFailed > 0 ? "text-red-700" : "text-[#64748B]"}`}>
+            {dataHealth.inquiries > 0
+              ? `已发送 ${dataHealth.emailsSent} · 待处理 ${dataHealth.emailsPending} · 失败 ${dataHealth.emailsFailed}`
+              : "没有失败记录，也没有真实询盘记录"}
+          </p>
+        </article>
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
