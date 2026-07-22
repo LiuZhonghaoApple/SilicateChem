@@ -88,7 +88,7 @@ export const TurnstileField = forwardRef<TurnstileFieldHandle, TurnstileFieldPro
         if (!document.querySelector('script[src*="turnstile/v0/api.js"]')) {
           const script = document.createElement("script");
           script.src =
-            "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad";
+            "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
           script.async = true;
           document.head.appendChild(script);
         }
