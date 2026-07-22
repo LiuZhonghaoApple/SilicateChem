@@ -8,6 +8,11 @@ export const intentGuides: IntentGuide[] = [
     metaDescription:
       "Procurement checklist for choosing a sodium metasilicate supplier: grade specification, COA, MSDS, samples, packing, and shipment review before FCL orders.",
     primaryKeyword: "sodium metasilicate supplier selection",
+    keywords: [
+      "sodium metasilicate supplier China",
+      "sodium metasilicate factory",
+      "sodium metasilicate RFQ",
+    ],
     intro:
       "B2B buyers evaluating sodium metasilicate suppliers should compare grade specification, document readiness, packing options, samples, and shipment requirements before comparing prices. This guide covers the procurement decisions that affect long-term supply reliability.",
     sections: [
@@ -44,6 +49,11 @@ export const intentGuides: IntentGuide[] = [
     metaDescription:
       "Industrial factors affecting sodium metasilicate pricing: grade, volume, packaging, loading method, shipping terms, documents, and destination port.",
     primaryKeyword: "sodium metasilicate price factors",
+    keywords: [
+      "sodium metasilicate price",
+      "sodium metasilicate quotation",
+      "sodium metasilicate supplier quote",
+    ],
     intro:
       "Sodium metasilicate quotations vary by grade, order volume, packaging, loading method, required documents, and shipping terms. Understanding these variables helps procurement teams compare offers accurately.",
     sections: [
@@ -76,6 +86,11 @@ export const intentGuides: IntentGuide[] = [
     metaDescription:
       "How detergent manufacturers use sodium metasilicate as an alkaline builder. Grade selection, granules, specifications, packing, and RFQ information.",
     primaryKeyword: "sodium metasilicate uses detergent industry",
+    keywords: [
+      "sodium metasilicate detergent supplier",
+      "sodium metasilicate granules quote",
+      "detergent grade sodium metasilicate",
+    ],
     intro:
       "Detergent manufacturers are the largest buyers of sodium metasilicate globally. Granule grade is standard for powder detergent blending lines — providing alkalinity, oil emulsification, and soil deflocculation in phosphate-free formulations.",
     sections: [
@@ -108,6 +123,10 @@ export const intentGuides: IntentGuide[] = [
     metaDescription:
       "Compare sodium metasilicate and soda ash as alkaline builders for detergents and industrial cleaning. When to choose metasilicate for B2B procurement.",
     primaryKeyword: "sodium metasilicate vs soda ash",
+    keywords: [
+      "buy sodium metasilicate for detergent",
+      "sodium metasilicate supplier comparison",
+    ],
     intro:
       "Procurement teams comparing alkaline builders evaluate sodium metasilicate against soda ash (sodium carbonate). Both raise pH, but metasilicate adds silicate activity for emulsification and anti-redeposition beyond simple alkalinity.",
     sections: [
@@ -139,6 +158,11 @@ export const intentGuides: IntentGuide[] = [
     metaDescription:
       "Review a Chinese sodium metasilicate supply source: grade specification, QC documents, packing, loading, export documents, and quotation requirements.",
     primaryKeyword: "how to choose sodium metasilicate factory china",
+    keywords: [
+      "sodium metasilicate manufacturer China",
+      "sodium metasilicate exporter China",
+      "sodium metasilicate factory quotation",
+    ],
     intro:
       "Selecting a reliable Chinese sodium metasilicate supply source requires more than comparing email quotations. Buyers should verify product specification control, document readiness, packing options, and shipment communication before FCL orders.",
     sections: [

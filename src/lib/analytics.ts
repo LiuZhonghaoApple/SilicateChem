@@ -42,10 +42,26 @@ declare global {
   }
 }
 
-export const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
 export const GA4_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA4_ID || "G-R7W0MMX4SW";
+/**
+ * Keep the event sender and script on the same measurement ID. Previously the
+ * fallback script loaded while GA4_ID stayed undefined, so all tracked events
+ * were silently dropped when the public env var was absent in Preview.
+ */
+export const GA4_ID = GA4_MEASUREMENT_ID;
 export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+
+/**
+ * Events that should be marked as key events in the GA4 property. This is a
+ * code-side contract for the reporting UI; marking them in Admin → Data
+ * display → Key events remains a one-time GA4 property action.
+ */
+export const GA4_KEY_EVENTS = [
+  "rfq_submit",
+  "whatsapp_click",
+  "ai_advisor_handoff",
+] as const;
 
 const IS_DEV = process.env.NODE_ENV === "development";
 
@@ -109,6 +125,16 @@ export function trackPageViewBySource(pagePath: string, pageSource?: string): vo
     funnel_layer: inferFunnelLayer(pagePath),
     event_category: "engagement",
     event_label: pageSource ?? pagePath,
+  });
+
+  // AnalyticsScripts disables gtag's automatic page_view so consent can be
+  // applied before collection. Emit the standard GA4 page_view explicitly;
+  // the custom page_view_by_source event above remains the source-aware event
+  // used by the site's data layer.
+  trackGa4Event("page_view", {
+    page_path: pagePath,
+    page_location: typeof window !== "undefined" ? window.location.href : undefined,
+    page_title: typeof document !== "undefined" ? document.title : undefined,
   });
 }
 

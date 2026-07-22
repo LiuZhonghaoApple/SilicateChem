@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Props) {
     description: guide.metaDescription,
     path: `/guides/${guide.slug}`,
     primaryKeyword: guide.primaryKeyword,
+    keywords: guide.keywords,
   });
 }
 

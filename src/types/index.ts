@@ -76,6 +76,8 @@ export type IntentGuide = {
   metaTitle: string;
   metaDescription: string;
   primaryKeyword: string;
+  /** Supporting commercial variants; primaryKeyword remains the page owner. */
+  keywords?: string[];
   intro: string;
   sections: ContentSection[];
   faq: FAQItem[];

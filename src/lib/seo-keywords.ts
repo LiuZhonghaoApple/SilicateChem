@@ -11,19 +11,29 @@ export const SEO_KEYWORDS = {
     title: "Sodium Metasilicate Manufacturer in China",
     description:
       `${SITE.company} — factory-direct sodium metasilicate manufacturer in China. 100,000+ tons capacity. Export supply for global B2B buyers.`,
+    // Commercial variants support the manufacturer/factory intent without
+    // changing the homepage's single primary keyword ownership.
+    keywords: [
+      "factory direct sodium metasilicate export",
+      "sodium metasilicate supplier China",
+      "sodium metasilicate factory quotation",
+    ],
   },
   /** Strongest product page — owns generic sodium metasilicate head terms */
   sodiumMetasilicate: {
     path: "/products/sodium-metasilicate",
     primary: "sodium metasilicate",
-    title: "Sodium Metasilicate Specifications, Grades & RFQ",
+    title: "Sodium Metasilicate Supplier — Grades, Specs & RFQ",
     description:
-      "Sodium metasilicate product information: CAS numbers, formula, anhydrous, pentahydrate, granules, specifications, applications, packing, MSDS, COA and RFQ.",
+      "Factory-direct sodium metasilicate supplier information: CAS numbers, grades, specifications, packing, MSDS, COA and quotation support for global B2B buyers.",
     keywords: [
       "sodium metasilicate specifications",
       "sodium metasilicate CAS",
       "sodium metasilicate MSDS",
       "sodium metasilicate COA",
+      "sodium metasilicate supplier",
+      "sodium metasilicate price",
+      "sodium metasilicate quotation",
     ],
   },
   /** Grade pages — specification keywords only */
@@ -33,6 +43,10 @@ export const SEO_KEYWORDS = {
     title: "Sodium Metasilicate Granules Specifications",
     description:
       "Sodium metasilicate granules specifications: CAS 6834-92-0, Na₂SiO₃, particle size, appearance, packing, MSDS, COA and quotation information.",
+    keywords: [
+      "sodium metasilicate granules supplier",
+      "granular sodium metasilicate price",
+    ],
   },
   anhydrous: {
     path: "/products/sodium-metasilicate-anhydrous",
@@ -40,6 +54,10 @@ export const SEO_KEYWORDS = {
     title: "Anhydrous Sodium Metasilicate Specifications",
     description:
       "Sodium metasilicate anhydrous specifications: low moisture, high alkalinity Na₂SiO₃ grade. Technical data for detergent and industrial formulations.",
+    keywords: [
+      "anhydrous sodium metasilicate supplier",
+      "anhydrous sodium metasilicate quotation",
+    ],
   },
   pentahydrate: {
     path: "/products/sodium-metasilicate-pentahydrate",
@@ -47,6 +65,10 @@ export const SEO_KEYWORDS = {
     title: "Sodium Metasilicate Pentahydrate Specs",
     description:
       "Sodium metasilicate pentahydrate specifications: crystalline Na₂SiO₃·5H₂O grade for cleaning and water treatment applications.",
+    keywords: [
+      "sodium metasilicate pentahydrate supplier",
+      "sodium metasilicate pentahydrate price",
+    ],
   },
   sodiumSilicate: {
     path: "/products/sodium-silicate",
@@ -54,6 +76,11 @@ export const SEO_KEYWORDS = {
     title: "Liquid Sodium Silicate — Specifications & RFQ",
     description:
       "Liquid sodium silicate product information: CAS 1344-09-8, modulus, appearance, packing options, industrial applications and RFQ details.",
+    keywords: [
+      "liquid sodium silicate supplier",
+      "sodium silicate exporter China",
+      "liquid sodium silicate quotation",
+    ],
   },
 } as const;
 

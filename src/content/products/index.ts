@@ -12,7 +12,12 @@ export const products: Product[] = [
     primaryKeyword: SEO_KEYWORDS.granules.primary,
     metaTitle: SEO_KEYWORDS.granules.title,
     metaDescription: SEO_KEYWORDS.granules.description,
-    keywords: ["sodium metasilicate granules specifications", "granule mesh size"],
+    keywords: [
+      "sodium metasilicate granules specifications",
+      "granule mesh size",
+      "sodium metasilicate granules supplier",
+      "granular sodium metasilicate price",
+    ],
     summary:
       "Granular sodium metasilicate product information for buyers reviewing particle size, handling, detergent compatibility, packing, documents, and RFQ details.",
     description: [
@@ -69,7 +74,12 @@ export const products: Product[] = [
     primaryKeyword: SEO_KEYWORDS.anhydrous.primary,
     metaTitle: SEO_KEYWORDS.anhydrous.title,
     metaDescription: SEO_KEYWORDS.anhydrous.description,
-    keywords: ["anhydrous Na2SiO3 specifications", "low moisture metasilicate"],
+    keywords: [
+      "anhydrous Na2SiO3 specifications",
+      "low moisture metasilicate",
+      "anhydrous sodium metasilicate supplier",
+      "anhydrous sodium metasilicate quotation",
+    ],
     summary:
       "Anhydrous sodium metasilicate technical information for buyers reviewing low-moisture Na₂SiO₃, dry blend compatibility, packing, documents, and RFQ requirements.",
     description: [
@@ -126,7 +136,12 @@ export const products: Product[] = [
     primaryKeyword: SEO_KEYWORDS.pentahydrate.primary,
     metaTitle: SEO_KEYWORDS.pentahydrate.title,
     metaDescription: SEO_KEYWORDS.pentahydrate.description,
-    keywords: ["pentahydrate Na2SiO3 specifications", "crystalline metasilicate"],
+    keywords: [
+      "pentahydrate Na2SiO3 specifications",
+      "crystalline metasilicate",
+      "sodium metasilicate pentahydrate supplier",
+      "sodium metasilicate pentahydrate price",
+    ],
     summary:
       "Sodium metasilicate pentahydrate technical information for buyers reviewing Na₂SiO₃·5H₂O hydrate grade, crystal form, packing, documents, and RFQ details.",
     description: [
@@ -182,7 +197,12 @@ export const products: Product[] = [
     primaryKeyword: SEO_KEYWORDS.sodiumSilicate.primary,
     metaTitle: SEO_KEYWORDS.sodiumSilicate.title,
     metaDescription: SEO_KEYWORDS.sodiumSilicate.description,
-    keywords: ["liquid sodium silicate", "sodium silicate exporter China"],
+    keywords: [
+      "liquid sodium silicate",
+      "sodium silicate exporter China",
+      "liquid sodium silicate supplier",
+      "liquid sodium silicate quotation",
+    ],
     summary:
       "Liquid sodium silicate product information for buyers reviewing water glass, modulus selection, solid content, liquid packing, documents, and RFQ preparation.",
     description: [

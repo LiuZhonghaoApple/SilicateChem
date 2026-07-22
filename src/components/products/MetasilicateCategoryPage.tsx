@@ -108,9 +108,9 @@ export function MetasilicateCategoryPage() {
           <div>
             <SectionHeader title="Sodium Metasilicate — Industrial Grade Product" />
             <p className="text-[#5A6570] leading-relaxed">
-              Industrial grade sodium metasilicate for detergent, cleaning, textile, ceramic, and
-              water treatment applications. Available in selected grades and forms for industrial
-              procurement.
+              Factory-direct sodium metasilicate supplier for detergent, cleaning, textile,
+              ceramic, and water treatment applications. Available grades and forms are reviewed
+              against your specification before quotation.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link

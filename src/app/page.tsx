@@ -15,7 +15,7 @@ export const metadata = createMetadata({
   description: SEO_KEYWORDS.homepage.description,
   path: "/",
   primaryKeyword: SEO_KEYWORDS.homepage.primary,
-  keywords: ["factory direct sodium metasilicate export"],
+  keywords: SEO_KEYWORDS.homepage.keywords,
 });
 
 const cat = sodiumMetasilicateCategory;

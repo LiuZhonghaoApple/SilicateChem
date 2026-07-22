@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { CONSENT_STORAGE_KEY } from "@/lib/consent";
 
 const CLARITY_PROJECT_ID = "x9xg57r7vj";
 
@@ -14,6 +15,8 @@ export function ClarityScript() {
     <Script id="clarity-init" strategy="afterInteractive">
       {`(function(c,l,a,r,i,t,y){
 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+var s='denied';try{if(localStorage.getItem('${CONSENT_STORAGE_KEY}')==='granted'){s='granted';}}catch(e){}
+c[a]('consentv2',{ad_Storage:'denied',analytics_Storage:s});
 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
 })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");`}

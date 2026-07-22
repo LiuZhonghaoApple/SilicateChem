@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SITE } from "@/lib/constants";
 import { FooterContact } from "@/components/layout/FooterContact";
+import { ConsentPreferencesButton } from "@/components/analytics/ConsentManager";
 import {
   metasilicateCategoryLink,
   metasilicateGradeLinks,
@@ -124,6 +125,16 @@ export function Footer() {
                   FAQ
                 </Link>
               </li>
+              <li>
+                <Link href="/privacy" className="text-sm text-blue-200/80 hover:text-white">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/cookies" className="text-sm text-blue-200/80 hover:text-white">
+                  Cookie Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -138,7 +149,10 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-blue-800/50 pt-6 text-xs text-blue-200/50">
-          <p>© {new Date().getFullYear()} {SITE.company}. All rights reserved.</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p>© {new Date().getFullYear()} {SITE.company}. All rights reserved.</p>
+            <ConsentPreferencesButton />
+          </div>
         </div>
       </div>
     </footer>
