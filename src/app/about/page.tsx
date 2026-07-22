@@ -6,9 +6,9 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "About Zhongzhi Chemical Technology | Sodium Metasilicate Manufacturer",
+  title: "About Zhongzhi | Sodium Metasilicate Manufacturer",
   description:
-    "Learn about Shandong Zhongzhi Chemical Technology, a specialized inorganic silicate and sodium metasilicate manufacturer in Changyi, Shandong, with company history, quality control, and industrial supply focus.",
+    "About Shandong Zhongzhi Chemical Technology, a sodium metasilicate manufacturer in Changyi, Shandong. Review company history, quality controls and industrial supply capabilities.",
   path: "/about",
 });
 

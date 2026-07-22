@@ -4,7 +4,7 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "supplier-selection",
     title: "How to Select a Sodium Metasilicate Supplier",
-    metaTitle: "Sodium Metasilicate Supplier Selection — B2B Procurement Guide",
+    metaTitle: "Sodium Metasilicate Supplier Selection Guide",
     metaDescription:
       "Procurement checklist for choosing a sodium metasilicate supplier: grade specification, COA, MSDS, samples, packing, and shipment review before FCL orders.",
     primaryKeyword: "sodium metasilicate supplier selection",
@@ -40,7 +40,7 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "price-factors",
     title: "Sodium Metasilicate Price Factors — Factory Quotation Guide",
-    metaTitle: "Sodium Metasilicate Price Factors — What Affects Factory Quotations",
+    metaTitle: "Sodium Metasilicate Price & Quotation Factors",
     metaDescription:
       "Industrial factors affecting sodium metasilicate pricing: grade, volume, packaging, loading method, shipping terms, documents, and destination port.",
     primaryKeyword: "sodium metasilicate price factors",
@@ -72,7 +72,7 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "uses-detergent",
     title: "Sodium Metasilicate Uses in Detergent Manufacturing",
-    metaTitle: "Sodium Metasilicate Uses in Detergent Industry — Buyer Guide",
+    metaTitle: "Sodium Metasilicate for Detergent Buyers",
     metaDescription:
       "How detergent manufacturers use sodium metasilicate as an alkaline builder. Grade selection, granules, specifications, packing, and RFQ information.",
     primaryKeyword: "sodium metasilicate uses detergent industry",
@@ -104,7 +104,7 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "sodium-metasilicate-vs-soda-ash",
     title: "Sodium Metasilicate vs Soda Ash — Procurement Comparison",
-    metaTitle: "Sodium Metasilicate vs Soda Ash (Sodium Carbonate) — Buyer Comparison",
+    metaTitle: "Sodium Metasilicate vs Soda Ash for Buyers",
     metaDescription:
       "Compare sodium metasilicate and soda ash as alkaline builders for detergents and industrial cleaning. When to choose metasilicate for B2B procurement.",
     primaryKeyword: "sodium metasilicate vs soda ash",
@@ -135,7 +135,7 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "how-to-choose-china-factory",
     title: "How to Choose a Sodium Metasilicate Factory in China",
-    metaTitle: "How to Choose a Sodium Metasilicate Factory in China — Verification Guide",
+    metaTitle: "Choose a Sodium Metasilicate Factory in China",
     metaDescription:
       "Review a Chinese sodium metasilicate supply source: grade specification, QC documents, packing, loading, export documents, and quotation requirements.",
     primaryKeyword: "how to choose sodium metasilicate factory china",

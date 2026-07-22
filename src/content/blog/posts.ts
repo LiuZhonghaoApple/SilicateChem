@@ -11,6 +11,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "detergent-industry-metasilicate",
     title: "Sodium Metasilicate for Detergent Manufacturing - Buyer Guide",
+    metaTitle: "Sodium Metasilicate Detergent Buyer Guide",
     excerpt:
       "Procurement guide for detergent manufacturers reviewing sodium metasilicate grades, granules, specifications, packing, documents, and RFQ details.",
     date: "2026-01-10",
@@ -177,6 +178,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "china-metasilicate-procurement",
     title: "Procuring Sodium Metasilicate from China - Importer RFQ Guide",
+    metaTitle: "China Sodium Metasilicate Importer RFQ Guide",
     excerpt:
       "Importer guide for procuring sodium metasilicate from China: supplier review, grade comparison, packing, loading, documents, and RFQ preparation.",
     date: "2026-01-05",

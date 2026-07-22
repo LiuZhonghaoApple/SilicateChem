@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "db:migrate": "node scripts/migrate-crm.mjs",
+    "audit:seo-geo": "node scripts/audit-seo-geo.mjs https://www.silicatechem.com --summary",
     "lint": "next lint",
     "images:report": "python3 scripts/generate-image-deployment-report.mjs",
     "visual-trust:reports": "python3 scripts/generate-visual-trust-reports.py",

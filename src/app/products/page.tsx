@@ -193,7 +193,7 @@ const productLinks = [
 ];
 
 export const metadata = createMetadata({
-  title: "Product Selection & RFQ Center | Sodium Metasilicate Grades",
+  title: "Sodium Metasilicate Grade Selection & RFQ",
   description:
     "Choose the right sodium metasilicate grade, product form, packing information, documents and quotation path for industrial procurement.",
   path: "/products",

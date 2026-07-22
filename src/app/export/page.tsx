@@ -14,7 +14,7 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Export Support & Packaging | Sodium Metasilicate Shipments",
+  title: "Sodium Metasilicate Export & Packaging",
   description:
     "Sodium metasilicate export support from China: packing options, container loading reference, export documents, destination markets, and RFQ information for overseas buyers.",
   path: "/export",

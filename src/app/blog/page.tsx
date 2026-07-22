@@ -10,7 +10,7 @@ import { createMetadata } from "@/lib/metadata";
 const newestBlogPosts = [...blogPosts].sort((a, b) => b.date.localeCompare(a.date));
 
 export const metadata = createMetadata({
-  title: "Sodium Metasilicate Blog — Procurement & Application Guides",
+  title: "Sodium Metasilicate Procurement Blog",
   description:
     "Sodium metasilicate blog for distributors, importers, formulators and procurement teams reviewing grades, markets, applications, documents, packing, and RFQs.",
   path: "/blog",

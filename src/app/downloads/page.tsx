@@ -5,7 +5,7 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Buyer Documents — Certificates, MSDS & Company Credentials",
+  title: "Sodium Metasilicate Certificates & MSDS",
   description:
     "Download certificates, MSDS, product documents, and company credentials for supplier review and sodium metasilicate procurement.",
   path: "/downloads",

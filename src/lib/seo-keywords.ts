@@ -30,21 +30,21 @@ export const SEO_KEYWORDS = {
   granules: {
     path: "/products/sodium-metasilicate-granules",
     primary: "sodium metasilicate granules",
-    title: "Sodium Metasilicate Granules — Specifications & Export Grade",
+    title: "Sodium Metasilicate Granules Specifications",
     description:
       "Sodium metasilicate granules specifications: CAS 6834-92-0, Na₂SiO₃, particle size, appearance, packing, MSDS, COA and quotation information.",
   },
   anhydrous: {
     path: "/products/sodium-metasilicate-anhydrous",
     primary: "sodium metasilicate anhydrous",
-    title: "Sodium Metasilicate Anhydrous — Specifications & Technical Data",
+    title: "Anhydrous Sodium Metasilicate Specifications",
     description:
       "Sodium metasilicate anhydrous specifications: low moisture, high alkalinity Na₂SiO₃ grade. Technical data for detergent and industrial formulations.",
   },
   pentahydrate: {
     path: "/products/sodium-metasilicate-pentahydrate",
     primary: "sodium metasilicate pentahydrate",
-    title: "Sodium Metasilicate Pentahydrate — Specifications & Technical Data",
+    title: "Sodium Metasilicate Pentahydrate Specs",
     description:
       "Sodium metasilicate pentahydrate specifications: crystalline Na₂SiO₃·5H₂O grade for cleaning and water treatment applications.",
   },

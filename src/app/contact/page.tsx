@@ -8,9 +8,9 @@ import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
 export const metadata = createMetadata({
-  title: "Contact — Request a Quote",
+  title: "Contact Zhongzhi for Sodium Metasilicate RFQ",
   description:
-    `Contact ${SITE.company} for sodium metasilicate quotations, MSDS, COA, TDS, packing details, and shipment document requests. Email: ${SITE.email}`,
+    `Contact Zhongzhi for sodium metasilicate quotations, MSDS/SDS, COA, TDS, packing and shipment documents. Email: ${SITE.email}`,
   path: "/contact",
 });
 
