@@ -22,19 +22,19 @@ export const metadata = createMetadata({
 
 const exportImages = [
   {
-    src: "/images/export/warehouse-staging.webp",
-    alt: "Packed sodium metasilicate products staged in warehouse for export",
-    title: "Warehouse Staging",
+    src: "/assets/images/factory-proof/finished-goods-warehouse.png",
+    alt: "Packed sodium metasilicate staged on pallets in the finished-goods warehouse ready for export",
+    title: "Finished Goods Warehouse",
   },
   {
-    src: "/images/export/export-loading-01.webp",
-    alt: "Sodium metasilicate export loading reference",
-    title: "Container Loading",
+    src: "/assets/images/factory-proof/packing-line.jpg",
+    alt: "Workers bagging sodium metasilicate on the production and packing line",
+    title: "Bagging & Packing Line",
   },
   {
-    src: "/images/export/export-loading-03.webp",
-    alt: "Export loading and shipment preparation for packed chemical products",
-    title: "Shipment Preparation",
+    src: "/assets/images/factory-proof/facility-exterior.png",
+    alt: "Zhongzhi sodium metasilicate production facility exterior with storage tanks",
+    title: "Production Facility",
   },
 ] as const;
 
