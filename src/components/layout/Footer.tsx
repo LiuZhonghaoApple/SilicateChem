@@ -126,6 +126,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/downloads" className="text-sm text-blue-200/80 hover:text-white">
+                  Downloads &amp; Documents
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="text-sm text-blue-200/80 hover:text-white">
                   Privacy Policy
                 </Link>

@@ -57,6 +57,61 @@ const downloadCategories: DownloadCategory[] = [
     ],
   },
   {
+    title: "Certificate of Analysis (COA)",
+    description:
+      "Representative batch COA by grade and form. Batch-specific COA is issued per shipment — request the lot you require during quotation.",
+    documents: [
+      {
+        title: "COA - Sodium Metasilicate Pentahydrate - English",
+        description: "Representative COA · Pentahydrate grade",
+        label: "COA",
+        href: "/downloads/documents/coa-sodium-metasilicate-pentahydrate-en.pdf",
+      },
+      {
+        title: "COA - Pentahydrate Granular - Superior",
+        description: "Granular · Lot 26070101",
+        label: "COA",
+        href: "/downloads/documents/coa-sodium-metasilicate-pentahydrate-granular.pdf",
+      },
+      {
+        title: "COA - Pentahydrate Powder (30 mesh) - Superior",
+        description: "Ground powder, pass 30 mesh · Lot 26070107",
+        label: "COA",
+        href: "/downloads/documents/coa-sodium-metasilicate-pentahydrate-powder-30mesh.pdf",
+      },
+      {
+        title: "COA - Pentahydrate Powder (60 mesh) - Superior",
+        description: "Powder, pass 60 mesh · Lot 26070107",
+        label: "COA",
+        href: "/downloads/documents/coa-sodium-metasilicate-pentahydrate-powder-60mesh.pdf",
+      },
+      {
+        title: "COA - Sodium Metasilicate Anhydrous - English",
+        description: "Representative COA · Anhydrous grade",
+        label: "COA",
+        href: "/downloads/documents/coa-anhydrous-sodium-metasilicate-en.pdf",
+      },
+      {
+        title: "COA - Anhydrous Beaded - Superior",
+        description: "Beaded/granular · Lot 26070108",
+        label: "COA",
+        href: "/downloads/documents/coa-anhydrous-sodium-metasilicate-beaded.pdf",
+      },
+      {
+        title: "COA - Anhydrous Powder (40 mesh) - Qualified",
+        description: "Powder, pass 40 mesh · Lot 26070107",
+        label: "COA",
+        href: "/downloads/documents/coa-anhydrous-sodium-metasilicate-powder-40mesh.pdf",
+      },
+      {
+        title: "COA - Anhydrous Powder (60 mesh) - Qualified",
+        description: "Powder, pass 60 mesh · Lot 26070107",
+        label: "COA",
+        href: "/downloads/documents/coa-anhydrous-sodium-metasilicate-powder-60mesh.pdf",
+      },
+    ],
+  },
+  {
     title: "Technical Documents",
     description:
       "MSDS and product documents for product evaluation, internal review, and safe handling.",
@@ -86,10 +141,16 @@ const downloadCategories: DownloadCategory[] = [
         href: "/downloads/documents/msds-sodium-metasilicate-pentahydrate-cn.pdf",
       },
       {
-        title: "Product Brochure",
-        description: "Product catalog with specifications and applications",
+        title: "Product Catalogue - English",
+        description: "Full product catalogue with specifications and applications",
         label: "DOC",
-        href: "/downloads/documents/zhongzhi-product-brochure-v2.pdf",
+        href: "/downloads/documents/zhongzhi-product-catalogue-en.pdf",
+      },
+      {
+        title: "Product Catalogue - Bilingual (中英对照)",
+        description: "Chinese-English product catalogue",
+        label: "DOC",
+        href: "/downloads/documents/zhongzhi-product-catalogue-bilingual.pdf",
       },
     ],
   },
