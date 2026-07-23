@@ -40,7 +40,7 @@ export const products: Product[] = [
       { label: "Bulk Density", value: "Available on request" },
       { label: "Whiteness", value: "Available on request for detergent applications" },
       { label: "pH", value: "Strongly alkaline; confirm by TDS" },
-      { label: "Documents Available", value: "MSDS, COA, TDS, certificates on request" },
+      { label: "Documents Available", value: "MSDS/SDS, ISO & REACH certificates, and product brochure downloadable; batch-specific COA & TDS on request" },
     ],
     applications: [
       "Laundry powder and dishwashing detergent builder systems",
@@ -102,7 +102,7 @@ export const products: Product[] = [
       { label: "Particle Size", value: "Subject to buyer specification" },
       { label: "pH", value: "Strongly alkaline; confirm by TDS" },
       { label: "Storage", value: "Keep sealed and dry; avoid moisture absorption" },
-      { label: "Documents Available", value: "MSDS, COA, TDS, certificates on request" },
+      { label: "Documents Available", value: "MSDS/SDS, ISO & REACH certificates, and product brochure downloadable; batch-specific COA & TDS on request" },
     ],
     applications: [
       "High-alkalinity detergent and cleaning powder formulations",
@@ -164,7 +164,7 @@ export const products: Product[] = [
       { label: "Water Insoluble", value: "Confirmed by grade specification" },
       { label: "pH", value: "Strongly alkaline; confirm by TDS" },
       { label: "Storage", value: "Keep sealed and dry; avoid moisture absorption" },
-      { label: "Documents Available", value: "MSDS, COA, TDS, certificates on request" },
+      { label: "Documents Available", value: "MSDS/SDS, ISO & REACH certificates, and product brochure downloadable; batch-specific COA & TDS on request" },
     ],
     applications: [
       "Household and institutional cleaning product formulations",
@@ -222,7 +222,7 @@ export const products: Product[] = [
       { label: "Solid Content", value: "Confirmed by requested modulus and specification" },
       { label: "Density", value: "Available on request" },
       { label: "pH", value: "Alkaline; confirm by TDS" },
-      { label: "Documents Available", value: "TDS, COA, SDS / MSDS on request" },
+      { label: "Documents Available", value: "SDS / MSDS downloadable; TDS & COA on request" },
     ],
     applications: [
       "Detergent and soap manufacturing where liquid silicate is used in formulation",

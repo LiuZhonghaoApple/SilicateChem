@@ -30,7 +30,7 @@ export const faqItems: FAQItem[] = [
   {
     question: "Can you provide TDS and MSDS documents?",
     answer:
-      `Yes. MSDS, product documents, company credentials, and selected certificates are available from the Downloads page. Batch-specific COA, TDS, and SDS can be requested through the contact form or by email at ${SITE.email}.`,
+      `Yes. MSDS/SDS, representative COA by grade, the product catalogue, company credentials, and ISO/REACH certificates can be downloaded directly from the Downloads page. Batch-specific COA for your shipment lot can be requested through the contact form or by email at ${SITE.email}.`,
   },
   {
     question: "Can you provide batch-specific COA?",

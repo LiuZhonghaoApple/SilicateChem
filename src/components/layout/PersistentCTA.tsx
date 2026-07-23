@@ -45,11 +45,11 @@ export function StickyQuoteBar() {
           Request Sample
         </Link>
         <Link
-          href={rfqContactHref("tds", ctx)}
+          href="/downloads"
           onClick={() => onCtaClick("tds", pathname, ctx, "sticky_bar")}
           className="hidden md:block flex-1 rounded border border-white/80 py-2.5 text-center text-sm font-bold text-white md:flex-none md:px-5 hover:bg-white/10"
         >
-          Get COA / MSDS / TDS
+          Download MSDS / Certificates
         </Link>
         <TrackedWhatsApp
           phone={SITE.whatsapp}

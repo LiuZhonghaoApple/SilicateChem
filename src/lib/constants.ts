@@ -20,6 +20,7 @@ export const NAV_LINKS = [
   { href: "/products", label: "Products" },
   { href: "/applications", label: "Applications" },
   { href: "/certifications", label: "Certifications" },
+  { href: "/downloads", label: "Downloads" },
   { href: "/guides", label: "Guides" },
   { href: "/blog", label: "Blog" },
   { href: "/faq", label: "FAQ" },

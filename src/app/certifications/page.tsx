@@ -74,8 +74,8 @@ const productDocuments = [
     href: "/downloads/documents/msds-sodium-metasilicate-pentahydrate-cn.pdf",
   },
   {
-    title: "Zhongzhi Product Brochure",
-    href: "/downloads/documents/zhongzhi-product-brochure-v2.pdf",
+    title: "Zhongzhi Product Catalogue (EN)",
+    href: "/downloads/documents/zhongzhi-product-catalogue-en.pdf",
   },
 ] as const;
 
