@@ -36,6 +36,8 @@ export const CONTENT_RELEASES: Readonly<Record<string, ContentRelease>> = {
   "/guides/uses-detergent": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/guides/sodium-metasilicate-vs-soda-ash": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/guides/how-to-choose-china-factory": { lastModified: GEO_BASELINE_LAST_MODIFIED },
+  "/guides/pentahydrate-vs-anhydrous": { lastModified: GEO_BASELINE_LAST_MODIFIED },
+  "/guides/granular-vs-powder": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/applications/detergent-industry": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/applications/water-treatment": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/applications/textile-industry": { lastModified: GEO_BASELINE_LAST_MODIFIED },
