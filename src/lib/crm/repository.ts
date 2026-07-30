@@ -177,7 +177,12 @@ export async function getDashboardStats(): Promise<{
     COUNT(*)::int AS total,
     COUNT(*) FILTER (WHERE submitted_at >= NOW() - INTERVAL '30 days')::int AS "last30Days",
     COUNT(*) FILTER (WHERE status = 'new')::int AS "newCount",
-    COUNT(*) FILTER (WHERE status = 'qualified')::int AS "qualifiedCount",
+    -- "有效询盘" canonical definition — MUST match getInquiryFunnel() in
+    -- src/lib/reporting/repository.ts so the overview and the SEO/GEO funnel
+    -- never disagree. Any lead that advanced past 'new' and is not spam/lost.
+    COUNT(*) FILTER (
+      WHERE status IN ('qualified','quoted','sample','negotiating','won')
+    )::int AS "qualifiedCount",
     COUNT(*) FILTER (WHERE status = 'quoted')::int AS "quotedCount",
     COUNT(*) FILTER (WHERE status = 'won')::int AS "wonCount",
     COUNT(*) FILTER (
@@ -187,6 +192,7 @@ export async function getDashboardStats(): Promise<{
     COUNT(*) FILTER (
       WHERE submitted_at >= NOW() - INTERVAL '30 days'
         AND geo_source IS NOT NULL
+        AND status <> 'spam'
     )::int AS "geoCount"
   FROM crm_leads`;
   const result = rows as unknown as Array<{
@@ -221,6 +227,7 @@ export async function getGeoInquiryStats(): Promise<
   FROM crm_leads
   WHERE submitted_at >= NOW() - INTERVAL '30 days'
     AND geo_source IS NOT NULL
+    AND status <> 'spam'
   GROUP BY geo_source
   ORDER BY count DESC`;
   return rows as unknown as Array<{ source: string; count: number }>;

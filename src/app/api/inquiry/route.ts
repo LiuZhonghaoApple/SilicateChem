@@ -23,6 +23,48 @@ type EmailSendResult =
   | { ok: true }
   | { ok: false; reason: "missing_config" | "resend_error"; detail?: string };
 
+const RESEND_MAX_ATTEMPTS = 3;
+
+// Send to Resend with automatic retry on transient failures (network errors,
+// HTTP 429 and 5xx). A positively-rejected request (4xx other than 429) is not
+// retried. Reduces silent email loss without an external queue.
+async function postToResendWithRetry(
+  apiKey: string,
+  body: Record<string, unknown>
+): Promise<{ ok: true } | { ok: false; detail?: string }> {
+  let lastDetail = "";
+  for (let attempt = 1; attempt <= RESEND_MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) return { ok: true };
+      lastDetail = await res.text();
+      const retryable = res.status === 429 || res.status >= 500;
+      console.error(
+        `[INQUIRY] Resend error (attempt ${attempt}/${RESEND_MAX_ATTEMPTS}, status ${res.status}):`,
+        lastDetail
+      );
+      if (!retryable) return { ok: false, detail: lastDetail };
+    } catch (error) {
+      lastDetail = error instanceof Error ? error.message : String(error);
+      console.error(
+        `[INQUIRY] Resend network error (attempt ${attempt}/${RESEND_MAX_ATTEMPTS}):`,
+        lastDetail
+      );
+    }
+    if (attempt < RESEND_MAX_ATTEMPTS) {
+      await new Promise((resolve) => setTimeout(resolve, 300 * attempt));
+    }
+  }
+  return { ok: false, detail: lastDetail };
+}
+
 async function sendInquiryEmail(
   lead: ReturnType<typeof buildStructuredLead>
 ): Promise<EmailSendResult> {
@@ -75,25 +117,16 @@ async function sendInquiryEmail(
     lead.message,
   ].join("\n");
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: toList,
-      subject,
-      text,
-      reply_to: lead.contact.email,
-    }),
+  const sent = await postToResendWithRetry(apiKey, {
+    from,
+    to: toList,
+    subject,
+    text,
+    reply_to: lead.contact.email,
   });
 
-  if (!res.ok) {
-    const detail = await res.text();
-    console.error("[INQUIRY] Resend error:", detail);
-    return { ok: false, reason: "resend_error", detail };
+  if (!sent.ok) {
+    return { ok: false, reason: "resend_error", detail: sent.detail };
   }
 
   return { ok: true };
