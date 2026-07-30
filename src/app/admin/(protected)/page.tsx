@@ -6,6 +6,7 @@ import {
   getProductInquiryStats,
   listLeads,
 } from "@/lib/crm/repository";
+import { getConversionEventFunnel } from "@/lib/reporting/repository";
 import {
   formatAdminDate,
   leadStatusClasses,
@@ -15,13 +16,22 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const [stats, recentLeads, productStats, geoStats, indexNowStatus] = await Promise.all([
+  const [stats, recentLeads, productStats, geoStats, indexNowStatus, activity] = await Promise.all([
     getDashboardStats(),
     listLeads({ limit: 8 }),
     getProductInquiryStats(),
     getGeoInquiryStats(),
     getLatestIndexNowSubmission(),
+    getConversionEventFunnel(30),
   ]);
+
+  const activityCards = [
+    { label: "网站会话（GA4）", value: activity.sessions },
+    { label: "WhatsApp 点击", value: activity.whatsappClicks },
+    { label: "在线咨询开启", value: activity.aiOpens },
+    { label: "询价发起（RFQ）", value: activity.rfqStarts },
+  ];
+  const hasActivity = activityCards.some((card) => card.value > 0);
 
   const cards = [
     { label: "全部询盘", value: stats.total },
@@ -59,6 +69,34 @@ export default async function AdminDashboardPage() {
           </article>
         ))}
       </div>
+
+      <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="font-bold text-[#0B2D5B]">近30天客户行为</h2>
+            <p className="mt-1 text-xs text-[#64748B]">
+              即使还没有正式询盘，这里也能看到网站是否有访客在互动。明细见
+              <Link href="/admin/analytics" className="ml-1 font-semibold text-[#2E7D9A] hover:underline">
+                SEO与流量
+              </Link>
+              。
+            </p>
+          </div>
+          {!hasActivity && (
+            <span className="rounded-full bg-[#F1F5F9] px-3 py-1 text-xs font-semibold text-[#64748B]">
+              近30天暂无互动
+            </span>
+          )}
+        </div>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {activityCards.map((card) => (
+            <div key={card.label} className="rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-4">
+              <p className="text-xs font-semibold text-[#64748B]">{card.label}</p>
+              <p className="mt-1 text-2xl font-bold text-[#0B2D5B]">{card.value}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,1fr)]">
         <section className="overflow-hidden rounded-xl border border-[#DCE4EA] bg-white shadow-sm">
