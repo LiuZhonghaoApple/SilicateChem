@@ -192,24 +192,25 @@ const productLinks = [
   },
 ];
 
-// Real product sample photos (J-product-shots). The sample dishes are marked in
-// Chinese only (0水粒 / 0水粉 / 五水粒 / 五水粉). English grade naming is pending
-// user confirmation, so it is NOT asserted as final copy here.
+// Real product sample photos (J-product-shots). English grade names confirmed:
+// 0水 = Anhydrous, 五水 = Pentahydrate, 粒 = Granular, 粉 = Powder.
 const gradeComparisonImage = {
   src: "/assets/images/products-real/sample-grade-comparison.webp",
-  alt: "Four sample dishes of sodium metasilicate marked 0水粒, 0水粉, 五水粒, 五水粉",
+  alt: "Four sample dishes: Anhydrous Granular, Anhydrous Powder, Pentahydrate Granular, Pentahydrate Powder",
 };
 
 const sampleComparisonPairs = [
   {
     src: "/assets/images/products-real/sample-anhydrous-compare.webp",
-    alt: "Two sample dishes marked 0水粒 (granule) and 0水粉 (powder)",
-    labels: "0水粒 / 0水粉",
+    alt: "Anhydrous sodium metasilicate granular versus powder sample comparison",
+    labels: "Anhydrous — Granular vs Powder",
+    note: "0水粒 / 0水粉",
   },
   {
     src: "/assets/images/products-real/sample-pentahydrate-compare.webp",
-    alt: "Two sample dishes marked 五水粒 (granule) and 五水粉 (powder)",
-    labels: "五水粒 / 五水粉",
+    alt: "Sodium metasilicate pentahydrate granular versus powder sample comparison",
+    labels: "Pentahydrate — Granular vs Powder",
+    note: "五水粒 / 五水粉",
   },
 ] as const;
 
@@ -373,7 +374,7 @@ export default function ProductsPage() {
               />
             </div>
             <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
-              Four samples as marked on the dishes: 0水粒 · 0水粉 · 五水粒 · 五水粉.
+              Anhydrous Granular · Anhydrous Powder · Pentahydrate Granular · Pentahydrate Powder.
             </figcaption>
           </figure>
           <div className="grid gap-6">
@@ -391,17 +392,18 @@ export default function ProductsPage() {
                     className="object-cover"
                   />
                 </div>
-                <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-sm font-semibold text-[#0B2D5B]">
-                  {pair.labels}
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2">
+                  <span className="block text-sm font-semibold text-[#0B2D5B]">{pair.labels}</span>
+                  <span className="mt-0.5 block text-xs text-[#5A6570]">{pair.note}</span>
                 </figcaption>
               </figure>
             ))}
           </div>
         </div>
         <p className="mt-4 text-xs leading-relaxed text-[#5A6570]">
-          Sample dishes are marked in Chinese (0水 = anhydrous, 五水 = pentahydrate,
-          粒 = granule, 粉 = powder). Final English grade names are being confirmed
-          before publishing them as product copy.
+          Naming: 0水 = Anhydrous, 五水 = Pentahydrate, 粒 = Granular, 粉 = Powder.
+          Granular and powder forms are available for selected grades — confirm
+          specification and packing before quotation.
         </p>
       </Section>
 
