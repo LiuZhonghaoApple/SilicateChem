@@ -15,6 +15,43 @@ export const metadata = createMetadata({
   path: "/applications",
 });
 
+// Downstream application fields transcribed from the factory product showroom boards.
+const downstreamApplicationFields = [
+  "Detergents, industrial cleaning agents and metal surface treatment",
+  "Cotton textile scouring and bleaching (pre-treatment)",
+  "Pulp and paper deinking / bleaching aids",
+  "Ceramic grinding aids and concrete water-reducing admixtures",
+  "Refractory agents and plasticity / water-retention aids",
+  "Mineral oil recovery",
+  "Dispersants and quick-drying aids for construction and metallurgy",
+  "Oilfield drilling aids",
+  "Water treatment",
+] as const;
+
+// Product properties transcribed from the showroom product-introduction panels.
+const showroomProductFacts = [
+  {
+    name: "Sodium Metasilicate Pentahydrate / 五水偏硅酸钠",
+    formula: "Na₂SiO₃·5H₂O",
+    appearance: "White granules or powder (crystalline)",
+    facts: [
+      "Relative molecular mass ≈ 212",
+      "Melting point ≈ 72.2 °C",
+      "Bulk density ≈ 0.8–1.0 g/mL",
+    ],
+  },
+  {
+    name: "Anhydrous Sodium Metasilicate / 无水（零水）偏硅酸钠",
+    formula: "Na₂SiO₃",
+    appearance: "White granules or powder",
+    facts: [
+      "Relative molecular mass ≈ 122",
+      "Melting point ≈ 1089 °C",
+      "Bulk density ≈ 1.05–1.35 g/mL",
+    ],
+  },
+] as const;
+
 export default function ApplicationsIndexPage() {
   return (
     <>
@@ -84,6 +121,51 @@ export default function ApplicationsIndexPage() {
             >
               Request Application Quote
             </Link>
+          </div>
+        </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Downstream Application Fields"
+          subtitle="Application fields and product properties transcribed from the factory product showroom."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-bold text-[#0B2D5B]">Where Sodium Metasilicate Is Used</h3>
+            <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+              {downstreamApplicationFields.map((field) => (
+                <li key={field} className="flex items-start gap-2 text-sm text-[#5A6570]">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#2E7D9A]" />
+                  {field}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="grid gap-4">
+            {showroomProductFacts.map((product) => (
+              <div
+                key={product.name}
+                className="rounded-2xl border border-[#D7E6EF] bg-white p-5 shadow-sm"
+              >
+                <h3 className="text-base font-bold text-[#0B2D5B]">{product.name}</h3>
+                <p className="mt-1 text-sm text-[#5A6570]">
+                  <span className="font-semibold">Formula:</span> {product.formula}
+                  <span className="mx-2 text-[#D7E6EF]">|</span>
+                  <span className="font-semibold">Appearance:</span> {product.appearance}
+                </p>
+                <ul className="mt-3 flex flex-wrap gap-2">
+                  {product.facts.map((fact) => (
+                    <li
+                      key={fact}
+                      className="rounded-full border border-[#D7E6EF] bg-[#F2F8FB] px-3 py-1 text-xs font-semibold text-[#1D6680]"
+                    >
+                      {fact}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
       </Section>

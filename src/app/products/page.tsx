@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Breadcrumbs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbSchema, ImageEvidenceSchema } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -192,6 +192,28 @@ const productLinks = [
   },
 ];
 
+// Real product sample photos (J-product-shots). English grade names confirmed:
+// 0水 = Anhydrous, 五水 = Pentahydrate, 粒 = Granular, 粉 = Powder.
+const gradeComparisonImage = {
+  src: "/assets/images/products-real/sample-grade-comparison.webp",
+  alt: "Four sample dishes: Anhydrous Granular, Anhydrous Powder, Pentahydrate Granular, Pentahydrate Powder",
+};
+
+const sampleComparisonPairs = [
+  {
+    src: "/assets/images/products-real/sample-anhydrous-compare.webp",
+    alt: "Anhydrous sodium metasilicate granular versus powder sample comparison",
+    labels: "Anhydrous — Granular vs Powder",
+    note: "0水粒 / 0水粉",
+  },
+  {
+    src: "/assets/images/products-real/sample-pentahydrate-compare.webp",
+    alt: "Sodium metasilicate pentahydrate granular versus powder sample comparison",
+    labels: "Pentahydrate — Granular vs Powder",
+    note: "五水粒 / 五水粉",
+  },
+] as const;
+
 export const metadata = createMetadata({
   title: "Sodium Metasilicate Grade Selection & RFQ",
   description:
@@ -206,6 +228,18 @@ export default function ProductsPage() {
         items={[
           { name: "Home", url: SITE.url },
           { name: "Products", url: `${SITE.url}/products` },
+        ]}
+      />
+      <ImageEvidenceSchema
+        pageUrl={`${SITE.url}/products`}
+        images={[
+          {
+            src: gradeComparisonImage.src,
+            caption:
+              "Anhydrous Granular, Anhydrous Powder, Pentahydrate Granular and Pentahydrate Powder sodium metasilicate samples.",
+          },
+          { src: "/assets/images/products-real/sample-powder.webp", caption: "Sodium metasilicate powder sample." },
+          ...sampleComparisonPairs.map((pair) => ({ src: pair.src, caption: `${pair.labels} — ${pair.note}.` })),
         ]}
       />
 
@@ -333,6 +367,56 @@ export default function ProductsPage() {
             </Link>
           ))}
         </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Product Grades & Forms — Sample Comparison"
+          subtitle="Real factory samples comparing anhydrous vs pentahydrate and granular vs powder forms."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+          <figure className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+              <Image
+                src={gradeComparisonImage.src}
+                alt={gradeComparisonImage.alt}
+                fill
+                sizes="(min-width: 1024px) 640px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+              Anhydrous Granular · Anhydrous Powder · Pentahydrate Granular · Pentahydrate Powder.
+            </figcaption>
+          </figure>
+          <div className="grid gap-6">
+            {sampleComparisonPairs.map((pair) => (
+              <figure
+                key={pair.src}
+                className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                  <Image
+                    src={pair.src}
+                    alt={pair.alt}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2">
+                  <span className="block text-sm font-semibold text-[#0B2D5B]">{pair.labels}</span>
+                  <span className="mt-0.5 block text-xs text-[#5A6570]">{pair.note}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+        <p className="mt-4 text-xs leading-relaxed text-[#5A6570]">
+          Naming: 0水 = Anhydrous, 五水 = Pentahydrate, 粒 = Granular, 粉 = Powder.
+          Granular and powder forms are available for selected grades — confirm
+          specification and packing before quotation.
+        </p>
       </Section>
 
       <Section background="grey">

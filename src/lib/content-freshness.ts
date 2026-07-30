@@ -16,6 +16,7 @@ export type ContentRelease = {
 export const CONTENT_RELEASES: Readonly<Record<string, ContentRelease>> = {
   "": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/about": { lastModified: GEO_BASELINE_LAST_MODIFIED },
+  "/manufacturing": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/contact": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/faq": { lastModified: GEO_BASELINE_LAST_MODIFIED },
   "/export": { lastModified: GEO_BASELINE_LAST_MODIFIED },
