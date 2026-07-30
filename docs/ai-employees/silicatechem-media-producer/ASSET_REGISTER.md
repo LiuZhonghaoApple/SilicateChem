@@ -45,3 +45,38 @@
   "review_status": "draft|human_review|approved|blocked"
 }
 ```
+
+## 新素材登记：silicatechem-factory-assets（2026-07-30）
+
+来源：用户提供的 `silicatechem-factory-assets.zip`（用户上传，company-owned，多张带“众智化工科技 / Zhongzhi Tech”水印）。
+拍摄日期与授权状态用户未提供，`filmed_at` 记为 unknown，`consent_status` 记为 user_provided。
+
+> **重要：文件名不可信。** 处理时按图片实际内容归类，发现多处文件名与内容不符（见下方“文件名与内容不符记录”）。
+
+| derived_file（网页路径） | source_file（原始，按实际内容） | category | evidence_status | target_page | review_status |
+|---|---|---|---|---|---|
+| /assets/images/facility/facility-park-main.webp | A-park-exterior/park-exterior-02-signboard-walkway.jpg | visit（厂区实景） | user_provided | /about | draft |
+| /assets/images/facility/facility-storage-tanks.webp | A-park-exterior/park-exterior-03-storage-tanks.jpg | visit | user_provided | /about | draft |
+| /assets/images/facility/facility-park-grounds.webp | A-park-exterior/park-exterior-01-entrance-rockery.jpg | visit | user_provided | /about | draft |
+| /assets/images/manufacturing/production-mixing-tank.webp | D-showroom-boards/showroom-02-product-intro-panels.jpg（实为搅拌罐设备） | production | user_provided | /about | draft |
+| /assets/images/manufacturing/production-drum-mill-01.webp | B-production-equipment/production-03-conical-tanks-overview.jpg（实为卧式回转筒磨机） | production | user_provided | /about | draft |
+| /assets/images/manufacturing/production-drum-mill-02.webp | B-production-equipment/production-04-rotary-kiln-angle2.jpg（实为同一磨机另一角度） | production | user_provided | /about | draft |
+| /assets/images/manufacturing/production-blending-hoppers.webp | B-production-equipment/production-02-mixer-tank.jpg（锥底料仓+皮带,标注成品仓） | production | user_provided | /about | draft |
+| /assets/images/manufacturing/production-finished-silos.webp | B-production-equipment/production-05-conical-tanks-closeup.jpg（两座成品仓） | production | user_provided | /about | draft |
+| /assets/images/masterplan/masterplan-rendering-aerial.webp | C-masterplan-renderings/masterplan-01-aerial-with-pool.jpg | illustrative（规划效果图，非实景） | illustrative | /about | draft |
+| /assets/images/masterplan/masterplan-rendering-blue-roof.webp | C-masterplan-renderings/masterplan-02-blue-roof-buildings.jpg | illustrative | illustrative | /about | draft |
+| /assets/images/export-loading/export-container-loading-forklift.webp | F-export-loading/export-02-container-truck-warehouse.png | shipment（装柜实拍） | user_provided | /export | draft |
+| /assets/images/export-loading/export-container-loading-dock.webp | F-export-loading/export-01-forklift-container-loading.png | shipment | user_provided | /export | draft |
+
+### 文件名与内容不符记录（按实际内容归类，未按文件名）
+
+- `B-production-equipment/production-01-rotary-kiln-clean.png` 与 `F-export-loading/export-01-forklift-container-loading.png` **md5 完全相同**（同一张图，内容是仓库内集装箱装柜，非回转窑）→ 仅作为出口装柜图使用，未计入设备图。
+- `B-production-equipment/production-06-mill-equipment.jpg` 实为展厅“产品介绍区”文字展板（非磨机设备）→ 归入 D 文字提取，不作设备图上站。
+- `D-showroom-boards/showroom-02-product-intro-panels.jpg` 实为“搅拌罐”设备实拍 → 归入生产设备图。
+- `production-03`/`production-04` 文件名写“conical-tanks/rotary-kiln”，实为卧式回转筒磨机；`production-02` 文件名写“mixer-tank”，实为锥底料仓+皮带输送。设备图说明按图中可见内容和可见铭牌（搅拌罐 / 成品仓）撰写，未编造容量、温度、型号等参数。
+
+### 未使用 / 待确认
+
+- `E-needs-confirmation/UNCONFIRMED-flame-retardant-line.jpg`：本次不使用，等待用户确认后再处理。
+- D 类展板原图（showroom-01 下游应用领域、产品介绍区展板）不上站，仅提取文字（下游应用分类、分子式/性状/相对分子量/熔点/堆积密度）用于 `/applications` 文案补充。
+- C 类效果图严格标注为“Industrial Park Master Plan (Rendering) / 产业园规划效果图”，页面加“Master Plan Rendering”角标并注明非已完工实景。
