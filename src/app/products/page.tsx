@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Breadcrumbs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbSchema, ImageEvidenceSchema } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -228,6 +228,18 @@ export default function ProductsPage() {
         items={[
           { name: "Home", url: SITE.url },
           { name: "Products", url: `${SITE.url}/products` },
+        ]}
+      />
+      <ImageEvidenceSchema
+        pageUrl={`${SITE.url}/products`}
+        images={[
+          {
+            src: gradeComparisonImage.src,
+            caption:
+              "Anhydrous Granular, Anhydrous Powder, Pentahydrate Granular and Pentahydrate Powder sodium metasilicate samples.",
+          },
+          { src: "/assets/images/products-real/sample-powder.webp", caption: "Sodium metasilicate powder sample." },
+          ...sampleComparisonPairs.map((pair) => ({ src: pair.src, caption: `${pair.labels} — ${pair.note}.` })),
         ]}
       />
 

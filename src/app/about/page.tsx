@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbSchema, ImageEvidenceSchema } from "@/components/seo/JsonLd";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
@@ -187,6 +187,16 @@ export default function AboutPage() {
           { name: "About Us", url: `${SITE.url}/about` },
         ]}
       />
+      <ImageEvidenceSchema
+        pageUrl={`${SITE.url}/about`}
+        images={[
+          { src: facilityMainImage.src, caption: facilityMainImage.caption },
+          { src: inventoryMainImage.src, caption: inventoryMainImage.caption },
+          { src: inventoryGallery[1].src, caption: inventoryGallery[1].caption },
+          { src: "/assets/images/lab/lab-main.webp", caption: "Quality-control laboratory and analysis bench." },
+          { src: packagingMainImage.src, caption: packagingMainImage.caption },
+        ]}
+      />
 
       <Section background="grey" className="pt-12 md:pt-16">
         <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
@@ -353,6 +363,17 @@ export default function AboutPage() {
                 </p>
               </div>
             ))}
+            <p className="text-sm leading-relaxed text-[#5A6570]">
+              Testing and management systems are backed by{" "}
+              <Link href="/certifications" className="font-semibold text-[#2E7D9A] hover:underline">
+                ISO 9001 / ISO 14001 certificates
+              </Link>{" "}
+              and per-batch{" "}
+              <Link href="/downloads" className="font-semibold text-[#2E7D9A] hover:underline">
+                COA / TDS documents
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </Section>
@@ -511,6 +532,18 @@ export default function AboutPage() {
             {inventoryWideImage.caption}
           </figcaption>
         </figure>
+        <p className="mt-4 text-sm leading-relaxed text-[#5A6570]">
+          Export bags are marked Sodium Metasilicate Pentahydrate, UN 3253, Class 8,
+          Packing Group III, Made in China. Verify against the{" "}
+          <Link href="/downloads" className="font-semibold text-[#2E7D9A] hover:underline">
+            MSDS and COA documents
+          </Link>{" "}
+          or request current stock and batch details via the{" "}
+          <Link href="/export" className="font-semibold text-[#2E7D9A] hover:underline">
+            export page
+          </Link>
+          .
+        </p>
       </Section>
 
       <Section>

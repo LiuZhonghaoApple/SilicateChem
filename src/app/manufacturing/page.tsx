@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbSchema, ImageEvidenceSchema } from "@/components/seo/JsonLd";
 import { SITE } from "@/lib/constants";
 import { createMetadata } from "@/lib/metadata";
 
@@ -99,6 +99,13 @@ export default function ManufacturingPage() {
           { name: "Home", url: SITE.url },
           { name: "Manufacturing", url: `${SITE.url}/manufacturing` },
         ]}
+      />
+      <ImageEvidenceSchema
+        pageUrl={`${SITE.url}/manufacturing`}
+        images={productionEquipment.map((item) => ({
+          src: item.src,
+          caption: `${item.title} — ${item.stage}. ${item.description}`,
+        }))}
       />
 
       <div className="border-b border-[#D7E6EF] bg-[#0B2D5B] text-white">

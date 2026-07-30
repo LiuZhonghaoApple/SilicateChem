@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageCTAs } from "@/components/layout/PageHeader";
 import { Section, SectionHeader } from "@/components/ui/Section";
-import { BreadcrumbSchema } from "@/components/seo/JsonLd";
+import { BreadcrumbSchema, ImageEvidenceSchema } from "@/components/seo/JsonLd";
 import {
   EXPORT_COUNTRIES,
   EXPORT_DATA_DISCLAIMER,
@@ -99,6 +99,13 @@ export default function ExportPage() {
           { name: "Home", url: SITE.url },
           { name: "Export", url: `${SITE.url}/export` },
         ]}
+      />
+      <ImageEvidenceSchema
+        pageUrl={`${SITE.url}/export`}
+        images={containerLoadingPhotos.map((photo) => ({
+          src: photo.src,
+          caption: `${photo.title}. ${photo.description}`,
+        }))}
       />
 
       <div className="border-b border-[#D7E6EF] bg-[#0B2D5B] text-white">
