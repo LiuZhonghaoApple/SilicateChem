@@ -110,3 +110,16 @@
 - J 规格英文命名（Anhydrous Granular/Powder、Pentahydrate Granular/Powder）**待用户二次确认**，页面仅用中文样品标注（0水粒/0水粉/五水粒/五水粉）+ 待定说明，未把英文当定稿。
 - **E-needs-confirmation（5 张，含固体阻燃产线/粘胶纤维/机械臂/工人装袋）全部未使用**，等待用户确认是否属同一工厂/同一偏硅酸钠产线。
 - 品牌水印：多张图带“众智化工科技 / Zhongzhi Tech”水印（保留原图，未改图内容）。是否统一/去除水印待用户确认。
+
+## 用户确认后的处理（2026-07-30，第三批）
+
+用户逐项确认，已按下述执行：
+
+1. **规格英文命名已定稿** → 0水粒/0水粉/五水粒/五水粉 = Anhydrous Granular / Anhydrous Powder / Pentahydrate Granular / Pentahydrate Powder；`/products` 规格对比模块已用英文定稿（中文作副标注保留）。
+2. **他司标签留样图不使用** → `H/lab-06`（青岛嘉润标签）确认不用，从未进入 `public/`，无需删除；登记标记为 blocked。
+3. **统一去除水印** → 对带“众智化工科技”角标的 6 张实景（facility 3 张 + inventory-main + lab-main + packaging-main）用 cv2 inpaint / 逐行插值 / 邻域补丁去除水印，仅处理水印区域，未改动其余画面内容；已覆盖 `public/` 对应文件。
+4. **统一工厂、统一产线** → 用户确认为同一工厂同一产线，各板块跨页引用一致。
+5. **独立路由** → 新建 `/manufacturing`（工艺流程页）：B 设备内容从 `/about` 迁入，含 Process Overview + 设备图；已接入导航 `NAV_LINKS`、`sitemap` INDEXABLE_STATIC、`content-freshness` 登记；`/about` 保留跳转入口。
+6. **画廊补充** → 新增 3 张：`warehouse-18`（叉车/缠膜区）、`warehouse-22`（仓库全景规模）入现货板块；`lab-01`（滴定台+马弗炉）入质检板块。
+
+> 注：`E-needs-confirmation` 用户确认为同一工厂同一产线“可以使用”，但本批未新增使用 E 图（E 内容偏固体阻燃产线，与当前偏硅酸钠页面主题关联度低）。如需将 E 用于特定板块，请指明目标页面与用途。
