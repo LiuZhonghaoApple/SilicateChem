@@ -20,7 +20,7 @@
 | 询盘管理 | `/admin/inquiries` | 列表、筛选、状态、优先级、负责人、跟进、备注、详情 |
 | SEO 与流量 | `/admin/analytics` | GA4/GSC 同步、询盘漏斗、GEO/AI 引用观察 |
 | 外链管理 | `/admin/backlinks` | 基线、候选台账、状态、归因（当前 30 条） |
-| AI 物料工作台 | `/admin/media-ai` | 任务、上传、草稿、审核（上传依赖 `BLOB_READ_WRITE_TOKEN`，见待修 P1） |
+| AI 物料工作台 | `/admin/media-ai` | 任务、上传、草稿、审核（Blob 存储 `silicatechem-media` 已开通，上传可用） |
 
 ## 2. 询盘链路（务必理解）
 
@@ -54,10 +54,10 @@
 | 优先级 | 待修项 | 说明 | 涉及文件 |
 |---|---|---|---|
 | ~~P0~~ 已修 | ~~Turnstile 客户端加载失败的根因修复~~ | **已完成（2026-07-30）**：客户端加 8s 超时看门狗 + 幂等完成逻辑 + script.onerror，加载失败即放行不再挂起；服务端改非阻断（仅拒明确无效 token，缺 token 则放行+记日志）。Turnstile 环境变量当前仍按运营决定保持移除（关闭），代码已可安全随时开回。 | `src/components/forms/TurnstileField.tsx`、`src/components/forms/InquiryForm.tsx`、`src/app/api/inquiry/route.ts`、`src/lib/validation.ts` |
-| P1 | 两套"有效询盘"口径不一致 | 总览用 `status='qualified'`；漏斗把 `qualified/quoted/sample/negotiating/won` 都算，两数不可直接比 | `src/lib/crm/repository.ts`、`src/lib/reporting/repository.ts` |
-| P1 | AI 来源询盘未排除 spam | "AI来源询盘(30天)"未排除 `spam` 状态，垃圾询盘可能被计入 | `src/lib/crm/repository.ts` |
-| P1 | `BLOB_READ_WRITE_TOKEN` 缺失致物料上传 503 | AI 物料上传接口当前不可用 | Vercel 环境变量、`src/app/api/admin/media-ai/upload/route.ts` |
-| P2 | Resend 邮件失败无自动重试 | 失败仅靠后台 `email_delivery_status` 人工发现，无队列/重试/告警 | `src/app/api/inquiry/route.ts` |
+| ~~P1~~ 已修 | ~~两套"有效询盘"口径不一致~~ | **已完成（2026-07-30）**：总览 `qualifiedCount` 改用与漏斗一致的 `status IN ('qualified','quoted','sample','negotiating','won')`，两处数字统一。 | `src/lib/crm/repository.ts` |
+| ~~P1~~ 已修 | ~~AI 来源询盘未排除 spam~~ | **已完成（2026-07-30）**：`geoCount` 与 `getGeoInquiryStats` 均加 `AND status <> 'spam'`。 | `src/lib/crm/repository.ts` |
+| ~~P1~~ 已修 | ~~`BLOB_READ_WRITE_TOKEN` 缺失致物料上传 503~~ | **已完成（2026-07-30）**：创建 public Blob 存储 `silicatechem-media` 并连到项目，`BLOB_READ_WRITE_TOKEN` 已注入三环境，重新部署后上传可用。 | Vercel 环境变量、`src/app/api/admin/media-ai/upload/route.ts` |
+| ~~P2~~ 已修 | ~~Resend 邮件失败无自动重试~~ | **已完成（2026-07-30）**：发信在 429/5xx/网络错误时自动重试 3 次（指数退避）。 | `src/app/api/inquiry/route.ts` |
 
 ## 5. 运营红线
 
