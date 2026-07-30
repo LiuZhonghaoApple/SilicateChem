@@ -34,6 +34,15 @@
 - 收件人/发件人由 Vercel 变量 `INQUIRY_TO_EMAIL` / `INQUIRY_FROM_EMAIL` 控制；代码按逗号拆分支持多收件人（`src/app/api/inquiry/route.ts`）。
 - **为何不发 info@**：阿里企业邮箱有"本域反仿冒"规则，会拦掉一切"外部系统寄来、却声称来自 @silicatechem.com"的邮件（notify@ / inquiry@ 均被拦，Gmail 无此规则）。若日后要让 info@ 也收，需在阿里企业邮箱后台把发信来源加白名单，属人工操作。
 
+### 总览页 GEO/AI 面板（2026-07-30 优化）
+
+总览页"近30天 GEO / AI 来源"面板原先只统计 `crm_leads` 里带 `geo_source` 的**已提交询盘**，leads=0 时一片空白，会误以为 AI 渠道无动静。已改为两层：
+
+- **AI 来源询盘**：已提交的 AI 渠道询盘（`getGeoInquiryStats`，lead 维度）。
+- **AI 来源访客活跃**（新增）：`getGeoSourceActivity`，从 `conversion_events` 按 `geo_source` 统计近30天访客数与 RFQ 发起数，即使尚未转化为 lead 也能显示（如 `chatgpt — N 访客 · M 次 RFQ`）。
+
+同理，总览页顶部另有"近30天客户行为"卡片（`getConversionEventFunnel`）：会话/WhatsApp点击/在线咨询/RFQ 发起，避免 leads=0 时整页显示为空。
+
 ### 在线客服 "Sales & Support"（2026-07-30 去 AI 化）
 
 - 组件 `src/components/ai/ProcurementAdvisor.tsx`，对外统一显示 **"Sales & Support"**，以真人客服口吻接待，不再出现 "AI/Advisor" 字样；对话引擎（`src/app/api/ai-advisor/route.ts`）也被要求以销售团队身份说话、不自称 AI。
