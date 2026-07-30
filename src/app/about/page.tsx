@@ -76,6 +76,80 @@ const qualityPoints = [
   },
 ];
 
+// Real on-site facility photos (A-park-exterior). One main image + gallery.
+const facilityMainImage = {
+  src: "/assets/images/facility/facility-park-main.webp",
+  alt: "Shandong Zhongzhi Chemical plant buildings, grounds and storage tanks",
+  caption: "Plant buildings and landscaped grounds at the Changyi, Shandong facility.",
+};
+
+const facilityGallery = [
+  {
+    src: "/assets/images/facility/facility-storage-tanks.webp",
+    alt: "Row of on-site storage tanks along the plant road at the Zhongzhi facility",
+    caption: "On-site storage tanks along the plant road.",
+  },
+  {
+    src: "/assets/images/facility/facility-park-grounds.webp",
+    alt: "Landscaped entrance grounds and workshop building at the Zhongzhi facility",
+    caption: "Entrance grounds and workshop building.",
+  },
+] as const;
+
+// Real production-equipment photos. Captions describe only what is visible on site
+// (equipment type and process stage) — no capacities, temperatures, or model data.
+const productionEquipment = [
+  {
+    src: "/assets/images/manufacturing/production-mixing-tank.webp",
+    alt: "Vertical agitated mixing tank marked 搅拌罐 on the Zhongzhi production line",
+    title: "Agitated Mixing Tank",
+    description:
+      "Vertical agitated tank marked on site as 搅拌罐 (mixing tank), with a top-mounted drive — part of the liquid mixing / dissolving stage.",
+  },
+  {
+    src: "/assets/images/manufacturing/production-drum-mill-01.webp",
+    alt: "Horizontal rotary drum mill with girth-gear drive and overhead feed hopper",
+    title: "Rotary Drum Mill",
+    description:
+      "Horizontal girth-gear-driven rotary drum fed by an overhead conical hopper — used in the grinding / material sizing stage.",
+  },
+  {
+    src: "/assets/images/manufacturing/production-drum-mill-02.webp",
+    alt: "Second view of the horizontal rotary drum milling equipment and feed platform",
+    title: "Milling Equipment (Alternate View)",
+    description:
+      "Alternate view of the same rotary drum milling equipment, feed platform and drive assembly.",
+  },
+  {
+    src: "/assets/images/manufacturing/production-blending-hoppers.webp",
+    alt: "Conical-bottom hoppers feeding a belt conveyor, one bin marked 成品仓",
+    title: "Hoppers & Conveying",
+    description:
+      "Conical-bottom hoppers (one bin marked 成品仓, finished-product bin) discharging onto belt conveyors — material handling and transfer stage.",
+  },
+  {
+    src: "/assets/images/manufacturing/production-finished-silos.webp",
+    alt: "Two large conical-bottom finished-product silos marked 成品仓 with conveyors",
+    title: "Finished-Product Silos",
+    description:
+      "Two large conical-bottom silos marked 成品仓 (finished-product silo) discharging onto conveyors — finished-product storage and transfer.",
+  },
+] as const;
+
+// Industrial park master plan — architectural RENDERINGS, not completed facilities.
+const masterPlanRenderings = [
+  {
+    src: "/assets/images/masterplan/masterplan-rendering-aerial.webp",
+    alt: "Aerial architectural rendering of the planned industrial park layout",
+    caption: "Aerial rendering of the planned industrial park layout.",
+  },
+  {
+    src: "/assets/images/masterplan/masterplan-rendering-blue-roof.webp",
+    alt: "Architectural rendering of planned workshop buildings in the industrial park",
+    caption: "Rendering of planned workshop buildings and site layout.",
+  },
+] as const;
+
 export default function AboutPage() {
   return (
     <>
@@ -218,6 +292,116 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </Section>
+
+      <Section>
+        <SectionHeader
+          title="Factory Facility"
+          subtitle="Real photos of the Zhongzhi manufacturing base in Changyi, Shandong."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-stretch">
+          <figure className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+              <Image
+                src={facilityMainImage.src}
+                alt={facilityMainImage.alt}
+                fill
+                sizes="(min-width: 1024px) 720px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+              {facilityMainImage.caption}
+            </figcaption>
+          </figure>
+          <div className="grid gap-6">
+            {facilityGallery.map((image) => (
+              <figure
+                key={image.src}
+                className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                  {image.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Production Process & Equipment"
+          subtitle="On-site production equipment across the mixing, milling, conveying, and finished-product storage stages."
+        />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {productionEquipment.map((item) => (
+            <figure
+              key={item.src}
+              className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+            >
+              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="flex flex-1 flex-col p-5">
+                <h3 className="text-base font-bold text-[#0B2D5B]">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#5A6570]">
+                  {item.description}
+                </p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <p className="mt-4 text-xs leading-relaxed text-[#5A6570]">
+          Captions describe equipment visible in each photo and the related process
+          stage. Specific capacities and process parameters are confirmed on request.
+        </p>
+      </Section>
+
+      <Section>
+        <SectionHeader
+          title="Industrial Park Master Plan (Rendering)"
+          subtitle="产业园规划效果图 — architectural renderings of the planned industrial park, not photographs of completed facilities."
+        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          {masterPlanRenderings.map((image) => (
+            <figure
+              key={image.src}
+              className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+            >
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+                <span className="absolute left-3 top-3 rounded-full bg-[#0B2D5B]/85 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white">
+                  Master Plan Rendering
+                </span>
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+                {image.caption}
+              </figcaption>
+            </figure>
+          ))}
         </div>
       </Section>
 
