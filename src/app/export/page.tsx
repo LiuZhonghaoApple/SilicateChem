@@ -64,6 +64,25 @@ const loadingImages = [
   },
 ] as const;
 
+// Real container-loading photos (F-export-loading). Captions describe the visible
+// loading operation only — no shipping line, route, or vessel details are claimed.
+const containerLoadingPhotos = [
+  {
+    src: "/assets/images/export-loading/export-container-loading-forklift.webp",
+    alt: "Forklift loading palletized bags of sodium metasilicate into a shipping container on a truck",
+    title: "Container Loading in Progress",
+    description:
+      "Forklift moving palletized bags into a shipping container mounted on the trailer.",
+  },
+  {
+    src: "/assets/images/export-loading/export-container-loading-dock.webp",
+    alt: "Shipping container positioned at the warehouse loading ramp during container stuffing",
+    title: "Loading Ramp & Container",
+    description:
+      "Container positioned at the warehouse loading ramp with staged finished goods alongside.",
+  },
+] as const;
+
 const rfqItems = [
   "Product grade and target specification",
   "Packing preference: 25 kg bag, neutral bag, printed bag or jumbo bag",
@@ -275,6 +294,35 @@ export default function ExportPage() {
       </Section>
 
       <Section background="grey">
+        <SectionHeader
+          title="Container Loading — Actual Operation"
+          subtitle="Photos from real container-stuffing operations at the warehouse, showing hands-on loading capability. Shipping line, route, and vessel are arranged per order and are not shown here."
+        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          {containerLoadingPhotos.map((photo) => (
+            <figure
+              key={photo.src}
+              className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+            >
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-3">
+                <p className="text-sm font-bold text-[#0B2D5B]">{photo.title}</p>
+                <p className="mt-1 text-sm text-[#5A6570]">{photo.description}</p>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
+
+      <Section>
         <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
           <div className="rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2E7D9A]">
