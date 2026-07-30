@@ -53,7 +53,7 @@
 
 | 优先级 | 待修项 | 说明 | 涉及文件 |
 |---|---|---|---|
-| P0 | Turnstile 客户端加载失败的根因修复 | 现已用"移除环境变量"临时绕过让表单可用；组件层缺少脚本 load/error/超时/重试兜底，`InquiryForm` 的 optional execute 会静默挂起 | `src/components/forms/TurnstileField.tsx`、`src/components/forms/InquiryForm.tsx` |
+| ~~P0~~ 已修 | ~~Turnstile 客户端加载失败的根因修复~~ | **已完成（2026-07-30）**：客户端加 8s 超时看门狗 + 幂等完成逻辑 + script.onerror，加载失败即放行不再挂起；服务端改非阻断（仅拒明确无效 token，缺 token 则放行+记日志）。Turnstile 环境变量当前仍按运营决定保持移除（关闭），代码已可安全随时开回。 | `src/components/forms/TurnstileField.tsx`、`src/components/forms/InquiryForm.tsx`、`src/app/api/inquiry/route.ts`、`src/lib/validation.ts` |
 | P1 | 两套"有效询盘"口径不一致 | 总览用 `status='qualified'`；漏斗把 `qualified/quoted/sample/negotiating/won` 都算，两数不可直接比 | `src/lib/crm/repository.ts`、`src/lib/reporting/repository.ts` |
 | P1 | AI 来源询盘未排除 spam | "AI来源询盘(30天)"未排除 `spam` 状态，垃圾询盘可能被计入 | `src/lib/crm/repository.ts` |
 | P1 | `BLOB_READ_WRITE_TOKEN` 缺失致物料上传 503 | AI 物料上传接口当前不可用 | Vercel 环境变量、`src/app/api/admin/media-ai/upload/route.ts` |
