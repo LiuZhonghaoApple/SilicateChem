@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#E2E6EA] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex w-full items-center justify-between px-3 py-3 sm:px-4 lg:pl-6 lg:pr-6 xl:pl-8 2xl:pl-12">
+      <div className="mx-auto flex w-full items-center justify-between px-3 py-3 sm:px-4 lg:pl-6 lg:pr-6 xl:pl-8 2xl:pl-12 min-[1560px]:max-w-[1720px]">
         <Link href="/" className="flex shrink-0 items-center gap-3">
           <Image
             src="/assets/images/zhongzhi-logo-nav.png"
