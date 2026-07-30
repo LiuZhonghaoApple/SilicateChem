@@ -192,6 +192,27 @@ const productLinks = [
   },
 ];
 
+// Real product sample photos (J-product-shots). The sample dishes are marked in
+// Chinese only (0水粒 / 0水粉 / 五水粒 / 五水粉). English grade naming is pending
+// user confirmation, so it is NOT asserted as final copy here.
+const gradeComparisonImage = {
+  src: "/assets/images/products-real/sample-grade-comparison.webp",
+  alt: "Four sample dishes of sodium metasilicate marked 0水粒, 0水粉, 五水粒, 五水粉",
+};
+
+const sampleComparisonPairs = [
+  {
+    src: "/assets/images/products-real/sample-anhydrous-compare.webp",
+    alt: "Two sample dishes marked 0水粒 (granule) and 0水粉 (powder)",
+    labels: "0水粒 / 0水粉",
+  },
+  {
+    src: "/assets/images/products-real/sample-pentahydrate-compare.webp",
+    alt: "Two sample dishes marked 五水粒 (granule) and 五水粉 (powder)",
+    labels: "五水粒 / 五水粉",
+  },
+] as const;
+
 export const metadata = createMetadata({
   title: "Sodium Metasilicate Grade Selection & RFQ",
   description:
@@ -333,6 +354,55 @@ export default function ProductsPage() {
             </Link>
           ))}
         </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Product Grades & Forms — Sample Comparison"
+          subtitle="Real factory samples comparing anhydrous vs pentahydrate and granular vs powder forms."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:items-start">
+          <figure className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+              <Image
+                src={gradeComparisonImage.src}
+                alt={gradeComparisonImage.alt}
+                fill
+                sizes="(min-width: 1024px) 640px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+              Four samples as marked on the dishes: 0水粒 · 0水粉 · 五水粒 · 五水粉.
+            </figcaption>
+          </figure>
+          <div className="grid gap-6">
+            {sampleComparisonPairs.map((pair) => (
+              <figure
+                key={pair.src}
+                className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                  <Image
+                    src={pair.src}
+                    alt={pair.alt}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-sm font-semibold text-[#0B2D5B]">
+                  {pair.labels}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+        <p className="mt-4 text-xs leading-relaxed text-[#5A6570]">
+          Sample dishes are marked in Chinese (0水 = anhydrous, 五水 = pentahydrate,
+          粒 = granule, 粉 = powder). Final English grade names are being confirmed
+          before publishing them as product copy.
+        </p>
       </Section>
 
       <Section background="grey">
