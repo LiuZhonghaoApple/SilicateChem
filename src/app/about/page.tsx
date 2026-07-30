@@ -96,46 +96,6 @@ const facilityGallery = [
   },
 ] as const;
 
-// Real production-equipment photos. Captions describe only what is visible on site
-// (equipment type and process stage) — no capacities, temperatures, or model data.
-const productionEquipment = [
-  {
-    src: "/assets/images/manufacturing/production-mixing-tank.webp",
-    alt: "Vertical agitated mixing tank marked 搅拌罐 on the Zhongzhi production line",
-    title: "Agitated Mixing Tank",
-    description:
-      "Vertical agitated tank marked on site as 搅拌罐 (mixing tank), with a top-mounted drive — part of the liquid mixing / dissolving stage.",
-  },
-  {
-    src: "/assets/images/manufacturing/production-drum-mill-01.webp",
-    alt: "Horizontal rotary drum mill with girth-gear drive and overhead feed hopper",
-    title: "Rotary Drum Mill",
-    description:
-      "Horizontal girth-gear-driven rotary drum fed by an overhead conical hopper — used in the grinding / material sizing stage.",
-  },
-  {
-    src: "/assets/images/manufacturing/production-drum-mill-02.webp",
-    alt: "Second view of the horizontal rotary drum milling equipment and feed platform",
-    title: "Milling Equipment (Alternate View)",
-    description:
-      "Alternate view of the same rotary drum milling equipment, feed platform and drive assembly.",
-  },
-  {
-    src: "/assets/images/manufacturing/production-blending-hoppers.webp",
-    alt: "Conical-bottom hoppers feeding a belt conveyor, one bin marked 成品仓",
-    title: "Hoppers & Conveying",
-    description:
-      "Conical-bottom hoppers (one bin marked 成品仓, finished-product bin) discharging onto belt conveyors — material handling and transfer stage.",
-  },
-  {
-    src: "/assets/images/manufacturing/production-finished-silos.webp",
-    alt: "Two large conical-bottom finished-product silos marked 成品仓 with conveyors",
-    title: "Finished-Product Silos",
-    description:
-      "Two large conical-bottom silos marked 成品仓 (finished-product silo) discharging onto conveyors — finished-product storage and transfer.",
-  },
-] as const;
-
 // Industrial park master plan — architectural RENDERINGS, not completed facilities.
 const masterPlanRenderings = [
   {
@@ -168,7 +128,19 @@ const inventoryGallery = [
     alt: "Close-up of export bags printed Sodium Metasilicate Pentahydrate, UN 3253, Class 8, Made in China",
     caption: "Export bag marking: Sodium Metasilicate Pentahydrate, UN 3253, Class 8.",
   },
+  {
+    src: "/assets/images/warehouse/inventory-forklift.webp",
+    alt: "Forklift and palletized sodium metasilicate pentahydrate bags in the packing and staging area",
+    caption: "Palletizing and stretch-wrap staging area.",
+  },
 ] as const;
+
+// Wide warehouse hall showing storage scale.
+const inventoryWideImage = {
+  src: "/assets/images/warehouse/inventory-scale-hall.webp",
+  alt: "Wide view of the warehouse hall with rows of palletized and tarped sodium metasilicate stacks",
+  caption: "Warehouse hall with palletized and bulk-wrapped finished-goods stacks.",
+};
 
 // Raw-material storage (I-raw-material-storage). Different piles are NOT assumed to
 // be the same material — colors differ between piles.
@@ -354,6 +326,20 @@ export default function AboutPage() {
                 Instrument analysis and retained-sample storage.
               </figcaption>
             </figure>
+            <figure className="overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src="/assets/images/lab/lab-titration.webp"
+                  alt="Titration glassware bench with a muffle furnace and temperature controller in the laboratory"
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                />
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                Titration glassware and muffle furnace for specification testing.
+              </figcaption>
+            </figure>
           </div>
           <div className="grid gap-4">
             {qualityPoints.map((point) => (
@@ -416,38 +402,26 @@ export default function AboutPage() {
       </Section>
 
       <Section background="grey">
-        <SectionHeader
-          title="Production Process & Equipment"
-          subtitle="On-site production equipment across the mixing, milling, conveying, and finished-product storage stages."
-        />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {productionEquipment.map((item) => (
-            <figure
-              key={item.src}
-              className="flex h-full flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#F4F6F8]">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="flex flex-1 flex-col p-5">
-                <h3 className="text-base font-bold text-[#0B2D5B]">{item.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[#5A6570]">
-                  {item.description}
-                </p>
-              </figcaption>
-            </figure>
-          ))}
+        <div className="rounded-2xl border border-[#D7E6EF] bg-white p-6 shadow-sm md:flex md:items-center md:justify-between md:gap-8">
+          <div className="max-w-2xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2E7D9A]">
+              Manufacturing
+            </p>
+            <h2 className="mt-2 text-2xl font-bold text-[#0B2D5B]">
+              See the production process and equipment
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#5A6570] md:text-base">
+              Mixing, milling, conveying and finished-product storage equipment, with
+              the process stages explained on the manufacturing page.
+            </p>
+          </div>
+          <Link
+            href="/manufacturing"
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-[#0B2D5B] px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-[#164675] md:mt-0"
+          >
+            View Manufacturing →
+          </Link>
         </div>
-        <p className="mt-4 text-xs leading-relaxed text-[#5A6570]">
-          Captions describe equipment visible in each photo and the related process
-          stage. Specific capacities and process parameters are confirmed on request.
-        </p>
       </Section>
 
       <Section>
@@ -523,6 +497,20 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
+        <figure className="mt-6 flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+          <div className="relative aspect-[21/9] w-full overflow-hidden bg-[#F4F6F8]">
+            <Image
+              src={inventoryWideImage.src}
+              alt={inventoryWideImage.alt}
+              fill
+              sizes="(min-width: 1024px) 1120px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+            {inventoryWideImage.caption}
+          </figcaption>
+        </figure>
       </Section>
 
       <Section>

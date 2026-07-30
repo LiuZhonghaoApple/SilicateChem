@@ -16,6 +16,7 @@ import { assertInternalLinkGraph } from "@/lib/seo/internal-link-graph";
 const INDEXABLE_STATIC = [
   "",
   "/about",
+  "/manufacturing",
   "/contact",
   "/faq",
   "/export",
