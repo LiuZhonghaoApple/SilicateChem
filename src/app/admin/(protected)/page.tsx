@@ -2,6 +2,7 @@ import Link from "next/link";
 import {
   getDashboardStats,
   getGeoInquiryStats,
+  getGeoSourceActivity,
   getLatestIndexNowSubmission,
   getProductInquiryStats,
   listLeads,
@@ -16,14 +17,16 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
-  const [stats, recentLeads, productStats, geoStats, indexNowStatus, activity] = await Promise.all([
-    getDashboardStats(),
-    listLeads({ limit: 8 }),
-    getProductInquiryStats(),
-    getGeoInquiryStats(),
-    getLatestIndexNowSubmission(),
-    getConversionEventFunnel(30),
-  ]);
+  const [stats, recentLeads, productStats, geoStats, indexNowStatus, activity, geoActivity] =
+    await Promise.all([
+      getDashboardStats(),
+      listLeads({ limit: 8 }),
+      getProductInquiryStats(),
+      getGeoInquiryStats(),
+      getLatestIndexNowSubmission(),
+      getConversionEventFunnel(30),
+      getGeoSourceActivity(),
+    ]);
 
   const activityCards = [
     { label: "网站会话（GA4）", value: activity.sessions },
@@ -161,22 +164,53 @@ export default async function AdminDashboardPage() {
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="rounded-xl border border-[#DCE4EA] bg-white shadow-sm">
           <div className="border-b border-[#E2E8F0] px-5 py-4">
-            <h2 className="font-bold text-[#0B2D5B]">近30天 GEO / AI 来源询盘</h2>
+            <h2 className="font-bold text-[#0B2D5B]">近30天 GEO / AI 来源</h2>
+            <p className="mt-1 text-xs text-[#64748B]">
+              ChatGPT、Perplexity 等 AI 渠道带来的询盘与访客行为。
+            </p>
           </div>
-          {geoStats.length === 0 ? (
-            <p className="p-8 text-center text-sm text-[#64748B]">暂无 AI 引荐询盘。</p>
-          ) : (
-            <div className="divide-y divide-[#E2E8F0]">
-              {geoStats.map((item) => (
-                <div key={item.source} className="flex items-center justify-between px-5 py-3">
-                  <p className="font-semibold text-[#334155]">{item.source}</p>
-                  <span className="rounded-full bg-[#EAF4FA] px-2.5 py-1 text-xs font-bold text-[#0B2D5B]">
-                    {item.count}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+
+          {/* 已成交/已提交的 AI 来源询盘 */}
+          <div className="px-5 pt-4">
+            <p className="text-xs font-bold uppercase tracking-wide text-[#64748B]">AI 来源询盘</p>
+            {geoStats.length === 0 ? (
+              <p className="py-3 text-sm text-[#64748B]">暂无 AI 来源询盘。</p>
+            ) : (
+              <div className="mt-2 divide-y divide-[#E2E8F0]">
+                {geoStats.map((item) => (
+                  <div key={item.source} className="flex items-center justify-between py-2">
+                    <p className="font-semibold text-[#334155]">{item.source}</p>
+                    <span className="rounded-full bg-[#EAF4FA] px-2.5 py-1 text-xs font-bold text-[#0B2D5B]">
+                      {item.count}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 尚未转化为询盘、但已到站的 AI 来源访客行为 */}
+          <div className="border-t border-[#E2E8F0] px-5 py-4">
+            <p className="text-xs font-bold uppercase tracking-wide text-[#64748B]">AI 来源访客活跃</p>
+            {geoActivity.length === 0 ? (
+              <p className="py-3 text-sm text-[#64748B]">近30天暂无 AI 渠道访客。</p>
+            ) : (
+              <div className="mt-2 space-y-2">
+                {geoActivity.map((item) => (
+                  <div
+                    key={item.source}
+                    className="flex items-center justify-between rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2"
+                  >
+                    <p className="font-semibold capitalize text-[#334155]">{item.source}</p>
+                    <p className="text-xs text-[#64748B]">
+                      <span className="font-bold text-[#0B2D5B]">{item.visitors}</span> 访客 ·{" "}
+                      <span className="font-bold text-[#0B2D5B]">{item.rfqStarts}</span> 次 RFQ 发起
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </section>
 
         <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">

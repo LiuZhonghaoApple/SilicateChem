@@ -233,6 +233,31 @@ export async function getGeoInquiryStats(): Promise<
   return rows as unknown as Array<{ source: string; count: number }>;
 }
 
+// AI/GEO-sourced visitor ACTIVITY from conversion_events, independent of whether
+// it converted to a lead. Lets the overview surface that ChatGPT/Perplexity/etc.
+// are driving buyers even when there are still zero AI-sourced inquiries.
+export async function getGeoSourceActivity(): Promise<
+  Array<{ source: string; visitors: number; rfqStarts: number; events: number }>
+> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    geo_source AS source,
+    COUNT(DISTINCT visitor_id_hash)::int AS visitors,
+    COUNT(*) FILTER (WHERE event_name = 'rfq_start')::int AS "rfqStarts",
+    COUNT(*)::int AS events
+  FROM conversion_events
+  WHERE occurred_at >= NOW() - INTERVAL '30 days'
+    AND geo_source IS NOT NULL
+  GROUP BY geo_source
+  ORDER BY visitors DESC, events DESC`;
+  return rows as unknown as Array<{
+    source: string;
+    visitors: number;
+    rfqStarts: number;
+    events: number;
+  }>;
+}
+
 export type IndexNowSubmissionStatus = {
   submittedAt: string;
   trigger: string;
