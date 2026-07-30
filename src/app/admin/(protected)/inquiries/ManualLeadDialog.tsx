@@ -45,7 +45,14 @@ export function ManualLeadDialog({ defaultOwner }: { defaultOwner: string }) {
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        const blob = await upload(`lead-attachments/${file.name}`, file, {
+        // Blob upload path must be ASCII-safe; keep the original name for display.
+        const dot = file.name.lastIndexOf(".");
+        const ext = dot >= 0 ? file.name.slice(dot).toLowerCase() : "";
+        const base = (dot >= 0 ? file.name.slice(0, dot) : file.name)
+          .replace(/[^a-zA-Z0-9._-]+/g, "-")
+          .replace(/-+/g, "-")
+          .slice(0, 60) || "file";
+        const blob = await upload(`lead-attachments/${base}${ext}`, file, {
           access: "public",
           handleUploadUrl: "/api/admin/inquiries/attachment",
           contentType: file.type || undefined,

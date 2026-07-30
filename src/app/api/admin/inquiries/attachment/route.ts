@@ -25,10 +25,6 @@ const ALLOWED_CONTENT_TYPES = [
 const MAX_SIZE_BYTES = 20 * 1024 * 1024; // 20MB per file
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const session = await getAdminSession();
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return NextResponse.json(
       { error: "附件存储未配置（缺少 BLOB_READ_WRITE_TOKEN）。" },
@@ -38,17 +34,25 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   const body = (await request.json()) as HandleUploadBody;
   try {
+    // NOTE: do NOT gate the whole route on getAdminSession(). handleUpload
+    // handles two request types: the token request (from the logged-in browser,
+    // cookies present) and the upload-completed webhook (server-to-server from
+    // Blob, NO cookies — verified by signature). Auth must live inside
+    // onBeforeGenerateToken, which only runs for the token request; gating the
+    // top would 401 the webhook and leave the client stuck on "uploading".
     const result = await handleUpload({
       body,
       request,
-      onBeforeGenerateToken: async () => ({
-        allowedContentTypes: ALLOWED_CONTENT_TYPES,
-        maximumSizeInBytes: MAX_SIZE_BYTES,
-        addRandomSuffix: true,
-        tokenPayload: JSON.stringify({ user: session.username }),
-      }),
-      // Server-side confirmation webhook (best-effort; the client also receives
-      // the final blob URL directly from upload()).
+      onBeforeGenerateToken: async () => {
+        const session = await getAdminSession();
+        if (!session) throw new Error("Unauthorized");
+        return {
+          allowedContentTypes: ALLOWED_CONTENT_TYPES,
+          maximumSizeInBytes: MAX_SIZE_BYTES,
+          addRandomSuffix: true,
+          tokenPayload: JSON.stringify({ user: session.username }),
+        };
+      },
       onUploadCompleted: async () => {},
     });
     return NextResponse.json(result);
