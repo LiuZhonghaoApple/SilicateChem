@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getAdminSession } from "@/lib/admin-auth";
 import { leadStatuses, listLeads } from "@/lib/crm/repository";
 import {
   formatAdminDate,
@@ -20,7 +21,10 @@ export default async function InquiryListPage({
     ? filters.status
     : "";
   const query = filters.q?.slice(0, 120) ?? "";
-  const leads = await listLeads({ status, query });
+  const [leads, session] = await Promise.all([
+    listLeads({ status, query }),
+    getAdminSession(),
+  ]);
 
   return (
     <div className="space-y-5">
@@ -29,7 +33,7 @@ export default async function InquiryListPage({
           <h1 className="text-2xl font-bold text-[#0B2D5B]">询盘管理</h1>
           <p className="mt-1 text-sm text-[#64748B]">按状态和联系人检索，进入详情后记录跟进与转化结果。</p>
         </div>
-        <ManualLeadDialog />
+        <ManualLeadDialog defaultOwner={session?.username ?? ""} />
       </div>
 
       <form className="grid gap-3 rounded-xl border border-[#DCE4EA] bg-white p-4 shadow-sm sm:grid-cols-[180px_minmax(220px,1fr)_auto]">

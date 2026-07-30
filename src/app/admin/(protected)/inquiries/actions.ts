@@ -27,56 +27,73 @@ function optionalValue(value: FormDataEntryValue | null, maxLength: number): str
 
 export type ManualLeadState = { ok: boolean; error?: string; nonce?: number };
 
-const MANUAL_REQUEST_TYPES = ["quote", "sample", "tds", "contact"] as const;
+type ManualAttachment = { url: string; name: string };
+
+function parseAttachments(raw: FormDataEntryValue | null): ManualAttachment[] {
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(String(raw));
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter(
+        (a): a is ManualAttachment =>
+          a &&
+          typeof a.url === "string" &&
+          typeof a.name === "string" &&
+          /^https:\/\/[^\s]+\.public\.blob\.vercel-storage\.com\//.test(a.url)
+      )
+      .slice(0, 20)
+      .map((a) => ({ url: a.url, name: a.name.slice(0, 200) }));
+  } catch {
+    return [];
+  }
+}
 
 // Manually record an inquiry that arrived off-site (WhatsApp, email, exhibition,
-// phone, marketplace…) so every channel is managed in one CRM. Reuses the same
-// StructuredLead pipeline as the website form; the channel and the operator are
-// preserved on the lead (source/utm) and in an audit note.
+// phone, marketplace…) so every channel is managed in one CRM. Simplified entry:
+// date is auto (submitted_at), plus country, product, owner, channel and a note
+// that can carry file attachments (uploaded to Blob, referenced by URL).
 export async function createManualLeadAction(
   _prev: ManualLeadState,
   formData: FormData
 ): Promise<ManualLeadState> {
   const actor = await adminUsername();
 
-  const name = String(formData.get("name") ?? "").trim().slice(0, 120);
-  const company = String(formData.get("company") ?? "").trim().slice(0, 180);
   const country = String(formData.get("country") ?? "").trim().slice(0, 120);
-  const message = String(formData.get("message") ?? "").trim().slice(0, 5_000);
-  const email = String(formData.get("email") ?? "").trim().slice(0, 254);
+  const note = String(formData.get("message") ?? "").trim().slice(0, 5_000);
   const product = optionalValue(formData.get("product"), 180) ?? undefined;
-  const quantity = optionalValue(formData.get("quantity"), 120) ?? undefined;
-  const contactExtra = optionalValue(formData.get("contactExtra"), 200);
+  const owner = String(formData.get("owner") ?? "").trim().slice(0, 120) || actor;
   const channel = String(formData.get("channel") ?? "Other").trim().slice(0, 60) || "Other";
+  const attachments = parseAttachments(formData.get("attachments"));
 
-  const requestTypeRaw = String(formData.get("requestType") ?? "contact");
-  const requestType = (MANUAL_REQUEST_TYPES as readonly string[]).includes(requestTypeRaw)
-    ? (requestTypeRaw as (typeof MANUAL_REQUEST_TYPES)[number])
-    : "contact";
+  if (country.length < 2) {
+    return { ok: false, error: "请填写国家（必填）。", nonce: nowNonce() };
+  }
+  if (note.length < 2 && attachments.length === 0) {
+    return { ok: false, error: "请填写备注或至少上传一个附件。", nonce: nowNonce() };
+  }
 
-  const statusRaw = String(formData.get("status") ?? "new") as LeadStatus;
-  const status = leadStatuses.includes(statusRaw) ? statusRaw : "new";
-
-  if (name.length < 2 || company.length < 2 || country.length < 2) {
-    return { ok: false, error: "请填写联系人、公司、国家（必填）。", nonce: nowNonce() };
+  // Compose the stored message: the note plus any attachment links so the
+  // record is self-contained on the lead detail page.
+  const messageLines: string[] = [];
+  if (note) messageLines.push(note);
+  if (attachments.length > 0) {
+    messageLines.push("", "附件：");
+    for (const a of attachments) messageLines.push(`- ${a.name}: ${a.url}`);
   }
-  if (message.length < 2) {
-    return { ok: false, error: "请填写询盘内容 / 备注。", nonce: nowNonce() };
-  }
-  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return { ok: false, error: "邮箱格式不正确（可留空）。", nonce: nowNonce() };
-  }
+  const message = messageLines.join("\n").slice(0, 5_000) || "（无备注）";
 
   const lead = buildStructuredLead(
     {
-      name,
-      company,
+      // Identity fields are optional for off-site logging; keep placeholders so
+      // NOT NULL constraints hold. Customer details live in the note/attachments.
+      name: "人工录入",
+      company: "—",
+      email: "",
       country,
-      email,
       message,
       product,
-      quantity,
-      requestType,
+      requestType: "quote",
       source: `manual:${channel}`,
       sourcePath: "手动录入",
       utmSource: channel,
@@ -87,23 +104,23 @@ export async function createManualLeadAction(
 
   await createLeadRecord(lead);
 
-  const noteParts = [`人工录入（渠道：${channel}）`];
-  if (contactExtra) noteParts.push(`联系方式：${contactExtra}`);
-  if (!email) noteParts.push("未提供邮箱");
-  await addLeadNote({ id: lead.id, body: noteParts.join(" · "), actor });
-
-  // Apply an initial status other than 'new' when the operator picked one.
-  if (status !== "new") {
-    await updateLeadRecord({
-      id: lead.id,
-      status,
-      priority: "normal",
-      owner: actor,
-      nextFollowUpAt: null,
-      lostReason: null,
-      actor,
-    });
+  const noteParts = [`人工录入（渠道：${channel}）· 跟进人：${owner}`];
+  if (attachments.length > 0) {
+    noteParts.push(`附件 ${attachments.length} 个：`);
+    for (const a of attachments) noteParts.push(`${a.name} → ${a.url}`);
   }
+  await addLeadNote({ id: lead.id, body: noteParts.join("\n"), actor });
+
+  // Assign the follow-up owner (status stays 'new').
+  await updateLeadRecord({
+    id: lead.id,
+    status: "new",
+    priority: "normal",
+    owner,
+    nextFollowUpAt: null,
+    lostReason: null,
+    actor,
+  });
 
   revalidatePath("/admin/inquiries");
   revalidatePath("/admin");
