@@ -117,6 +117,7 @@ export function ProductSchema({
   image,
   cas,
   formula,
+  specs,
   dateModified,
 }: {
   name: string;
@@ -126,8 +127,20 @@ export function ProductSchema({
   image?: string;
   cas?: string;
   formula?: string;
+  specs?: { label: string; value: string }[];
   dateModified: string;
 }) {
+  const specProperties = (specs ?? []).map((s) => ({
+    "@type": "PropertyValue",
+    name: s.label,
+    value: s.value,
+  }));
+  const additionalProperty = [
+    ...(formula
+      ? [{ "@type": "PropertyValue", name: "Chemical formula", value: formula }]
+      : []),
+    ...specProperties,
+  ];
   return (
     <JsonLd
       data={{
@@ -163,15 +176,8 @@ export function ProductSchema({
               value: cas,
             }
           : undefined,
-        additionalProperty: formula
-          ? [
-              {
-                "@type": "PropertyValue",
-                name: "Chemical formula",
-                value: formula,
-              },
-            ]
-          : undefined,
+        additionalProperty:
+          additionalProperty.length > 0 ? additionalProperty : undefined,
       }}
     />
   );

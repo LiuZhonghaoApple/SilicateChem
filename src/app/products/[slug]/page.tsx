@@ -68,6 +68,7 @@ export default async function ProductPage({ params }: Props) {
         image={`${SITE.url}${productImage.src}`}
         cas={product.cas}
         formula={product.formula}
+        specs={product.specs}
         dateModified={getContentLastModified(productPath)}
       />
       <BreadcrumbSchema

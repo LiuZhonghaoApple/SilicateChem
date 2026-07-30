@@ -2,10 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { ProductMainImage } from "@/components/products/ProductMainImage";
-import { FAQSchema } from "@/components/seo/JsonLd";
+import { FAQSchema, ProductSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { ContextualInternalLinks } from "@/components/seo/ContextualInternalLinks";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
+import { SITE } from "@/lib/constants";
+import { getContentLastModified } from "@/lib/content-freshness";
+import { getProductMainImage } from "@/content/product-main-images";
+
+const CATEGORY_PATH = "/products/sodium-metasilicate";
 
 const quoteHref = "/contact?type=quote&product=Sodium%20Metasilicate";
 
@@ -99,8 +104,26 @@ const productFaq = [
 export function MetasilicateCategoryPage() {
   const cat = sodiumMetasilicateCategory;
 
+  const schemaSpecs = [
+    ...productIdentity
+      .filter(([label]) => label !== "Product name" && label !== "Chinese name")
+      .map(([label, value]) => ({ label, value })),
+    ...buyingSpecs.map(([label, value]) => ({ label, value })),
+  ];
+
   return (
     <>
+      <ProductSchema
+        name="Sodium Metasilicate"
+        description={cat.summary ?? "Factory-direct sodium metasilicate grades and forms for industrial buyers."}
+        url={`${SITE.url}${CATEGORY_PATH}`}
+        sku="sodium-metasilicate"
+        image={`${SITE.url}${getProductMainImage("sodium-metasilicate").src}`}
+        cas="6834-92-0"
+        formula="Na₂SiO₃"
+        specs={schemaSpecs}
+        dateModified={getContentLastModified(CATEGORY_PATH)}
+      />
       <FAQSchema items={productFaq} />
 
       <Section>
