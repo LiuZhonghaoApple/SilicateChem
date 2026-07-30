@@ -1,6 +1,5 @@
 "use client";
 
-import { upload } from "@vercel/blob/client";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { products } from "@/content/products";
 import { createManualLeadAction, type ManualLeadState } from "./actions";
@@ -45,19 +44,21 @@ export function ManualLeadDialog({ defaultOwner }: { defaultOwner: string }) {
     setUploading(true);
     try {
       for (const file of Array.from(files)) {
-        // Blob upload path must be ASCII-safe; keep the original name for display.
-        const dot = file.name.lastIndexOf(".");
-        const ext = dot >= 0 ? file.name.slice(dot).toLowerCase() : "";
-        const base = (dot >= 0 ? file.name.slice(0, dot) : file.name)
-          .replace(/[^a-zA-Z0-9._-]+/g, "-")
-          .replace(/-+/g, "-")
-          .slice(0, 60) || "file";
-        const blob = await upload(`lead-attachments/${base}${ext}`, file, {
-          access: "public",
-          handleUploadUrl: "/api/admin/inquiries/attachment",
-          contentType: file.type || undefined,
+        const fd = new FormData();
+        fd.append("file", file);
+        const res = await fetch("/api/admin/inquiries/attachment", {
+          method: "POST",
+          body: fd,
         });
-        setAttachments((cur) => [...cur, { url: blob.url, name: file.name }]);
+        const data = (await res.json().catch(() => ({}))) as {
+          url?: string;
+          name?: string;
+          error?: string;
+        };
+        if (!res.ok || !data.url) {
+          throw new Error(data.error || `上传失败（${res.status}）`);
+        }
+        setAttachments((cur) => [...cur, { url: data.url!, name: data.name || file.name }]);
       }
     } catch (e) {
       setUploadError(e instanceof Error ? e.message : "附件上传失败，请重试。");
@@ -157,7 +158,7 @@ export function ManualLeadDialog({ defaultOwner }: { defaultOwner: string }) {
               </div>
 
               <div>
-                <label className={labelClass}>附件（Word / Excel / PDF / 图片，可多选，单个≤20MB）</label>
+                <label className={labelClass}>附件（Word / Excel / PDF / 图片，可多选，单个≤4MB）</label>
                 <input
                   ref={fileInputRef}
                   type="file"
