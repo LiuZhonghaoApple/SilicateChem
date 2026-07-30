@@ -150,6 +150,62 @@ const masterPlanRenderings = [
   },
 ] as const;
 
+// In-stock finished-goods inventory (G-warehouse-inventory).
+const inventoryMainImage = {
+  src: "/assets/images/warehouse/inventory-main.webp",
+  alt: "Branded warehouse filled with palletized bags of finished sodium metasilicate",
+  caption: "Finished-goods warehouse with palletized sodium metasilicate in stock.",
+};
+
+const inventoryGallery = [
+  {
+    src: "/assets/images/warehouse/inventory-jumbo-bags.webp",
+    alt: "FIBC jumbo bags printed Sodium Metasilicate, Net WT 1000KG, Made in China, with palletized 25 kg bags",
+    caption: "1,000 kg FIBC jumbo bags and palletized 25 kg bags in storage.",
+  },
+  {
+    src: "/assets/images/warehouse/inventory-labeled-bags.webp",
+    alt: "Close-up of export bags printed Sodium Metasilicate Pentahydrate, UN 3253, Class 8, Made in China",
+    caption: "Export bag marking: Sodium Metasilicate Pentahydrate, UN 3253, Class 8.",
+  },
+] as const;
+
+// Raw-material storage (I-raw-material-storage). Different piles are NOT assumed to
+// be the same material — colors differ between piles.
+const rawMaterialImages = [
+  {
+    src: "/assets/images/raw-materials/raw-pile-main.webp",
+    alt: "Large white bulk raw-material pile stored inside the plant warehouse",
+    caption: "Bulk raw material stored inside the plant.",
+  },
+  {
+    src: "/assets/images/raw-materials/raw-mixed-colors.webp",
+    alt: "Two separate bulk piles of differing color stored in the raw-material warehouse",
+    caption:
+      "Separate bulk piles of differing color — stored apart as distinct materials, not one uniform stock.",
+  },
+] as const;
+
+// Automated packaging & palletizing (K-packaging-automation).
+const packagingMainImage = {
+  src: "/assets/images/packaging/packaging-main.webp",
+  alt: "Branded robotic palletizing cell stacking bagged sodium metasilicate onto pallets",
+  caption: "Robotic palletizing cell stacking bagged product onto pallets.",
+};
+
+const packagingGallery = [
+  {
+    src: "/assets/images/packaging/packaging-bagging.webp",
+    alt: "Workers bagging sodium metasilicate pentahydrate on the conveyor packing line",
+    caption: "Bagging line for finished product.",
+  },
+  {
+    src: "/assets/images/packaging/packaging-robot.webp",
+    alt: "NACHI industrial robot arm on the palletizing conveyor inside a safety cage",
+    caption: "Industrial robot arm on the palletizing conveyor.",
+  },
+] as const;
+
 export default function AboutPage() {
   return (
     <>
@@ -269,15 +325,35 @@ export default function AboutPage() {
           subtitle="Testing standards, process control, and laboratory checks support stable sodium metasilicate quality."
         />
         <div className="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-center">
-          <div className="overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
-            <Image
-              src="/assets/images/about/quality-lab.png"
-              alt="Zhongzhi quality control laboratory for sodium metasilicate testing"
-              width={1672}
-              height={941}
-              className="h-auto w-full"
-              sizes="(min-width: 1024px) 560px, 100vw"
-            />
+          <div className="grid gap-4">
+            <figure className="overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src="/assets/images/lab/lab-main.webp"
+                  alt="Zhongzhi quality-control laboratory with a technician at the analysis bench"
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                />
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                Quality-control laboratory and analysis bench.
+              </figcaption>
+            </figure>
+            <figure className="overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src="/assets/images/lab/lab-analyzer.webp"
+                  alt="Laboratory technician operating an element analyzer beside retained-sample shelves"
+                  fill
+                  className="object-cover"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                />
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                Instrument analysis and retained-sample storage.
+              </figcaption>
+            </figure>
           </div>
           <div className="grid gap-4">
             {qualityPoints.map((point) => (
@@ -402,6 +478,122 @@ export default function AboutPage() {
               </figcaption>
             </figure>
           ))}
+        </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="In-Stock Inventory & Capacity"
+          subtitle="Finished sodium metasilicate held in the warehouse — palletized bags and jumbo bags ready for dispatch."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-stretch">
+          <figure className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+              <Image
+                src={inventoryMainImage.src}
+                alt={inventoryMainImage.alt}
+                fill
+                sizes="(min-width: 1024px) 720px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+              {inventoryMainImage.caption}
+            </figcaption>
+          </figure>
+          <div className="grid gap-6">
+            {inventoryGallery.map((image) => (
+              <figure
+                key={image.src}
+                className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                  {image.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section>
+        <SectionHeader
+          title="Raw Material Storage"
+          subtitle="Bulk raw materials stored on site. Different piles are handled as distinct materials."
+        />
+        <div className="grid gap-6 sm:grid-cols-2">
+          {rawMaterialImages.map((image) => (
+            <figure
+              key={image.src}
+              className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+            >
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  sizes="(min-width: 640px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+                {image.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
+
+      <Section background="grey">
+        <SectionHeader
+          title="Automated Packaging & Palletizing"
+          subtitle="Bagging line and robotic palletizing support consistent packing for bulk orders."
+        />
+        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr] lg:items-stretch">
+          <figure className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+              <Image
+                src={packagingMainImage.src}
+                alt={packagingMainImage.alt}
+                fill
+                sizes="(min-width: 1024px) 720px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <figcaption className="border-t border-[#D7E6EF] px-4 py-3 text-sm text-[#5A6570]">
+              {packagingMainImage.caption}
+            </figcaption>
+          </figure>
+          <div className="grid gap-6">
+            {packagingGallery.map((image) => (
+              <figure
+                key={image.src}
+                className="flex flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-sm"
+              >
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#F4F6F8]">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="border-t border-[#D7E6EF] px-4 py-2 text-xs text-[#5A6570]">
+                  {image.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </Section>
 
