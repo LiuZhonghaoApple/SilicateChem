@@ -3,42 +3,70 @@ import type { IntentGuide } from "@/types";
 export const intentGuides: IntentGuide[] = [
   {
     slug: "supplier-selection",
-    title: "How to Select a Sodium Metasilicate Supplier",
-    metaTitle: "Sodium Metasilicate Supplier Selection Guide",
+    title: "How to Select a Sodium Metasilicate Supplier or Distributor",
+    metaTitle: "Sodium Metasilicate Supplier & Distributor Selection Guide",
     metaDescription:
-      "Procurement checklist for choosing a sodium metasilicate supplier: grade specification, COA, MSDS, samples, packing, and shipment review before FCL orders.",
+      "Buyer's decision framework for choosing a sodium metasilicate supplier or distributor: how to read the COA, match grade specification to your application, verify manufacturer vs trader, and compare quotations before FCL orders.",
     primaryKeyword: "sodium metasilicate supplier selection",
     keywords: [
+      "sodium metasilicate supplier",
+      "sodium metasilicate distributor",
       "sodium metasilicate supplier China",
       "sodium metasilicate factory",
       "sodium metasilicate RFQ",
     ],
     intro:
-      "B2B buyers evaluating sodium metasilicate suppliers should compare grade specification, document readiness, packing options, samples, and shipment requirements before comparing prices. This guide covers the procurement decisions that affect long-term supply reliability.",
+      "B2B buyers evaluating a sodium metasilicate supplier or distributor should assess grade specification, COA readiness, document control, packing, and shipment reliability before comparing prices. This guide gives procurement teams a repeatable decision framework — what to verify, which COA indicators matter, and how to match grade to application — so the lowest quote is not mistaken for the best-value supply.",
     sections: [
       {
-        heading: "Specification and Document Review",
+        heading: "Supplier Evaluation Framework",
         paragraphs: [
-          "Request TDS, MSDS/SDS, sample COA, and product samples before volume orders. Confirm Na₂O, SiO₂, Fe, appearance, particle size or bulk density, and water-insoluble matter for the selected grade.",
-          "Use the same specification, packing method, Incoterms, destination port, and required documents when comparing quotations from different suppliers.",
+          "Score every candidate on five dimensions before price: (1) specification control — can they commit to a written spec per grade; (2) document readiness — MSDS/SDS, ISO and REACH certificates, TDS and batch-specific COA; (3) grade availability — granules, anhydrous, and pentahydrate from one source simplifies multi-grade FCL; (4) packing and loading options; and (5) shipment communication and repeatability across orders.",
+          "A supplier that scores well on specification and documents but is slightly higher on unit price is usually the lower total-cost choice, because rejected batches, re-testing, and formulation adjustments cost more than the quote gap. Rank candidates on these dimensions first, then compare price among the qualified shortlist only.",
         ],
       },
       {
-        heading: "Pre-Order Verification Checklist",
+        heading: "How to Read the COA Before You Order",
         paragraphs: [
-          "Before volume contracts: request TDS, MSDS, sample COA, and test samples in your application. Confirm iron content, particle size, and color stability match your formulation requirements.",
-          "For recurring FCL orders, confirm grade availability, lead time, packing method, loading quantity, and whether batch COA records can be provided across shipments.",
+          "The certificate of analysis is where specification claims become verifiable. For sodium metasilicate, check these indicators against your application: SiO₂ and Na₂O content (the alkaline builder actives), Fe content, water-insoluble matter, appearance, and — for hydrate grades — the correct CAS number.",
+          "Anhydrous and granular sodium metasilicate typically carry SiO₂ ≥ 46.0% and Na₂O ≥ 50.0% with Fe ≤ 0.02%; the pentahydrate grade (Na₂SiO₃·5H₂O, CAS 10213-79-3) carries lower actives — SiO₂ ≥ 28.5% and Na₂O ≥ 29.0% — because roughly half its mass is water of crystallization. Comparing a pentahydrate COA against an anhydrous spec sheet without normalizing for this difference is the most common buyer error.",
+          "Iron is the indicator to watch for any white or light-colored end product: Fe ≤ 0.02% supports color stability in white detergent powders. For granular grades, confirm the particle-size range (for example 8–40 mesh, customizable) suits your dosing equipment, and for anhydrous grades confirm moisture ≤ 1.0% for dry-blend stability.",
+        ],
+      },
+      {
+        heading: "Match Grade Specification to Your Application",
+        paragraphs: [
+          "Powder-detergent and dry-blend lines usually specify anhydrous or granular metasilicate for high alkalinity and low moisture; granules add cleaner handling, controlled dust, and predictable dissolution for automated blending. Cleaning products, textile auxiliaries, and water-treatment blends more often specify the pentahydrate crystalline grade where controlled dissolution is preferred.",
+          "Confirm the grade against the same specification, packing method, Incoterms, destination port, and required documents when you send an RFQ, so quotations from different suppliers are directly comparable rather than superficially cheaper.",
+        ],
+      },
+      {
+        heading: "Verify Manufacturer vs Trader",
+        paragraphs: [
+          "Ask whether the supplier controls batch testing for SiO₂, Na₂O, iron, and color, and request historical COA samples to check specification consistency across batches — a genuine manufacturer can supply these; a pure trader often cannot. Confirm whether batch COA records can be provided across recurring shipments, not just for the first order.",
+          "For recurring FCL contracts, confirm grade availability, lead time, packing and loading method, loading quantity, export-document experience to your destination market, and whether combined multi-grade FCL loading is possible.",
         ],
       },
     ],
     faq: [
       {
         question: "What documents should I request before ordering?",
-        answer: "TDS, MSDS, sample COA, and a test sample. Verify iron content and particle size for your grade.",
+        answer:
+          "TDS, MSDS/SDS, ISO and REACH certificates, a sample batch COA, and a test sample in your own application. Verify SiO₂, Na₂O, iron content, and particle size for your selected grade.",
+      },
+      {
+        question: "Which COA indicators matter most for sodium metasilicate?",
+        answer:
+          "SiO₂ and Na₂O content (the alkaline actives), Fe content (≤ 0.02% supports white-product color stability), water-insoluble matter, appearance, and the correct CAS number for the grade. Normalize actives when comparing an anhydrous grade against pentahydrate.",
+      },
+      {
+        question: "How do I tell a manufacturer from a trader?",
+        answer:
+          "Request business credentials, in-house batch-testing evidence for SiO₂/Na₂O/Fe/color, and historical COA samples across batches. A manufacturer can commit to a written per-grade specification and repeat batch COA across shipments.",
       },
       {
         question: "What is typical MOQ from a Chinese manufacturer?",
-        answer: "One FCL (approximately 20–25 MT) is standard. Samples available for pre-order testing.",
+        answer: "One FCL (approximately 20–25 MT) is standard. Samples are available for pre-order testing.",
       },
     ],
   },
