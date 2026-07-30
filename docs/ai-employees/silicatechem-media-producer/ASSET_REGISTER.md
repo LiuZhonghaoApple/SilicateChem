@@ -123,3 +123,17 @@
 6. **画廊补充** → 新增 3 张：`warehouse-18`（叉车/缠膜区）、`warehouse-22`（仓库全景规模）入现货板块；`lab-01`（滴定台+马弗炉）入质检板块。
 
 > 注：`E-needs-confirmation` 用户确认为同一工厂同一产线“可以使用”，但本批未新增使用 E 图（E 内容偏固体阻燃产线，与当前偏硅酸钠页面主题关联度低）。如需将 E 用于特定板块，请指明目标页面与用途。
+
+## P0 证据链 + 结构化数据（2026-07-30）
+
+目标：把已上站图片转成“可核验证据”，提升买家信任与 SEO/GEO 可信度。
+
+- **ImageObject 结构化数据**：新增 `ImageEvidenceSchema`（`components/seo/JsonLd.tsx`），为 `/about`、`/manufacturing`、`/export`、`/products` 的真实图输出 `ImageObject`（contentUrl + caption + `creditText`/`copyrightHolder`/`author` = 众智）。**去水印后用元数据补回图片归属**，且把可核验事实写进 caption（GEO 读文字不读像素）。
+- **Organization schema 增强**：加 `image[]`（厂区/现货/实验室/包装实景）、`foundingDate=2011`、`addressLocality=Changyi`、`hasCredential`（ISO 9001 / ISO 14001 / REACH，链到 `downloads/documents` 真实 PDF）。
+- **Product schema**：`image` 支持数组（string | string[]），为后续按 grade 挂多图预留。
+- **可见证据链**：`/about` 现货板块加“UN 3253 / Class 8 / PG III / Made in China”声明 + 链 MSDS/COA 与 export 页；质检板块加 ISO 证书 + 批次 COA/TDS 链接。
+- 验证：`npm run build`（48 页）通过，ESLint 无警告，已在构建产物中确认 ImageObject/Organization JSON-LD 正确输出。
+
+### P0 之后可继续（待用户排期）
+- P1：image sitemap（`sitemap.ts` 每页 `images[]`）、每页真实 OG 图、FAQ/QAPage schema、实体一致性统一。
+- P2：启用 `/factory` 或建“Evidence”聚合页；收敛 PENDING 的 trust-image 系统。
