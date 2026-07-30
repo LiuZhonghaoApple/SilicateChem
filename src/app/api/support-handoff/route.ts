@@ -54,7 +54,13 @@ async function sendHandoffEmail(data: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from, to: toList, subject, text }),
+    body: JSON.stringify({
+      from,
+      to: toList,
+      subject,
+      text,
+      reply_to: SITE.email,
+    }),
   });
 
   if (!res.ok) {
