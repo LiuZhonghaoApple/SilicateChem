@@ -27,7 +27,10 @@ async function sendInquiryEmail(
   lead: ReturnType<typeof buildStructuredLead>
 ): Promise<EmailSendResult> {
   const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.INQUIRY_TO_EMAIL ?? "padelonesource@gmail.com";
+  const toList = (process.env.INQUIRY_TO_EMAIL ?? "padelonesource@gmail.com")
+    .split(",")
+    .map((addr) => addr.trim())
+    .filter(Boolean);
   const fromAddress = process.env.INQUIRY_FROM_EMAIL ?? SITE.email;
   const from = `SilicateChem Inquiry <${fromAddress}>`;
 
@@ -36,7 +39,7 @@ async function sendInquiryEmail(
     return { ok: false, reason: "missing_config" };
   }
 
-  if (!to || !from) {
+  if (toList.length === 0 || !from) {
     console.error("[INQUIRY] INQUIRY_TO_EMAIL or INQUIRY_FROM_EMAIL not configured");
     return { ok: false, reason: "missing_config" };
   }
@@ -80,7 +83,7 @@ async function sendInquiryEmail(
     },
     body: JSON.stringify({
       from,
-      to: [to],
+      to: toList,
       subject,
       text,
       reply_to: lead.contact.email,
