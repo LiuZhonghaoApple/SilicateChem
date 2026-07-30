@@ -10,8 +10,8 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#E2E6EA] bg-white/95 backdrop-blur">
-      <div className="mx-auto flex w-full items-center justify-between px-3 py-3 sm:px-4 lg:pl-[11vw] lg:pr-6 xl:pl-[12vw]">
-        <Link href="/" className="flex shrink-0 items-center gap-4">
+      <div className="mx-auto flex w-full items-center justify-between px-3 py-3 sm:px-4 lg:pl-6 lg:pr-6 xl:pl-8 2xl:pl-12">
+        <Link href="/" className="flex shrink-0 items-center gap-3">
           <Image
             src="/assets/images/zhongzhi-logo-nav.png"
             alt="Zhongzhi logo"
@@ -20,7 +20,7 @@ export function Header() {
             className="h-12 w-12 shrink-0 rounded object-contain"
             priority
           />
-          <div className="flex w-[260px] shrink-0 flex-col justify-center leading-tight">
+          <div className="flex w-[224px] shrink-0 flex-col justify-center leading-tight">
             <span className="flex w-full justify-between whitespace-nowrap text-lg font-bold text-[#0B2D5B]">
               <span>Zhongzhi</span>
               <span>Chemical</span>
@@ -32,13 +32,13 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-2 xl:flex 2xl:gap-3">
-          <div className="flex items-center gap-2 transform-gpu xl:-translate-x-24 2xl:-translate-x-32 2xl:gap-3">
+        <nav className="hidden items-center gap-2 min-[1560px]:flex 2xl:gap-3">
+          <div className="flex items-center gap-1 2xl:gap-1.5">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="origin-center transform-gpu whitespace-nowrap rounded-full px-2.5 py-1.5 text-[15px] font-semibold text-[#5A6570] transition-all duration-300 ease-out hover:scale-[1.15] hover:bg-[#EAF4FA] hover:text-[#0B2D5B] hover:shadow-sm 2xl:text-[16px]"
+                className="origin-center transform-gpu whitespace-nowrap rounded-full px-2 py-1.5 text-[15px] font-semibold text-[#5A6570] transition-all duration-300 ease-out hover:scale-[1.15] hover:bg-[#EAF4FA] hover:text-[#0B2D5B] hover:shadow-sm 2xl:px-2.5 2xl:text-[16px]"
               >
                 {link.label}
               </Link>
@@ -54,7 +54,7 @@ export function Header() {
 
         <button
           type="button"
-          className="p-2 text-[#0B2D5B] xl:hidden"
+          className="p-2 text-[#0B2D5B] min-[1560px]:hidden"
           onClick={() => setOpen(!open)}
           aria-label="Toggle menu"
           aria-expanded={open}
@@ -70,7 +70,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav className="border-t border-[#E2E6EA] bg-white px-4 py-4 xl:hidden">
+        <nav className="border-t border-[#E2E6EA] bg-white px-4 py-4 min-[1560px]:hidden">
           <div className="flex flex-col gap-3">
             {NAV_LINKS.map((link) => (
               <Link
