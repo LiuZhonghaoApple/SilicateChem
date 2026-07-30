@@ -102,6 +102,12 @@ const gradeSelectionGuide: ContextualLink = {
   kind: "Guide",
 };
 
+const formSelectionGuide: ContextualLink = {
+  href: "/guides/granular-vs-powder",
+  label: "Granular vs Powder — Which Form to Buy",
+  kind: "Guide",
+};
+
 const detergentArticle: ContextualLink = {
   href: "/blog/detergent-industry-metasilicate",
   label: "Detergent Manufacturing Procurement Notes",
@@ -150,6 +156,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     detergentGuide,
     detergentArticle,
     supplierGuide,
+    formSelectionGuide,
     priceGuide,
     documents,
     distributorArticle,
@@ -207,6 +214,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     detergentApplication,
     detergentArticle,
     comparisonGuide,
+    formSelectionGuide,
     documents,
   ],
   "/guides/sodium-metasilicate-vs-soda-ash": [hub, granules, detergentApplication, supplierGuide, detergentGuide],
@@ -215,6 +223,14 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     anhydrous,
     pentahydrate,
     supplierGuide,
+    priceGuide,
+    documents,
+  ],
+  "/guides/granular-vs-powder": [
+    hub,
+    granules,
+    anhydrous,
+    detergentApplication,
     priceGuide,
     documents,
   ],

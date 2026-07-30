@@ -336,6 +336,12 @@ const buyerIntentGuideCards: BuyerIntentGuideCard[] = [
     icon: "comparison",
   },
   {
+    title: "Granular vs Powder — Which Form to Buy",
+    href: "/guides/granular-vs-powder",
+    cta: "Read guide → Request quote",
+    icon: "comparison",
+  },
+  {
     title: "How to Choose a Sodium Metasilicate Factory in China",
     href: "/guides/how-to-choose-china-factory",
     cta: "Read guide → Request quote",

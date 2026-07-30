@@ -271,6 +271,61 @@ export const intentGuides: IntentGuide[] = [
       },
     ],
   },
+  {
+    slug: "granular-vs-powder",
+    title: "Sodium Metasilicate Granular vs Powder — Which Form to Buy",
+    metaTitle: "Granular vs Powder Sodium Metasilicate for Buyers",
+    metaDescription:
+      "Compare granular and powder sodium metasilicate for procurement: same chemistry, different particle size. How form affects dust, dosing, dissolution, and blending — and how to specify mesh size in your RFQ.",
+    primaryKeyword: "sodium metasilicate granular vs powder",
+    keywords: [
+      "sodium metasilicate granules vs powder",
+      "sodium metasilicate particle size selection",
+      "sodium metasilicate mesh size RFQ",
+    ],
+    intro:
+      "Buyers often ask whether to order sodium metasilicate as granules or as powder. This is a physical-form decision, not a chemistry change — both forms carry the same alkaline actives — so the right choice depends on how the material is handled, dosed, and dissolved in your process. This guide explains how particle size affects handling and blending, and how to specify the form in your RFQ.",
+    sections: [
+      {
+        heading: "Same Chemistry, Different Particle Size",
+        paragraphs: [
+          "Granular and powder sodium metasilicate share the same specification actives: SiO₂ ≥ 46.0%, Na₂O ≥ 50.0%, and Fe ≤ 0.02%. What differs is particle size and flow. Granules are supplied free-flowing at a defined mesh range — for example 8–40 mesh, customizable — while powder is a finer form (the anhydrous grade is supplied as white powder or fine granules).",
+          "Because the chemistry is identical, quotations for the two forms should be compared on the same active specification and packing; the meaningful difference is handling behavior on your line, not builder performance per unit.",
+        ],
+      },
+      {
+        heading: "Handling, Dust and Dosing",
+        paragraphs: [
+          "Granular form supports cleaner handling, easier dosing, and reduced dust compared with fine powder. Uniform granules give controlled dust levels and predictable dissolution for automated blending equipment — the reason granules are the standard export form for powder-detergent blending lines.",
+          "A finer powder increases surface area, which can speed dissolution, but tends to generate more dust and can be harder to meter in automated equipment. Where operators handle open material or where dust control matters, the granular form is usually preferred.",
+        ],
+      },
+      {
+        heading: "How to Specify Form in Your RFQ",
+        paragraphs: [
+          "State the target mesh size or particle-size range, the required actives (SiO₂, Na₂O, Fe), packing method, loading quantity, destination port, and required documents. For granules, confirm the mesh range against your dosing and blending equipment; for powder, confirm handling and dust-control requirements.",
+          "Request appearance, whiteness, and Fe review before order confirmation when the material goes into white or light-colored end products, and ask for a sample in your own application before volume contracts.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is granular or powder sodium metasilicate better?",
+        answer:
+          "Neither is chemically better — they share the same actives (SiO₂ ≥ 46.0% / Na₂O ≥ 50.0% / Fe ≤ 0.02%). Granules give cleaner handling, less dust, and easier dosing for automated blending; finer powder offers more surface area for faster dissolution but more dust.",
+      },
+      {
+        question: "Which form do powder-detergent plants use?",
+        answer:
+          "Granules are the standard export form for powder-detergent blending lines, because uniform particle size gives controlled dust and predictable dissolution in automated equipment.",
+      },
+      {
+        question: "What should I specify in the RFQ for form?",
+        answer:
+          "Target mesh size or particle-size range (e.g. 8–40 mesh for granules), actives (SiO₂/Na₂O/Fe), packing, loading quantity, destination port, and documents. Request a sample in your application before volume orders.",
+      },
+    ],
+  },
 ];
 
 export function getIntentGuideBySlug(slug: string): IntentGuide | undefined {
