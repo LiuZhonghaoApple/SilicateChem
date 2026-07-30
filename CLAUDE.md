@@ -34,6 +34,15 @@
 - 收件人/发件人由 Vercel 变量 `INQUIRY_TO_EMAIL` / `INQUIRY_FROM_EMAIL` 控制；代码按逗号拆分支持多收件人（`src/app/api/inquiry/route.ts`）。
 - **为何不发 info@**：阿里企业邮箱有"本域反仿冒"规则，会拦掉一切"外部系统寄来、却声称来自 @silicatechem.com"的邮件（notify@ / inquiry@ 均被拦，Gmail 无此规则）。若日后要让 info@ 也收，需在阿里企业邮箱后台把发信来源加白名单，属人工操作。
 
+### 询盘人工录入 + 附件（2026-07-30 新增）
+
+`/admin/inquiries` 右上角"+ 人工录入"，把 WhatsApp/邮件/展会/电话等站外渠道询盘统一收进 CRM。
+
+- 字段：录入日期（自动=submitted_at）、国家、来源渠道、产品、跟进人（默认当前账号）、备注、附件。
+- 走与网站表单同一套 `buildStructuredLead` + `createLeadRecord`；name/company/email 以占位值满足 NOT NULL，客户细节写进备注/附件；来源记在 `source/utm`，录入人+渠道+附件链接写入 `crm_lead_notes` 审计备注。
+- 附件：服务端 `put()` 上传到 Blob（`src/app/api/admin/inquiries/attachment/route.ts`），登录 cookie 鉴权，**单个≤4MB**（Vercel 无服务器请求体上限）。支持 Word/Excel/PDF/图片/CSV/TXT。附件 URL 存进 lead message 与备注。
+- 注意：曾尝试 `@vercel/blob/client` 客户端直传，因完成回调不带 cookie 被鉴权挡住导致卡住，已改回服务端 `put()`。如需 >4MB 大文件需另行实现客户端直传（鉴权放在 onBeforeGenerateToken）。
+
 ### 总览页 GEO/AI 面板（2026-07-30 优化）
 
 总览页"近30天 GEO / AI 来源"面板原先只统计 `crm_leads` 里带 `geo_source` 的**已提交询盘**，leads=0 时一片空白，会误以为 AI 渠道无动静。已改为两层：
