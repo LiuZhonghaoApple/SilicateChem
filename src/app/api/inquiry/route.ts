@@ -143,18 +143,26 @@ export async function POST(request: Request) {
 
     if (isTurnstileVerificationEnabled()) {
       const token = result.data.turnstileToken;
-      if (!token) {
-        return NextResponse.json(
-          { error: "Verification failed" },
-          { status: 400 }
-        );
-      }
-
-      const verified = await verifyTurnstileToken(token, clientIp);
-      if (!verified) {
-        return NextResponse.json(
-          { error: "Verification failed" },
-          { status: 400 }
+      if (token) {
+        // A token was produced: verify it. A positively-invalid token is a
+        // strong bot signal, so reject that.
+        const verified = await verifyTurnstileToken(token, clientIp);
+        if (!verified) {
+          return NextResponse.json(
+            { error: "Verification failed" },
+            { status: 400 }
+          );
+        }
+      } else {
+        // No token — the client could not complete the challenge (script
+        // blocked, network/CDN issue, widget never ready). Do NOT reject a
+        // real buyer for a third-party outage; this exact failure lost 8 days
+        // of inquiries. Allow and log; honeypot, form age and rate limiting
+        // above remain the hard anti-spam gates.
+        console.warn(
+          `[INQUIRY] Turnstile token absent (status=${
+            result.data.turnstileStatus ?? "unknown"
+          }); allowing submission via baseline anti-spam controls.`
         );
       }
     }

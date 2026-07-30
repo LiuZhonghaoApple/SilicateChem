@@ -20,6 +20,13 @@ const EMAIL_DELIVERY_FAILED_MSG =
 
 const VERIFICATION_FAILED_MSG = "Verification failed. Please try again.";
 
+// If the Turnstile challenge does not resolve within this window (script blocked,
+// network issue, widget never ready), stop waiting and submit anyway. The server
+// treats a missing token as a logged, allowed event so a real buyer is never
+// blocked by a third-party outage — honeypot, form age and rate limiting remain
+// the hard anti-spam gates.
+const TURNSTILE_TIMEOUT_MS = 8_000;
+
 type InquiryPayload = Record<string, string | undefined>;
 
 export function InquiryForm({
@@ -38,6 +45,8 @@ export function InquiryForm({
   const pendingPayloadRef = useRef<InquiryPayload | null>(null);
   const formStartedAtRef = useRef(Date.now());
   const formStartTrackedRef = useRef(false);
+  const turnstileTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const settledRef = useRef(true);
 
   const ctx = getRfqContext(pathname);
   const product =
@@ -104,26 +113,43 @@ export function InquiryForm({
     }
   }
 
-  function handleTurnstileSuccess(token: string) {
+  // Single, idempotent completion path for a Turnstile-gated submit. Whichever
+  // fires first — success callback, error callback or the timeout watchdog —
+  // wins; the rest are ignored via settledRef. `token` is null when the
+  // challenge could not be completed, in which case we still submit and let the
+  // server log/allow it rather than trapping the buyer on "Submitting...".
+  function finalizeTurnstileSubmit(token: string | null) {
+    if (settledRef.current) return;
+    settledRef.current = true;
+
+    if (turnstileTimeoutRef.current) {
+      clearTimeout(turnstileTimeoutRef.current);
+      turnstileTimeoutRef.current = null;
+    }
+
     const payload = pendingPayloadRef.current;
     const form = formRef.current;
+    pendingPayloadRef.current = null;
+    turnstileRef.current?.reset();
 
     if (!payload || !form) {
       setErrorMsg(VERIFICATION_FAILED_MSG);
       setState("error");
-      turnstileRef.current?.reset();
       return;
     }
 
-    pendingPayloadRef.current = null;
-    void submitInquiry({ ...payload, turnstileToken: token }, form);
+    const finalPayload = token
+      ? { ...payload, turnstileToken: token }
+      : { ...payload, turnstileStatus: "unavailable" };
+    void submitInquiry(finalPayload, form);
+  }
+
+  function handleTurnstileSuccess(token: string) {
+    finalizeTurnstileSubmit(token);
   }
 
   function handleTurnstileError() {
-    pendingPayloadRef.current = null;
-    setErrorMsg(VERIFICATION_FAILED_MSG);
-    setState("error");
-    turnstileRef.current?.reset();
+    finalizeTurnstileSubmit(null);
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -142,7 +168,18 @@ export function InquiryForm({
 
     if (TURNSTILE_SITE_KEY) {
       pendingPayloadRef.current = attributedPayload;
-      turnstileRef.current?.execute();
+      settledRef.current = false;
+      turnstileTimeoutRef.current = setTimeout(
+        () => finalizeTurnstileSubmit(null),
+        TURNSTILE_TIMEOUT_MS
+      );
+      const handle = turnstileRef.current;
+      if (handle) {
+        handle.execute();
+      } else {
+        // Widget ref never attached — don't wait, degrade immediately.
+        finalizeTurnstileSubmit(null);
+      }
       return;
     }
 

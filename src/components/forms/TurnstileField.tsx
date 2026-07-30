@@ -90,6 +90,10 @@ export const TurnstileField = forwardRef<TurnstileFieldHandle, TurnstileFieldPro
           script.src =
             "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
           script.async = true;
+          // If the third-party script is blocked or fails to load, surface it
+          // immediately so the form can degrade instead of waiting for the
+          // submit-time watchdog to expire.
+          script.onerror = () => onErrorRef.current();
           document.head.appendChild(script);
         }
       }
