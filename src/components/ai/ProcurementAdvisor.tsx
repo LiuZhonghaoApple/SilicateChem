@@ -41,12 +41,12 @@ const initialMessage: AdvisorMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hello! I’m the SilicateChem Procurement Advisor. I can help with product selection, specifications, packing, documents, and RFQ preparation. Final prices and commercial terms are confirmed by our human sales team.",
+    "Hi, welcome to SilicateChem. You're chatting with our Sales & Support desk — ask us about grades, specifications, packing, documents or a quotation and we'll help you right away. Leave your email or WhatsApp anytime and a colleague will follow up with prices and terms.",
   mode: "local",
 };
 
 const fallbackMessage =
-  "The automated answer is temporarily unavailable. Please continue with our human sales team on WhatsApp or use the quotation form.";
+  "We can't reach the desk this second. Please leave your email or WhatsApp below, or message us on WhatsApp, and our team will get back to you shortly.";
 
 function createMessageId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -62,6 +62,9 @@ export function ProcurementAdvisor() {
   const [busy, setBusy] = useState(false);
   const [requestCount, setRequestCount] = useState(0);
   const [messages, setMessages] = useState<AdvisorMessage[]>([initialMessage]);
+  const [contact, setContact] = useState("");
+  const [contactBusy, setContactBusy] = useState(false);
+  const [contactDone, setContactDone] = useState(false);
   const sessionIdRef = useRef<string | null>(null);
   const messageListRef = useRef<HTMLDivElement | null>(null);
 
@@ -72,7 +75,7 @@ export function ProcurementAdvisor() {
     .map((message) => `- ${message.content}`)
     .join("\n");
   const handoffText = [
-    "Hello SilicateChem, I used the AI Procurement Advisor.",
+    "Hello SilicateChem, I was chatting on your website.",
     "My inquiry:",
     buyerMessages || "- I would like to discuss a sodium metasilicate requirement.",
     "Please continue with a human sales representative.",
@@ -197,13 +200,70 @@ export function ProcurementAdvisor() {
     void sendMessage(input);
   }
 
+  async function submitContact(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = contact.trim();
+    if (value.length < 3 || contactBusy) return;
+    setContactBusy(true);
+    const conversation = messages
+      .filter((item) => item.id !== "welcome")
+      .slice(-8)
+      .map((item) => `${item.role === "user" ? "Visitor" : "Support"}: ${item.content}`)
+      .join("\n");
+    try {
+      const response = await fetch("/api/support-handoff", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contact: value,
+          pagePath: pathname,
+          conversation,
+          website: "",
+        }),
+      });
+      if (!response.ok) throw new Error("handoff_failed");
+      setContactDone(true);
+      setContact("");
+      setMessages((current) => [
+        ...current,
+        {
+          id: createMessageId(),
+          role: "assistant",
+          content:
+            "Thank you — we've notified our sales team and a colleague will reach out to you shortly. You can also message us on WhatsApp for a faster reply.",
+          mode: "local",
+        },
+      ]);
+      trackAiAdvisorEvent({
+        event: "ai_advisor_handoff",
+        pagePath: pathname,
+        label: "contact_captured",
+      });
+      scrollToLatest();
+    } catch {
+      setMessages((current) => [
+        ...current,
+        {
+          id: createMessageId(),
+          role: "assistant",
+          content:
+            "Sorry, we couldn't submit that just now. Please message us on WhatsApp and our team will assist you right away.",
+          mode: "fallback",
+        },
+      ]);
+      scrollToLatest();
+    } finally {
+      setContactBusy(false);
+    }
+  }
+
   return (
     <div className="fixed bottom-20 right-4 z-50 md:bottom-24 md:right-6">
       {open && (
         <section
           id="procurement-advisor-panel"
           role="dialog"
-          aria-label="AI Procurement Advisor"
+          aria-label="Sales & Support chat"
           className="absolute bottom-[calc(100%+0.75rem)] right-0 flex h-[min(68vh,34rem)] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-[#D7E6EF] bg-white shadow-2xl"
         >
           <header className="flex items-center justify-between bg-[#0B2D5B] px-4 py-3 text-white">
@@ -215,10 +275,10 @@ export function ProcurementAdvisor() {
                 </svg>
               </span>
               <div>
-                <h2 className="text-sm font-bold">AI Procurement Advisor</h2>
+                <h2 className="text-sm font-bold">Sales &amp; Support</h2>
                 <p className="flex items-center gap-1.5 text-xs text-white/75">
                   <span className="h-2 w-2 rounded-full bg-[#25D366]" />
-                  24-hour pre-sales guidance
+                  Online · we usually reply fast
                 </p>
               </div>
             </div>
@@ -226,7 +286,7 @@ export function ProcurementAdvisor() {
               type="button"
               onClick={toggleOpen}
               className="rounded p-1 text-2xl leading-none text-white/80 hover:bg-white/10 hover:text-white"
-              aria-label="Close AI Procurement Advisor"
+              aria-label="Close Sales & Support chat"
             >
               ×
             </button>
@@ -321,6 +381,27 @@ export function ProcurementAdvisor() {
               </button>
             </form>
 
+            {!contactDone && (
+              <form onSubmit={submitContact} className="mt-2 flex items-center gap-2">
+                <input
+                  type="text"
+                  value={contact}
+                  onChange={(event) => setContact(event.target.value)}
+                  maxLength={200}
+                  placeholder="Your email or WhatsApp for a reply"
+                  className="min-h-9 flex-1 rounded-lg border border-[#CBD5E1] px-3 py-1.5 text-xs text-[#0F172A] outline-none placeholder:text-[#94A3B8] focus:border-[#2E7D9A]"
+                  aria-label="Your email or WhatsApp number"
+                />
+                <button
+                  type="submit"
+                  disabled={contactBusy || contact.trim().length < 3}
+                  className="shrink-0 rounded-lg bg-[#0B2D5B] px-3 py-1.5 text-xs font-bold text-white hover:bg-[#071F3F] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {contactBusy ? "Sending…" : "Request reply"}
+                </button>
+              </form>
+            )}
+
             <div className="mt-2 grid grid-cols-2 gap-2">
               <a
                 href={whatsappHref}
@@ -373,7 +454,7 @@ export function ProcurementAdvisor() {
         type="button"
         onClick={toggleOpen}
         className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#0B2D5B] text-white shadow-xl transition-colors hover:bg-[#071F3F]"
-        aria-label={open ? "Close AI Procurement Advisor" : "Open AI Procurement Advisor"}
+        aria-label={open ? "Close Sales & Support chat" : "Chat with Sales & Support"}
         aria-expanded={open}
         aria-controls="procurement-advisor-panel"
       >
@@ -385,9 +466,7 @@ export function ProcurementAdvisor() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M5 5.5h14v10H9l-4 3v-13Z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 9h6M9 12h4" />
             </svg>
-            <span className="absolute -right-1 -top-1 rounded-full bg-[#25D366] px-1.5 py-0.5 text-[9px] font-black text-white">
-              AI
-            </span>
+            <span className="absolute -right-0.5 -top-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-[#25D366]" aria-hidden="true" />
           </>
         )}
       </button>

@@ -139,11 +139,12 @@ async function requestModelAnswer({
   history: Array<z.infer<typeof messageSchema>>;
   knowledgeContext: string;
 }): Promise<string | null> {
-  const instructions = `You are the SilicateChem AI Procurement Advisor for Shandong Zhongzhi Chemical Technology Co., Ltd.
+  const instructions = `You are a member of the SilicateChem Sales & Support team at Shandong Zhongzhi Chemical Technology Co., Ltd.
 
-Your role is limited to 24-hour pre-sales guidance, inquiry qualification, translation, and preparation of a concise handoff summary for human sales.
+Your role is pre-sales guidance, inquiry qualification, translation, and preparing a concise handoff summary for the sales colleagues who confirm prices and terms.
 
 Rules:
+- Speak naturally as the SilicateChem Sales & Support team ("we", "our team"). Do not describe yourself as an AI, bot, assistant, or automated system.
 - Answer in the same language as the buyer.
 - Use only the approved reference information below. Do not use outside facts.
 - Never invent or confirm prices, discounts, payment terms, live stock, production slots, delivery dates, shipping costs, exclusivity, contracts, or batch-specific values.
@@ -228,7 +229,7 @@ export async function POST(request: Request) {
     if (!(await aiCallAllowed(getClientIp(request), sessionId))) {
       return NextResponse.json({
         answer:
-          "The automated answer limit for this session has been reached. Please continue with our human sales team on WhatsApp for a verified response.",
+          "Thanks for all your questions! To keep things moving, please continue with our sales team on WhatsApp, or leave your email below and a colleague will follow up.",
         mode: "fallback",
         sources: advisorFallback.sources,
         handoff: true,
