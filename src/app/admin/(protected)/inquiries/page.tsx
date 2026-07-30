@@ -6,6 +6,7 @@ import {
   leadStatusClasses,
   leadStatusLabels,
 } from "@/lib/crm/presentation";
+import { ManualLeadDialog } from "./ManualLeadDialog";
 
 export const dynamic = "force-dynamic";
 
@@ -23,9 +24,12 @@ export default async function InquiryListPage({
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-[#0B2D5B]">询盘管理</h1>
-        <p className="mt-1 text-sm text-[#64748B]">按状态和联系人检索，进入详情后记录跟进与转化结果。</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-[#0B2D5B]">询盘管理</h1>
+          <p className="mt-1 text-sm text-[#64748B]">按状态和联系人检索，进入详情后记录跟进与转化结果。</p>
+        </div>
+        <ManualLeadDialog />
       </div>
 
       <form className="grid gap-3 rounded-xl border border-[#DCE4EA] bg-white p-4 shadow-sm sm:grid-cols-[180px_minmax(220px,1fr)_auto]">
