@@ -330,6 +330,12 @@ const buyerIntentGuideCards: BuyerIntentGuideCard[] = [
     icon: "comparison",
   },
   {
+    title: "Pentahydrate vs Anhydrous — Which Grade to Buy",
+    href: "/guides/pentahydrate-vs-anhydrous",
+    cta: "Read guide → Request quote",
+    icon: "comparison",
+  },
+  {
     title: "How to Choose a Sodium Metasilicate Factory in China",
     href: "/guides/how-to-choose-china-factory",
     cta: "Read guide → Request quote",

@@ -216,6 +216,61 @@ export const intentGuides: IntentGuide[] = [
       },
     ],
   },
+  {
+    slug: "pentahydrate-vs-anhydrous",
+    title: "Sodium Metasilicate Pentahydrate vs Anhydrous — Which Grade to Buy",
+    metaTitle: "Pentahydrate vs Anhydrous Sodium Metasilicate for Buyers",
+    metaDescription:
+      "Compare sodium metasilicate pentahydrate (Na₂SiO₃·5H₂O) and anhydrous (Na₂SiO₃) for procurement: active content, water of crystallization, dissolution, moisture handling, and how to choose the right grade for your formulation.",
+    primaryKeyword: "sodium metasilicate pentahydrate vs anhydrous",
+    keywords: [
+      "anhydrous vs pentahydrate sodium metasilicate",
+      "which sodium metasilicate grade to buy",
+      "sodium metasilicate grade selection",
+    ],
+    intro:
+      "Procurement teams sourcing sodium metasilicate must choose between the anhydrous grade (Na₂SiO₃, CAS 6834-92-0) and the pentahydrate grade (Na₂SiO₃·5H₂O, CAS 10213-79-3). Both are alkaline silicate builders, but they differ in active content, water of crystallization, dissolution behavior, and moisture handling. This guide explains the specification differences so buyers pick the grade that matches their formulation rather than defaulting to the cheapest quote.",
+    sections: [
+      {
+        heading: "Key Specification Differences",
+        paragraphs: [
+          "The decisive difference is water of crystallization. Anhydrous sodium metasilicate carries high actives — SiO₂ ≥ 46.0% and Na₂O ≥ 50.0% — at molecular weight 122.06 g/mol. The pentahydrate binds five water molecules per unit (MW 212.14 g/mol), so on a mass basis its actives are lower: SiO₂ ≥ 28.5% and Na₂O ≥ 29.0%. Roughly half the pentahydrate's weight is bound water.",
+          "Both grades share Fe ≤ 0.02%, supporting color stability in white and light-colored end products. Because the actives differ, the correct comparison between a quotation for each grade is cost per unit of active alkalinity delivered, not price per ton of material.",
+        ],
+      },
+      {
+        heading: "Handling and Dissolution",
+        paragraphs: [
+          "Anhydrous sodium metasilicate is a low-moisture grade (moisture ≤ 1.0%) supplied as white powder or fine granules, selected for dry-blend systems where introducing water should be minimized and where high alkalinity per ton matters — high-alkalinity detergents, industrial degreasing, and dry chemical blends. Keep it sealed and dry to avoid moisture absorption.",
+          "Pentahydrate is a white crystalline granule or powder whose bound water gives controlled, predictable dissolution. It is commonly specified for cleaning products, textile scouring and bleaching auxiliaries, water-treatment blends, and metal-cleaning preparations where dissolution behavior is more important than maximum actives per ton.",
+        ],
+      },
+      {
+        heading: "How to Choose Between Them",
+        paragraphs: [
+          "Choose anhydrous when you need maximum alkalinity per ton, a low-moisture material for dry blending, or the most freight-efficient way to ship active silicate — since you are not paying to ship bound water.",
+          "Choose pentahydrate when your formulation specifies the hydrate grade, when controlled dissolution is required, or when your process was validated on crystalline material. When sending an RFQ, state the grade, CAS number, target actives, particle size or appearance, packing, and destination port so quotations are directly comparable.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is anhydrous or pentahydrate sodium metasilicate cheaper to use?",
+        answer:
+          "Compare on cost per unit of active alkalinity, not price per ton. Anhydrous carries higher actives (SiO₂ ≥ 46.0% / Na₂O ≥ 50.0%) than pentahydrate (SiO₂ ≥ 28.5% / Na₂O ≥ 29.0%), because about half the pentahydrate's mass is water of crystallization.",
+      },
+      {
+        question: "Can I substitute one grade for the other?",
+        answer:
+          "Only after adjusting dosage for the active-content difference and validating dissolution in your process. Anhydrous suits low-moisture dry blends; pentahydrate suits formulations specifying controlled dissolution or the hydrate grade.",
+      },
+      {
+        question: "Which grade ships more efficiently?",
+        answer:
+          "Anhydrous delivers more active silicate per ton, so you are not paying freight on bound water. Pentahydrate is preferred where the formulation or process requires the crystalline hydrate form.",
+      },
+    ],
+  },
 ];
 
 export function getIntentGuideBySlug(slug: string): IntentGuide | undefined {

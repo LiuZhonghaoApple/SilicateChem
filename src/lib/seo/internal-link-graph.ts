@@ -96,6 +96,12 @@ const factoryGuide: ContextualLink = {
   kind: "Guide",
 };
 
+const gradeSelectionGuide: ContextualLink = {
+  href: "/guides/pentahydrate-vs-anhydrous",
+  label: "Pentahydrate vs Anhydrous — Which Grade to Buy",
+  kind: "Guide",
+};
+
 const detergentArticle: ContextualLink = {
   href: "/blog/detergent-industry-metasilicate",
   label: "Detergent Manufacturing Procurement Notes",
@@ -132,6 +138,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     anhydrous,
     pentahydrate,
     supplierGuide,
+    gradeSelectionGuide,
     detergentApplication,
     documents,
     distributorArticle,
@@ -152,6 +159,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     detergentApplication,
     detergentGuide,
     supplierGuide,
+    gradeSelectionGuide,
     priceGuide,
     procurementArticle,
     documents,
@@ -161,6 +169,7 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     waterApplication,
     textileApplication,
     waterArticle,
+    gradeSelectionGuide,
     supplierGuide,
     documents,
     pentahydrateMarketArticle,
@@ -201,6 +210,14 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     documents,
   ],
   "/guides/sodium-metasilicate-vs-soda-ash": [hub, granules, detergentApplication, supplierGuide, detergentGuide],
+  "/guides/pentahydrate-vs-anhydrous": [
+    hub,
+    anhydrous,
+    pentahydrate,
+    supplierGuide,
+    priceGuide,
+    documents,
+  ],
   "/guides/how-to-choose-china-factory": [hub, supplierGuide, procurementArticle, certifications, documents],
   "/blog/detergent-industry-metasilicate": [hub, granules, detergentApplication, detergentGuide, documents],
   "/blog/water-treatment-metasilicate": [hub, pentahydrate, waterApplication, supplierGuide, documents],
