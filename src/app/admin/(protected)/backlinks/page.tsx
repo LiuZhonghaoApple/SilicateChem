@@ -213,6 +213,22 @@ export default async function BacklinkDashboardPage({
                 {item.costNote ? <p className="mt-2 text-xs text-amber-700">{item.costNote}</p> : null}
                 <p className="mt-3 text-xs text-[#64748B]">计划承接：{item.plannedTargetPath ?? "待定"}</p>
                 <p className="mt-1 text-xs text-[#64748B]">建议资产：{item.suggestedAsset ?? "待定"}</p>
+                <div className="mt-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] p-2.5">
+                  <p className="text-xs font-bold text-[#334155]">编辑联系人</p>
+                  {item.contactEmail ? (
+                    <a href={`mailto:${item.contactEmail}`} className="mt-1 block break-all text-xs font-semibold text-[#2E7D9A] hover:underline">
+                      {item.contactEmail}
+                    </a>
+                  ) : (
+                    <p className="mt-1 text-xs text-[#94A3B8]">未记录 — 请在下方表单补填</p>
+                  )}
+                  {item.contactName ? <p className="mt-1 text-xs text-[#64748B]">{item.contactName}</p> : null}
+                  {item.contactPageUrl ? (
+                    <a href={item.contactPageUrl} target="_blank" rel="noreferrer" className="mt-1 block text-xs text-[#2E7D9A] hover:underline">
+                      联系页 ↗
+                    </a>
+                  ) : null}
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2 text-center text-xs sm:grid-cols-4 xl:grid-cols-2">
                 <div className="rounded-lg bg-[#F8FAFC] p-3"><p className="text-[#64748B]">会话</p><p className="mt-1 text-lg font-bold text-[#0B2D5B]">{number(item.sessions)}</p></div>
@@ -230,6 +246,8 @@ export default async function BacklinkDashboardPage({
                 <input name="owner" defaultValue={item.owner ?? ""} placeholder="负责人" className={inputClass} />
                 <input name="nextReviewAt" type="date" defaultValue={item.nextReviewAt ?? ""} className={inputClass} />
                 <input name="plannedTargetPath" defaultValue={item.plannedTargetPath ?? ""} placeholder="承接页" className={inputClass} />
+                <input name="contactEmail" type="email" defaultValue={item.contactEmail ?? ""} placeholder="编辑邮箱" className={inputClass} />
+                <input name="contactName" defaultValue={item.contactName ?? ""} placeholder="编辑姓名 / 职务" className={`${inputClass} md:col-span-2`} />
                 <input name="sourcePageUrl" type="url" defaultValue={item.sourcePageUrl ?? ""} placeholder="已上线来源页 URL" className={`${inputClass} md:col-span-2`} />
                 <input name="anchorText" defaultValue={item.anchorText ?? ""} placeholder="锚文本" className={inputClass} />
                 <textarea name="notes" defaultValue={item.notes ?? ""} placeholder="执行备注" className={`${inputClass} md:col-span-3`} />

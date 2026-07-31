@@ -110,6 +110,8 @@ export async function updateBacklinkAction(formData: FormData): Promise<void> {
     linkRel,
     nextReviewAt: reviewDate,
     notes: optionalValue(formData.get("notes"), 2_000),
+    contactEmail: optionalValue(formData.get("contactEmail"), 200),
+    contactName: optionalValue(formData.get("contactName"), 200),
     actor,
   });
   revalidatePath("/admin/backlinks");

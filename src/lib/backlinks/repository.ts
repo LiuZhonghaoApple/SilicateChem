@@ -62,6 +62,11 @@ export type BacklinkOpportunity = {
   suggestedAsset: string | null;
   nextAction: string | null;
   owner: string | null;
+  // Editor contact captured at outreach time so follow-ups don't require
+  // re-hunting the publication's contact page.
+  contactEmail: string | null;
+  contactName: string | null;
+  contactPageUrl: string | null;
   sourcePageUrl: string | null;
   anchorText: string | null;
   linkRel: BacklinkRel;
@@ -161,6 +166,9 @@ export async function listBacklinkOpportunities(
       b.suggested_asset AS "suggestedAsset",
       b.next_action AS "nextAction",
       b.owner,
+      b.contact_email AS "contactEmail",
+      b.contact_name AS "contactName",
+      b.contact_page_url AS "contactPageUrl",
       b.source_page_url AS "sourcePageUrl",
       b.anchor_text AS "anchorText",
       b.link_rel AS "linkRel",
@@ -261,6 +269,8 @@ export async function updateBacklinkOpportunity(params: {
   linkRel: BacklinkRel;
   nextReviewAt: string | null;
   notes: string | null;
+  contactEmail?: string | null;
+  contactName?: string | null;
   actor: string;
 }): Promise<void> {
   const sql = getDatabase();
@@ -269,6 +279,8 @@ export async function updateBacklinkOpportunity(params: {
       status = ${params.status},
       planned_target_path = ${params.plannedTargetPath},
       owner = ${params.owner},
+      contact_email = ${params.contactEmail ?? null},
+      contact_name = ${params.contactName ?? null},
       source_page_url = ${params.sourcePageUrl},
       anchor_text = ${params.anchorText},
       link_rel = ${params.linkRel},
