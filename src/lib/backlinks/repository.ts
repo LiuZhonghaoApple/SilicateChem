@@ -199,7 +199,22 @@ export async function listBacklinkOpportunities(
       -- don't clutter the page. Still viewable by explicitly filtering status='rejected'.
       AND ($4 <> '' OR b.status <> 'rejected')
       AND ($6 = '' OR b.channel = $6)
-    ORDER BY CASE b.priority WHEN 'S' THEN 1 WHEN 'A' THEN 2 ELSE 3 END, b.fit_score DESC, b.source_domain`,
+    ORDER BY
+      -- Progress first: the opportunities that actually moved (live/accepted/
+      -- contacted) belong at the top of the page; untouched candidates below.
+      CASE b.status
+        WHEN 'live' THEN 1
+        WHEN 'accepted' THEN 2
+        WHEN 'contacted' THEN 3
+        WHEN 'contact-ready' THEN 4
+        WHEN 'qualified' THEN 5
+        WHEN 'candidate' THEN 6
+        WHEN 'lost' THEN 7
+        ELSE 8
+      END,
+      CASE b.priority WHEN 'S' THEN 1 WHEN 'A' THEN 2 ELSE 3 END,
+      b.fit_score DESC,
+      b.source_domain`,
     [query, search, priority, status, days, channel]
   );
   return rows as unknown as BacklinkOpportunity[];
