@@ -41,6 +41,22 @@ Lina Tyan
 General Manager, Shandong Zhongzhi Chemical Technology Co., Ltd.
 info@silicatechem.com · WhatsApp +86 17685880260
 
+## UPDATE 2026-07-31 — Editor invited an outline
+Peter Saunders replied: "Yes, I'd be interested in seeing an outline." → send the outline below as a threaded reply.
+
+### Proposed outline (reply to Peter)
+**Working title:** Sodium Silicates in Pulp Bleaching and Deinking: Function, Trade-offs and Control
+**Audience:** mill process/bleaching and deinking engineers · **Length:** ~1,300–1,500 words · **Type:** vendor-neutral, educational
+**Sections:**
+1. Why silicates appear in peroxide systems — role at a glance (stabilizer, buffer, sequestrant)
+2. Peroxide bleaching stabilization — sequestration of transition metals (Mn, Fe, Cu) that catalyze H₂O₂ decomposition; alkalinity buffering; interplay with chelants (DTPA/EDTA) and MgSO₄; effect on brightness gain
+3. Deinking chemistry — ink detachment and anti-redeposition, saponification, pH buffering; behavior in flotation vs wash deinking
+4. Choosing the silicate — liquid water-glass vs sodium metasilicate; SiO₂:Na₂O ratio and what it changes; dosing ranges and where to meter it
+5. Trade-offs & control — silicate scaling/deposits and dead-load, incoming water hardness/metal management, monitoring and optimization to minimize consumption
+6. Sourcing & handling (brief) — grade/spec consistency, documentation to request (TDS/SDS/COA), storage and safety of an alkaline solid
+**Reference:** one supporting link to an SilicateChem application reference page (/applications/paper-industry); happy to omit or genericize per editorial preference.
+**Author:** Lina Tyan, General Manager, Shandong Zhongzhi Chemical Technology — hands-on manufacturing background.
+
 ## Guardrails
 - Editorial route only (Editor), not the advertising/sales contact.
 - Non-promotional; single supporting citation; accept editorial removal.
