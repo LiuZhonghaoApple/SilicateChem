@@ -59,9 +59,24 @@
 - 内部统计事件名仍为 `ai_advisor_*`（保持数据连续，勿改）。
 - **留联系方式 + 人工通知**：聊天框内可留邮箱/WhatsApp，提交到 `src/app/api/support-handoff/route.ts`，即时发邮件到 Gmail 提醒人工跟进（回信到 info@）。
 
+### 外链基线卡片（2026-08-01 重做）
+
+`/admin/backlinks` 顶部两张 GSC / Bing 卡片曾长期停在 `2026-07-22 · 数据生成中`。根因不是故障：`processing` 是人在表单里手选的值，**系统里没有任何机制会推进它**，所以它会永久挂着。
+
+- **GSC 侧只能人工**。Search Console API 全部接口只有 站点 / 站点地图 / 搜索表现 / URL 检查 四类，**根本没有 Links 报告端点**（已按官方 discovery 文档逐条核对）。卡片上直接写明这一点并给出 GSC 链接报告直达入口，不要再期待它自动更新。
+- **Bing 侧已自动化**。`src/lib/backlinks/bing.ts` 走 Bing Webmaster API（`GetLinkCounts` + `GetUrlLinks`），由 `/api/analytics/sync` 在每日 03:15 顺带跑（不另占 Vercel cron 名额），卡片上另有「立即同步」按钮。
+  - **需要人工做一次**：在 Bing Webmaster Tools → Settings → API Access 生成 API Key，作为 Vercel 环境变量 `BING_WEBMASTER_API_KEY` 加入三环境并重新部署。未配置时卡片如实显示「未接入 / 未授权」。
+  - 接入后**第一件事是拿返回值和网页版数字对一遍**：已有开发者反映这两个接口对已验证站点可能返回空、与 UI 数据源不一致。
+- **状态只剩终态**，不再有"进行中"：`has_data`（已有数据）/ `confirmed_zero`（已确认为 0）/ `unknown`（未知·待人工核查）/ `not_configured`（未接入）/ `error`（读取异常）。旧值 `ready`/`processing`/`not_authenticated` 已迁移，读取层另有兼容映射。
+- **铁律：未知永远不写成 0。** `confirmed_zero` 只允许在接口调用成功且确实返回 0 条时写入；任何失败路径一律写 `error`/`not_configured` 且数量留 NULL。
+- 卡片显示「最后登记 X · 距今 N 天」，**超过 7 天自动标黄**并提示复核（`BASELINE_STALE_AFTER_DAYS`）。
+
 ## 3. 待办队列
 
-**活跃待办：无。**
+**活跃待办：**
+
+- **加 `BING_WEBMASTER_API_KEY`**（人工，约 5 分钟）：Bing Webmaster Tools → Settings → API Access 生成 Key → 加进 Vercel 三环境 → 重新部署 → 到 `/admin/backlinks` 点「立即同步」→ 与 Bing 网页版数字核对。
+- **人工复核一次 GSC 链接报告**并在后台登记（该项永远不会自动化，见上）。
 
 **已关闭（2026-08-01）：**
 
@@ -89,6 +104,7 @@
 | ~~P2~~ 已修 | ~~两套"已报价"口径不一致~~ | **已完成（2026-08-01）**：总览只数 `status='quoted'`、漏斗数累计，客户推进到谈判中就从卡片消失。两处统一为累计口径，并补上此前遗漏的 `sample`（**已与运营确认：寄样在报价之后**）。 | `src/lib/crm/repository.ts`、`src/lib/reporting/repository.ts` |
 | ~~P2~~ 已修 | ~~产品页询盘分布未排除 spam~~ | **已完成（2026-08-01）**：`getProductInquiryStats` 加 `status <> 'spam'`。 | `src/lib/crm/repository.ts` |
 | ~~P2~~ 已修 | ~~GEO 内容审核被批量误重置~~ | **已完成（2026-08-01）**：`content_version` 取自共享数据文件的 git 时间，改一个产品会让全部产品页版本跳变、复核状态与复核人被一起清空。改为按单页真实内容算指纹（`geo_content_reviews.content_fingerprint`），仅当该页自身内容变化才重置；静态页无指纹时回退比时间戳；首次同步只回填不重置。 | `src/lib/seo/content-fingerprint.ts`、`src/lib/seo/geo-content-registry.ts`、`src/lib/reporting/repository.ts`、`scripts/migrate-crm.mjs` |
+| ~~P2~~ 已修 | ~~外链基线卡片永远停在"数据生成中"~~ | **已完成（2026-08-01）**：`processing` 是人工手选值且无任何机制推进，卡片停在 `2026-07-22` 十天。状态改为五个终态（已有数据 / 已确认为 0 / 未知待查 / 未接入 / 读取异常），卡片显示"距今 N 天"并超 7 天标黄；Bing 接 API 每日自动同步 + 「立即同步」按钮；GSC 明确标注只能人工登记（官方 API 无 Links 端点）。顶部黄框与"候选域名"计数改为实时读库（原写死"30个域名、未对外联系"，实际已联系 20 家）。 | `src/lib/backlinks/bing.ts`、`src/lib/backlinks/baseline-sync.ts`、`src/lib/backlinks/repository.ts`、`backlinks/page.tsx`、`backlinks/actions.ts`、`api/analytics/sync/route.ts`、`scripts/migrate-crm.mjs` |
 | P3 未做 | IndexNow 覆盖窄 + 无手动按钮 | 仅每日 03:00 cron 触发（发布后最长等 24h），且只提交"时间戳最新的那一批"URL，其他改动页可能一直不被提交；后台无"立即提交"。**经评估性价比低（"已接收"≠已收录，Bing 流量占比小），运营决定暂缓。** | `src/lib/geo/indexnow.ts`、`vercel.json` |
 
 ## 5. 运营红线

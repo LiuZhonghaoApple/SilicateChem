@@ -130,6 +130,25 @@ const statements = [
   `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_email TEXT`,
   `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_name TEXT`,
   `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_page_url TEXT`,
+  // Baseline connection states became terminal: "processing" implied something
+  // was still working on the number when nothing ever was, so it never left the
+  // dashboard. Drop the constraint, remap the legacy rows, then re-apply it.
+  `ALTER TABLE backlink_baseline_snapshots DROP CONSTRAINT IF EXISTS backlink_baseline_snapshots_connection_status_check`,
+  `UPDATE backlink_baseline_snapshots SET connection_status = CASE
+      WHEN connection_status = 'ready' AND (
+        referring_domains IS NOT NULL OR linking_pages IS NOT NULL
+        OR sample_links IS NOT NULL OR anchor_count IS NOT NULL
+      ) THEN 'has_data'
+      WHEN connection_status = 'ready' THEN 'unknown'
+      -- "processing" only ever meant "nobody has looked since", i.e. unknown.
+      -- It must not become confirmed_zero: that would invent a fact.
+      WHEN connection_status = 'processing' THEN 'unknown'
+      WHEN connection_status = 'not_authenticated' THEN 'not_configured'
+      ELSE connection_status
+    END
+    WHERE connection_status IN ('ready', 'processing', 'not_authenticated')`,
+  `ALTER TABLE backlink_baseline_snapshots ADD CONSTRAINT backlink_baseline_snapshots_connection_status_check
+     CHECK (connection_status IN ('has_data', 'confirmed_zero', 'unknown', 'not_configured', 'error'))`,
   `CREATE TABLE IF NOT EXISTS geo_indexnow_submissions (
     id BIGSERIAL PRIMARY KEY,
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -278,7 +297,9 @@ const statements = [
     id BIGSERIAL PRIMARY KEY,
     provider TEXT NOT NULL CHECK (provider IN ('gsc', 'bing')),
     observed_on DATE NOT NULL,
-    connection_status TEXT NOT NULL CHECK (connection_status IN ('ready', 'processing', 'not_authenticated', 'error')),
+    -- Terminal states only. An in-progress value ("processing") had no mechanism
+    -- to ever advance it and sat on the dashboard for ten days.
+    connection_status TEXT NOT NULL CHECK (connection_status IN ('has_data', 'confirmed_zero', 'unknown', 'not_configured', 'error')),
     referring_domains INTEGER,
     linking_pages INTEGER,
     sample_links INTEGER,
@@ -444,17 +465,17 @@ seedQueries.push(
   sql`INSERT INTO backlink_baseline_snapshots (
     provider, observed_on, connection_status, evidence_url, note, observed_by
   ) VALUES (
-    'gsc', '2026-07-22', 'processing',
+    'gsc', '2026-07-22', 'unknown',
     'https://search.google.com/search-console/links?resource_id=https%3A%2F%2Fwww.silicatechem.com%2F',
-    'Verified property is available. The Links report is still processing data and the external-link export is disabled; counts must remain unknown instead of being recorded as zero.',
+    'Verified property is available, but the Search Console API exposes no Links endpoint at all, so this baseline can only ever be filled in by opening the Links report by hand. Counts stay unknown rather than being recorded as zero.',
     'codex-readonly-audit'
   ) ON CONFLICT (provider, observed_on) DO NOTHING`,
   sql`INSERT INTO backlink_baseline_snapshots (
     provider, observed_on, connection_status, evidence_url, note, observed_by
   ) VALUES (
-    'bing', '2026-07-22', 'not_authenticated',
-    'https://www.bing.com/webmasters/about?from=home',
-    'The current browser session is not authenticated in Bing Webmaster Tools. No account was created or connected because external registration is outside the approved scope.',
+    'bing', '2026-07-22', 'not_configured',
+    'https://www.bing.com/webmasters/backlinks',
+    'Bing Webmaster API key is not configured yet, so the baseline cannot be pulled automatically. Counts stay unknown rather than being recorded as zero.',
     'codex-readonly-audit'
   ) ON CONFLICT (provider, observed_on) DO NOTHING`
 );

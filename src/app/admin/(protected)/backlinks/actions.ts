@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { getAdminSession } from "@/lib/admin-auth";
+import { syncBingBaseline } from "@/lib/backlinks/baseline-sync";
 import {
   backlinkChannels,
   backlinkConnectionStatuses,
@@ -139,5 +140,16 @@ export async function recordBacklinkBaselineAction(formData: FormData): Promise<
     note: requiredValue(formData.get("note"), 1_000),
     actor,
   });
+  revalidatePath("/admin/backlinks");
+}
+
+/**
+ * Manual "sync now" for the Bing card. The daily cron does the same thing; this
+ * exists so the baseline can be refreshed (and the API key verified) without
+ * waiting until 03:15.
+ */
+export async function syncBingBaselineAction(): Promise<void> {
+  const actor = await adminUsername();
+  await syncBingBaseline(actor);
   revalidatePath("/admin/backlinks");
 }

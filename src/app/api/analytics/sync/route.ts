@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { syncBingBaseline } from "@/lib/backlinks/baseline-sync";
 import { isAuthorizedCronRequest } from "@/lib/cron-auth";
 import { isDatabaseConfigured } from "@/lib/db";
 import { syncReportingData } from "@/lib/reporting/sync";
@@ -31,9 +32,27 @@ export async function GET(request: Request) {
 
   try {
     const result = await syncReportingData("vercel_cron");
-    return NextResponse.json(result, {
-      headers: { "Cache-Control": "no-store" },
-    });
+
+    // Rides the same daily slot rather than claiming a third Vercel cron. A Bing
+    // failure must not fail the reporting sync, so it is reported, not thrown.
+    let backlinkBaseline;
+    try {
+      backlinkBaseline = await syncBingBaseline("vercel_cron");
+    } catch (error) {
+      console.error("[BACKLINKS] Bing baseline sync failed", error);
+      backlinkBaseline = {
+        provider: "bing" as const,
+        status: "error" as const,
+        observedOn: "",
+        written: false,
+        detail: error instanceof Error ? error.message : "Unknown Bing baseline sync error",
+      };
+    }
+
+    return NextResponse.json(
+      { ...result, backlinkBaseline },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch (error) {
     console.error("[REPORTING] Daily sync failed", error);
     return NextResponse.json(

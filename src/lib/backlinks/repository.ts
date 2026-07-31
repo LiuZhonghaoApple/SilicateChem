@@ -20,7 +20,21 @@ export const backlinkChannels = [
 ] as const;
 export const backlinkRelValues = ["unknown", "follow", "nofollow", "sponsored", "ugc"] as const;
 export const backlinkProviders = ["gsc", "bing"] as const;
-export const backlinkConnectionStatuses = ["ready", "processing", "not_authenticated", "error"] as const;
+
+// Baseline states are deliberately terminal: every value answers "do we have
+// backlinks?" outright. There is no in-progress value, because nothing in the
+// system would ever advance it — the old "processing" sat on the dashboard for
+// ten days claiming data was still being generated.
+export const backlinkConnectionStatuses = [
+  "has_data",
+  "confirmed_zero",
+  "unknown",
+  "not_configured",
+  "error",
+] as const;
+
+/** A baseline observation older than this is treated as due for re-checking. */
+export const BASELINE_STALE_AFTER_DAYS = 7;
 
 export type BacklinkPriority = (typeof backlinkPriorities)[number];
 export type BacklinkStatus = (typeof backlinkStatuses)[number];
@@ -79,14 +93,45 @@ export type BacklinkOpportunity = {
 };
 
 export type BacklinkSummary = {
+  /** Every row, including the ones excluded by the free-only policy. */
   total: number;
+  /** Rows still in play — this is what the dashboard list actually shows. */
+  activeTotal: number;
+  excluded: number;
   highPriority: number;
+  /** Anything we have actually reached out about (contacted / accepted / live). */
+  outreachStarted: number;
+  accepted: number;
   live: number;
   sessions: number;
   users: number;
   keyEvents: number;
   inquiries: number;
 };
+
+/**
+ * Maps retired status values onto the current set at read time.
+ *
+ * Keeps the dashboard correct regardless of whether the database migration has
+ * run yet, so deploy order doesn't matter. `processing` becomes `unknown` and
+ * never `confirmed_zero`: nobody looked, which is not the same as "there are none".
+ */
+function normalizeConnectionStatus(value: string, hasCounts: boolean): BacklinkConnectionStatus {
+  if ((backlinkConnectionStatuses as readonly string[]).includes(value)) {
+    return value as BacklinkConnectionStatus;
+  }
+  if (value === "ready") return hasCounts ? "has_data" : "unknown";
+  if (value === "not_authenticated") return "not_configured";
+  return "unknown";
+}
+
+/** Whole days between an `observed_on` date and today (both `YYYY-MM-DD`). */
+export function daysSinceObservation(observedOn: string, today: string): number {
+  const observed = Date.parse(`${observedOn}T00:00:00Z`);
+  const now = Date.parse(`${today}T00:00:00Z`);
+  if (Number.isNaN(observed) || Number.isNaN(now)) return 0;
+  return Math.max(0, Math.round((now - observed) / 86_400_000));
+}
 
 export async function getBacklinkBaselines(): Promise<BacklinkBaseline[]> {
   const sql = getDatabase();
@@ -105,7 +150,16 @@ export async function getBacklinkBaselines(): Promise<BacklinkBaseline[]> {
     updated_at::text AS "updatedAt"
   FROM backlink_baseline_snapshots
   ORDER BY provider, observed_on DESC, updated_at DESC`;
-  return rows as unknown as BacklinkBaseline[];
+  return (rows as unknown as BacklinkBaseline[]).map((row) => ({
+    ...row,
+    connectionStatus: normalizeConnectionStatus(
+      row.connectionStatus,
+      row.referringDomains != null ||
+        row.linkingPages != null ||
+        row.sampleLinks != null ||
+        row.anchorCount != null
+    ),
+  }));
 }
 
 export async function getBacklinkSummary(days = 30): Promise<BacklinkSummary> {
@@ -114,7 +168,13 @@ export async function getBacklinkSummary(days = 30): Promise<BacklinkSummary> {
     `WITH opportunity AS (
       SELECT
         COUNT(*)::int AS total,
-        COUNT(*) FILTER (WHERE priority IN ('S', 'A'))::int AS "highPriority",
+        COUNT(*) FILTER (WHERE status <> 'rejected')::int AS "activeTotal",
+        COUNT(*) FILTER (WHERE status = 'rejected')::int AS excluded,
+        -- Excluded rows are hidden from the list, so counting them here made the
+        -- headline cards disagree with the rows underneath them.
+        COUNT(*) FILTER (WHERE priority IN ('S', 'A') AND status <> 'rejected')::int AS "highPriority",
+        COUNT(*) FILTER (WHERE status IN ('contacted', 'accepted', 'live'))::int AS "outreachStarted",
+        COUNT(*) FILTER (WHERE status = 'accepted')::int AS accepted,
         COUNT(*) FILTER (WHERE status = 'live')::int AS live
       FROM backlink_opportunities
     ), traffic AS (
@@ -134,7 +194,21 @@ export async function getBacklinkSummary(days = 30): Promise<BacklinkSummary> {
     [days]
   );
   const result = rows as unknown as BacklinkSummary[];
-  return result[0] ?? { total: 0, highPriority: 0, live: 0, sessions: 0, users: 0, keyEvents: 0, inquiries: 0 };
+  return (
+    result[0] ?? {
+      total: 0,
+      activeTotal: 0,
+      excluded: 0,
+      highPriority: 0,
+      outreachStarted: 0,
+      accepted: 0,
+      live: 0,
+      sessions: 0,
+      users: 0,
+      keyEvents: 0,
+      inquiries: 0,
+    }
+  );
 }
 
 export async function listBacklinkOpportunities(

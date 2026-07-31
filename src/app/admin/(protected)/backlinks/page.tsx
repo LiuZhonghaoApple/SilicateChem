@@ -4,14 +4,18 @@ import {
   backlinkPriorities,
   backlinkRelValues,
   backlinkStatuses,
+  daysSinceObservation,
   getBacklinkBaselines,
   getBacklinkSummary,
   listBacklinkOpportunities,
+  BASELINE_STALE_AFTER_DAYS,
   type BacklinkConnectionStatus,
 } from "@/lib/backlinks/repository";
+import { isBingConfigured } from "@/lib/backlinks/bing";
 import {
   createBacklinkAction,
   recordBacklinkBaselineAction,
+  syncBingBaselineAction,
   updateBacklinkAction,
 } from "./actions";
 
@@ -37,18 +41,28 @@ const statusLabels = {
 } as const;
 
 const connectionLabels: Record<BacklinkConnectionStatus, string> = {
-  ready: "数据已就绪",
-  processing: "数据生成中",
-  not_authenticated: "未登录 / 待授权",
+  has_data: "已有数据",
+  confirmed_zero: "已确认为 0",
+  unknown: "未知 · 待人工核查",
+  not_configured: "未接入 / 未授权",
   error: "读取异常",
 };
 
+// "Unknown" is not a neutral state: it means nobody has looked. It gets the same
+// visual weight as a hard error so it cannot quietly sit on the page for weeks.
 const connectionClasses: Record<BacklinkConnectionStatus, string> = {
-  ready: "border-green-200 bg-green-50 text-green-800",
-  processing: "border-amber-200 bg-amber-50 text-amber-900",
-  not_authenticated: "border-slate-200 bg-slate-50 text-slate-700",
-  error: "border-red-200 bg-red-50 text-red-800",
+  has_data: "border-green-200 bg-green-50 text-green-900",
+  confirmed_zero: "border-slate-200 bg-slate-50 text-slate-700",
+  unknown: "border-amber-200 bg-amber-50 text-amber-950",
+  not_configured: "border-slate-200 bg-slate-50 text-slate-700",
+  error: "border-red-200 bg-red-50 text-red-900",
 };
+
+const STALE_CLASS = "border-amber-300 bg-amber-50 text-amber-950";
+
+const GSC_LINKS_REPORT_URL =
+  "https://search.google.com/search-console/links?resource_id=https%3A%2F%2Fwww.silicatechem.com%2F";
+const BING_BACKLINKS_URL = "https://www.bing.com/webmasters/backlinks";
 
 const inputClass = "rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm";
 
@@ -83,8 +97,22 @@ export default async function BacklinkDashboardPage({
   ]);
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai" }).format(new Date());
   const baselineMap = new Map(baselines.map((item) => [item.provider, item]));
+  const bingConfigured = isBingConfigured();
+
+  const baselineCards = (["gsc", "bing"] as const).map((provider) => {
+    const item = baselineMap.get(provider);
+    // A missing row is an unknown, not an error: nobody has looked yet.
+    const status: BacklinkConnectionStatus = item?.connectionStatus ?? "unknown";
+    const ageDays = item ? daysSinceObservation(item.observedOn, today) : null;
+    const stale = ageDays === null || ageDays > BASELINE_STALE_AFTER_DAYS;
+    return { provider, item, status, ageDays, stale, needsAttention: stale || status === "unknown" || status === "error" };
+  });
+  const anyBaselineNeedsAttention = baselineCards.some((card) => card.needsAttention);
+
   const cards = [
-    { label: "候选域名", value: summary.total, note: "首批经核验台账" },
+    // Excluded rows are hidden from the list below, so counting them here would
+    // make this number disagree with what the page actually shows.
+    { label: "候选域名", value: summary.activeTotal, note: `另有 ${number(summary.excluded)} 条已排除` },
     { label: "S/A 优先级", value: summary.highPriority, note: "优先投入内容资产" },
     { label: "已上线外链", value: summary.live, note: "仅统计确认可访问链接" },
     { label: "30天引荐会话", value: summary.sessions, note: `${number(summary.users)} 访客` },
@@ -99,38 +127,123 @@ export default async function BacklinkDashboardPage({
         <p className="mt-1 text-sm text-[#64748B]">外链基线、机会台账、GA4 流量与 CRM 询盘归因。</p>
       </div>
 
+      {/* Read from the ledger rather than hard-coded: the previous fixed wording
+          still claimed nobody had been contacted long after outreach began. */}
       <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
         <p className="font-bold">候选不等于已获得</p>
-        <p className="mt-1">当前30个域名仅完成公开入口与行业相关性核验；本阶段未对外联系、未注册平台、未购买链接。</p>
+        {summary.outreachStarted > 0 ? (
+          <p className="mt-1">
+            台账共 {number(summary.activeTotal)} 个域名（另有 {number(summary.excluded)} 条按“只做免费”政策排除）。
+            已对外联系 {number(summary.outreachStarted)} 家，其中 {number(summary.accepted)} 家已接受投稿，
+            {number(summary.live)} 条外链已确认上线。仍未注册付费平台、未购买任何链接。
+          </p>
+        ) : (
+          <p className="mt-1">
+            当前 {number(summary.activeTotal)} 个域名仅完成公开入口与行业相关性核验；尚未对外联系、未注册平台、未购买链接。
+          </p>
+        )}
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
-        {(["gsc", "bing"] as const).map((provider) => {
-          const item = baselineMap.get(provider);
-          const currentStatus = item?.connectionStatus ?? "error";
+        {baselineCards.map(({ provider, item, status, ageDays, stale }) => {
+          const isGsc = provider === "gsc";
+          const reportUrl = item?.evidenceUrl || (isGsc ? GSC_LINKS_REPORT_URL : BING_BACKLINKS_URL);
+          const autoSynced = !isGsc && item?.observedBy === "vercel_cron";
           return (
-            <article key={provider} className={`rounded-xl border p-5 ${connectionClasses[currentStatus]}`}>
+            <article
+              key={provider}
+              className={`rounded-xl border p-5 ${stale ? STALE_CLASS : connectionClasses[status]}`}
+            >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="text-sm font-bold uppercase">{provider === "gsc" ? "Google Search Console" : "Bing Webmaster Tools"}</p>
-                  <p className="mt-1 text-xs">{item?.observedOn ?? "尚未记录"}</p>
+                  <p className="text-sm font-bold uppercase">
+                    {isGsc ? "Google Search Console" : "Bing Webmaster Tools"}
+                  </p>
+                  {/* Always show how old the reading is — a bare date told nobody
+                      that the number had gone unchecked for over a week. */}
+                  <p className="mt-1 text-xs">
+                    {item ? `最后登记 ${item.observedOn} · 距今 ${ageDays} 天` : "从未登记过"}
+                  </p>
                 </div>
-                <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-bold">{connectionLabels[currentStatus]}</span>
+                <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-bold">
+                  {connectionLabels[status]}
+                </span>
               </div>
+
+              {stale ? (
+                <p className="mt-3 rounded-lg border border-amber-300 bg-white/70 px-3 py-2 text-xs font-bold">
+                  ⚠️ 超过 {BASELINE_STALE_AFTER_DAYS} 天未复核{item ? `（距今 ${ageDays} 天）` : ""}，请重新核查并登记。
+                </p>
+              ) : null}
+
               <div className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                 <div><p className="text-xs opacity-70">引用域</p><p className="mt-1 text-xl font-bold">{displayCount(item?.referringDomains ?? null)}</p></div>
                 <div><p className="text-xs opacity-70">链接页</p><p className="mt-1 text-xl font-bold">{displayCount(item?.linkingPages ?? null)}</p></div>
                 <div><p className="text-xs opacity-70">样本链接</p><p className="mt-1 text-xl font-bold">{displayCount(item?.sampleLinks ?? null)}</p></div>
                 <div><p className="text-xs opacity-70">锚文本</p><p className="mt-1 text-xl font-bold">{displayCount(item?.anchorCount ?? null)}</p></div>
               </div>
-              <p className="mt-4 text-xs leading-5">{item?.note ?? "等待首次基线审计。"}</p>
-              {item ? <a href={item.evidenceUrl} target="_blank" rel="noreferrer" className="mt-2 inline-block text-xs font-bold underline">查看数据源</a> : null}
+              {item?.referringDomains == null ||
+              item?.linkingPages == null ||
+              item?.sampleLinks == null ||
+              item?.anchorCount == null ? (
+                <p className="mt-1 text-xs opacity-70">“—”表示未知（尚未核查），不代表 0。</p>
+              ) : null}
+
+              <p className="mt-4 text-xs leading-5">{item?.note ?? "尚未做过首次基线审计。"}</p>
+              {item ? (
+                <p className="mt-2 text-xs opacity-80">
+                  登记人：{item.observedBy}{autoSynced ? "（自动同步）" : "（人工登记）"}
+                </p>
+              ) : null}
+
+              <p className="mt-3 rounded-lg bg-white/70 px-3 py-2 text-xs leading-5">
+                {isGsc ? (
+                  <>
+                    Google 未开放外链 API（Search Console API 只有站点 / 站点地图 / 搜索表现 / URL 检查四类接口，没有 Links 报告），
+                    <strong>此卡片只能人工登录 GSC 网页查看后回来登记</strong>，不会自动更新。
+                  </>
+                ) : bingConfigured ? (
+                  <>已接入 Bing Webmaster API，每日 03:15 随分析同步自动刷新。</>
+                ) : (
+                  <>
+                    尚未接入：在 Bing Webmaster Tools → Settings → API Access 生成 API Key，
+                    再作为 Vercel 环境变量 <code>BING_WEBMASTER_API_KEY</code> 加入并重新部署，本卡片即可自动更新。
+                  </>
+                )}
+              </p>
+
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <a
+                  href={reportUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg bg-white/80 px-3 py-1.5 text-xs font-bold underline"
+                >
+                  打开{isGsc ? " GSC 链接报告" : " Bing 外链报告"} ↗
+                </a>
+                <a href="#baseline-form" className="rounded-lg bg-white/80 px-3 py-1.5 text-xs font-bold underline">
+                  去登记
+                </a>
+                {!isGsc ? (
+                  <form action={syncBingBaselineAction}>
+                    <button className="rounded-lg bg-[#0B2D5B] px-3 py-1.5 text-xs font-bold text-white">
+                      立即同步
+                    </button>
+                  </form>
+                ) : null}
+              </div>
             </article>
           );
         })}
       </section>
 
-      <details className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+      {/* Opens itself when a baseline is stale or unknown, so the fix is one
+          click away from the warning that sent you here. */}
+      <details
+        id="baseline-form"
+        open={anyBaselineNeedsAttention}
+        className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm scroll-mt-4"
+      >
         <summary className="cursor-pointer font-bold text-[#0B2D5B]">更新 GSC / Bing 基线快照</summary>
         <form action={recordBacklinkBaselineAction} className="mt-4 grid gap-3 md:grid-cols-4">
           <select name="provider" required className={inputClass}><option value="gsc">GSC</option><option value="bing">Bing</option></select>
