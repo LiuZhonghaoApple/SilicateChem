@@ -152,7 +152,7 @@ async function syncGsc(params: {
     let inspectedCount = 0;
     try {
       const inspections = await inspectGscUrls(params.accessToken, params.inspectionUrls, {
-        budgetMs: 30_000,
+        budgetMs: 45_000,
       });
       inspectedCount = await upsertUrlInspections({
         snapshotDate: params.snapshotDate,

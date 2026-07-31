@@ -313,8 +313,8 @@ export async function inspectGscUrls(
 ): Promise<GscUrlInspectionRow[]> {
   const rows: GscUrlInspectionRow[] = [];
   const errors: Error[] = [];
-  const batchSize = 6;
-  const deadline = Date.now() + (options.budgetMs ?? 30_000);
+  const batchSize = 8;
+  const deadline = Date.now() + (options.budgetMs ?? 45_000);
 
   for (let index = 0; index < urls.length; index += batchSize) {
     if (Date.now() >= deadline) break;
