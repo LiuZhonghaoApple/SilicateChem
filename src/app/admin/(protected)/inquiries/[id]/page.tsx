@@ -19,6 +19,7 @@ import {
   toChinaDateTimeLocal,
 } from "@/lib/crm/presentation";
 import { getVisitorTimelineByVisitorId } from "@/lib/conversion/visitor-events";
+import { formatCountry, isCountryMismatch } from "@/lib/attribution/visitor-country";
 import { addLeadNoteAction, updateLeadAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -46,6 +47,8 @@ export default async function InquiryDetailPage({
     getLeadStatusHistory(id),
     getVisitorTimelineByVisitorId(lead.visitorId),
   ]);
+
+  const countryMismatch = isCountryMismatch(lead.country, lead.detectedCountry);
 
   const whatsappText = encodeURIComponent(
     `Hello ${lead.name}, thank you for your inquiry about ${lead.product ?? "sodium metasilicate"}. This is SilicateChem sales. We would like to confirm your specification, quantity, packing and destination requirements.`
@@ -90,7 +93,26 @@ export default async function InquiryDetailPage({
               <DetailItem label="联系人" value={lead.name} />
               <DetailItem label="邮箱" value={<a href={`mailto:${lead.email}`} className="text-[#2E7D9A] hover:underline">{lead.email}</a>} />
               <DetailItem label="公司" value={lead.company} />
-              <DetailItem label="国家" value={lead.country} />
+              <DetailItem
+                label="国家（客户填写 / 系统检测）"
+                value={
+                  <span>
+                    {lead.country}
+                    <span className="text-[#94A3B8]"> / </span>
+                    <span className={countryMismatch ? "font-semibold text-amber-700" : ""}>
+                      {formatCountry(lead.detectedCountry)}
+                    </span>
+                    {countryMismatch ? (
+                      <span
+                        className="ml-2 rounded bg-amber-100 px-1.5 py-0.5 text-xs font-bold text-amber-800"
+                        title="填写国家与提交时的网络所在国不一致，常见于中间商/贸易代理，也可能只是出差或使用VPN"
+                      >
+                        不一致
+                      </span>
+                    ) : null}
+                  </span>
+                }
+              />
               <DetailItem label="产品" value={lead.product} />
               <DetailItem label="数量" value={lead.quantity} />
               <DetailItem label="询盘类型" value={lead.inquiryType} />

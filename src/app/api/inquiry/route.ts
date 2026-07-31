@@ -8,6 +8,7 @@ import {
   updateLeadEmailDelivery,
 } from "@/lib/crm/repository";
 import { checkInquiryRateLimit, getClientIp } from "@/lib/rate-limit";
+import { resolveVisitorCountry } from "@/lib/attribution/visitor-country";
 import {
   isTurnstileVerificationEnabled,
   verifyTurnstileToken,
@@ -205,6 +206,7 @@ export async function POST(request: Request) {
       ipHash: hashClientIp(clientIp),
       referer: request.headers.get("referer"),
       siteUrl: SITE.url,
+      detectedCountry: resolveVisitorCountry(request),
     });
 
     let databaseStored = false;

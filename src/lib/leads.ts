@@ -42,6 +42,13 @@ export interface StructuredLead {
     ipHash: string | null;
     referer: string | null;
     siteUrl: string;
+    /**
+     * Country detected at the edge from the visitor's IP (ISO 3166-1 alpha-2).
+     * Server-observed, unlike `contact.country`, which the buyer types in.
+     * Comparing the two flags likely intermediaries/agents. Null for manual
+     * entry and whenever the edge cannot resolve a country.
+     */
+    detectedCountry: string | null;
   };
 }
 
@@ -75,6 +82,7 @@ export function buildStructuredLead(
     ipHash?: string | null;
     referer?: string | null;
     siteUrl: string;
+    detectedCountry?: string | null;
   }
 ): StructuredLead {
   return {
@@ -115,6 +123,7 @@ export function buildStructuredLead(
       ipHash: meta.ipHash ?? null,
       referer: meta.referer ?? null,
       siteUrl: meta.siteUrl,
+      detectedCountry: meta.detectedCountry ?? null,
     },
   };
 }

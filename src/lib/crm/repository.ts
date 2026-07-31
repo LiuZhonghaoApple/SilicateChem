@@ -52,6 +52,8 @@ export type CrmLead = {
   utmContent: string | null;
   visitorId: string | null;
   userAgent: string | null;
+  /** Edge-detected country (ISO alpha-2); compare with `country` (buyer-typed). */
+  detectedCountry: string | null;
   geoSource: string | null;
   geoReferrerHost: string | null;
   geoLandingPath: string | null;
@@ -113,6 +115,7 @@ const leadSelect = `
   utm_content AS "utmContent",
   visitor_id AS "visitorId",
   user_agent AS "userAgent",
+  detected_country AS "detectedCountry",
   geo_source AS "geoSource",
   geo_referrer_host AS "geoReferrerHost",
   geo_landing_path AS "geoLandingPath",
@@ -141,7 +144,7 @@ export async function createLeadRecord(lead: StructuredLead): Promise<void> {
       message, inquiry_type, source_page, source_path, funnel_layer,
       landing_page, referrer, utm_source, utm_medium, utm_campaign,
       utm_term, utm_content, visitor_id, user_agent, ip_hash,
-      geo_source, geo_referrer_host, geo_landing_path
+      geo_source, geo_referrer_host, geo_landing_path, detected_country
     ) VALUES (
       ${lead.id}, ${lead.submittedAt}, ${lead.contact.name}, ${lead.contact.email},
       ${lead.contact.company}, ${lead.contact.country}, ${lead.interest.product},
@@ -153,7 +156,7 @@ export async function createLeadRecord(lead: StructuredLead): Promise<void> {
       ${lead.attribution.utmTerm}, ${lead.attribution.utmContent},
       ${lead.attribution.visitorId}, ${lead.meta.userAgent}, ${lead.meta.ipHash},
       ${lead.attribution.geoSource}, ${lead.attribution.geoReferrerHost},
-      ${lead.attribution.geoLandingPath}
+      ${lead.attribution.geoLandingPath}, ${lead.meta.detectedCountry}
     )`,
     sql`INSERT INTO crm_lead_status_history (
       lead_id, from_status, to_status, note, changed_by

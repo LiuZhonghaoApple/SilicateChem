@@ -55,3 +55,92 @@ export function formatCountry(code: string | null): string {
   const flag = countryFlag(code);
   return flag ? `${flag} ${countryName(code)}` : countryName(code);
 }
+
+/**
+ * Common ways buyers write a country that the standard English/Chinese display
+ * names do not cover. Keys must already be normalized (lowercase, punctuation
+ * and whitespace stripped).
+ */
+const COUNTRY_ALIASES: Record<string, string> = {
+  usa: "US", us: "US", america: "US", unitedstates: "US", unitedstatesofamerica: "US",
+  uk: "GB", britain: "GB", greatbritain: "GB", england: "GB", unitedkingdom: "GB",
+  uae: "AE", 阿联酋: "AE", 迪拜: "AE",
+  korea: "KR", southkorea: "KR", 南韩: "KR", 韩国: "KR",
+  northkorea: "KP",
+  russia: "RU", 俄罗斯: "RU",
+  vietnam: "VN", vietnam2: "VN", 越南: "VN",
+  taiwan: "TW", 台湾: "TW",
+  hongkong: "HK", 香港: "HK",
+  macau: "MO", macao: "MO", 澳门: "MO",
+  czechrepublic: "CZ", czechia: "CZ",
+  holland: "NL", netherlands: "NL", 荷兰: "NL",
+  turkey: "TR", türkiye: "TR", turkiye: "TR", 土耳其: "TR",
+  ivorycoast: "CI",
+  iran: "IR", 伊朗: "IR",
+  syria: "SY", 叙利亚: "SY",
+  egypt: "EG", 埃及: "EG",
+  china: "CN", 中国: "CN", 中国大陆: "CN", prc: "CN",
+};
+
+function normalize(text: string): string {
+  return text.toLowerCase().replace(/[\s.,'’\-_()]/g, "");
+}
+
+/** All valid ISO alpha-2 codes, discovered via Intl rather than hardcoded. */
+let nameIndex: Map<string, string> | null = null;
+
+function getNameIndex(): Map<string, string> {
+  if (nameIndex) return nameIndex;
+  const index = new Map<string, string>();
+  let en: Intl.DisplayNames | null = null;
+  let zh: Intl.DisplayNames | null = null;
+  try {
+    en = new Intl.DisplayNames(["en"], { type: "region" });
+    zh = new Intl.DisplayNames(["zh-CN"], { type: "region" });
+  } catch {
+    // Runtime without ICU region data: alias table only.
+  }
+  for (let a = 65; a <= 90; a++) {
+    for (let b = 65; b <= 90; b++) {
+      const code = String.fromCharCode(a, b);
+      const enName = en?.of(code);
+      if (!enName || enName === code) continue; // not a real region
+      index.set(normalize(code), code);
+      index.set(normalize(enName), code);
+      const zhName = zh?.of(code);
+      if (zhName && zhName !== code) index.set(normalize(zhName), code);
+    }
+  }
+  for (const [alias, code] of Object.entries(COUNTRY_ALIASES)) {
+    index.set(normalize(alias), code);
+  }
+  nameIndex = index;
+  return index;
+}
+
+/**
+ * Buyer-typed country text → ISO alpha-2, or null when it cannot be resolved
+ * confidently. Deliberately strict: unresolved input must NOT be treated as a
+ * mismatch, or legitimate buyers get flagged as intermediaries.
+ */
+export function countryCodeFromText(text: string | null | undefined): string | null {
+  if (!text) return null;
+  const key = normalize(text);
+  if (!key) return null;
+  return getNameIndex().get(key) ?? null;
+}
+
+/**
+ * True only when the buyer-typed country and the edge-detected country both
+ * resolve AND disagree. Any uncertainty (missing detection, unparseable text)
+ * returns false so the admin never shows an unfounded "mismatch" badge.
+ */
+export function isCountryMismatch(
+  typedCountry: string | null | undefined,
+  detectedCode: string | null | undefined
+): boolean {
+  if (!detectedCode) return false;
+  const typedCode = countryCodeFromText(typedCountry);
+  if (!typedCode) return false;
+  return typedCode !== detectedCode.toUpperCase();
+}

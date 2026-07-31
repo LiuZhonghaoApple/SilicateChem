@@ -117,11 +117,19 @@ const statements = [
   // Per-page content hash so a commit to a SHARED content file no longer resets
   // every sibling page's GEO review status (see lib/seo/content-fingerprint.ts).
   `ALTER TABLE geo_content_reviews ADD COLUMN IF NOT EXISTS content_fingerprint TEXT`,
+  // Edge-detected country of the submitter, to compare against the country the
+  // buyer typed in. A mismatch usually signals an intermediary/agent.
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS detected_country TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS inquiry_tonnage NUMERIC`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS quote_amount NUMERIC`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS deal_amount NUMERIC`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS expected_delivery_date DATE`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS payment_status TEXT`,
+  // Editor contact captured at outreach time, so follow-ups don't require
+  // re-hunting each publication's contact page.
+  `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_email TEXT`,
+  `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_name TEXT`,
+  `ALTER TABLE backlink_opportunities ADD COLUMN IF NOT EXISTS contact_page_url TEXT`,
   `CREATE TABLE IF NOT EXISTS geo_indexnow_submissions (
     id BIGSERIAL PRIMARY KEY,
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
