@@ -204,7 +204,12 @@ export async function getDashboardStats(): Promise<{
     COUNT(*) FILTER (
       WHERE status IN ('qualified','quoted','sample','negotiating','won')
     )::int AS "qualifiedCount",
-    COUNT(*) FILTER (WHERE status = 'quoted')::int AS "quotedCount",
+    -- "已报价" canonical definition — cumulative "reached the quoted stage or
+    -- beyond", matching getInquiryFunnel(). Counting only status='quoted' made a
+    -- lead vanish from this card the moment it advanced to 寄样/谈判中/成交.
+    COUNT(*) FILTER (
+      WHERE status IN ('quoted','sample','negotiating','won')
+    )::int AS "quotedCount",
     COUNT(*) FILTER (WHERE status = 'won')::int AS "wonCount",
     COUNT(*) FILTER (
       WHERE next_follow_up_at < NOW()
@@ -312,6 +317,7 @@ export async function getProductInquiryStats(): Promise<
     COUNT(*)::int AS count
   FROM crm_leads
   WHERE submitted_at >= NOW() - INTERVAL '30 days'
+    AND status <> 'spam'
   GROUP BY 1, 2
   ORDER BY count DESC
   LIMIT 12`;

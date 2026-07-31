@@ -1,9 +1,17 @@
 import { getContentLastModified } from "@/lib/content-freshness";
+import { getContentFingerprint } from "@/lib/seo/content-fingerprint";
 
 export type GeoContentRecord = {
   pagePath: string;
   contentVersion: string;
   evidenceSource: string;
+  /**
+   * Hash of this page's own content. Drives the review-status reset so a commit
+   * to a shared data file no longer wipes every sibling page's review stamp.
+   * Null for static pages with no collection-backed content — those still fall
+   * back to comparing contentVersion.
+   */
+  contentFingerprint: string | null;
 };
 
 function evidenceSourceForPath(path: string): string {
@@ -30,5 +38,6 @@ export function getGeoContentRegistry(paths: readonly string[]): GeoContentRecor
     pagePath: path || "/",
     contentVersion: getContentLastModified(path),
     evidenceSource: evidenceSourceForPath(path),
+    contentFingerprint: getContentFingerprint(path),
   }));
 }

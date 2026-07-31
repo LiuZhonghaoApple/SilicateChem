@@ -206,26 +206,53 @@ export async function upsertSiteSnapshot(params: {
 }
 
 export async function upsertGeoContentRegistry(
-  records: Array<{ pagePath: string; contentVersion: string; evidenceSource: string }>
+  records: Array<{
+    pagePath: string;
+    contentVersion: string;
+    evidenceSource: string;
+    contentFingerprint?: string | null;
+  }>
 ): Promise<number> {
   const sql = getDatabase();
+  // A page's human review is invalidated only when its OWN content changed:
+  // prefer the per-page fingerprint, and fall back to the (shared-file derived)
+  // timestamp only for static pages that have no fingerprint. Comparing
+  // timestamps alone used to reset every product page whenever one shared
+  // content file was touched.
   const queries = records.map((record) => sql`INSERT INTO geo_content_reviews (
-    page_path, content_version, evidence_source, review_status, updated_at
+    page_path, content_version, evidence_source, content_fingerprint, review_status, updated_at
   ) VALUES (
-    ${record.pagePath}, ${record.contentVersion}, ${record.evidenceSource}, 'source_linked', NOW()
+    ${record.pagePath}, ${record.contentVersion}, ${record.evidenceSource},
+    ${record.contentFingerprint ?? null}, 'source_linked', NOW()
   ) ON CONFLICT (page_path) DO UPDATE SET
     content_version = EXCLUDED.content_version,
     evidence_source = EXCLUDED.evidence_source,
+    content_fingerprint = EXCLUDED.content_fingerprint,
     review_status = CASE
-      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN 'source_linked'
+      WHEN (geo_content_reviews.content_fingerprint IS NOT NULL
+              AND EXCLUDED.content_fingerprint IS NOT NULL
+              AND geo_content_reviews.content_fingerprint <> EXCLUDED.content_fingerprint)
+        OR (EXCLUDED.content_fingerprint IS NULL
+              AND geo_content_reviews.content_version <> EXCLUDED.content_version)
+      THEN 'source_linked'
       ELSE geo_content_reviews.review_status
     END,
     reviewed_by = CASE
-      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN NULL
+      WHEN (geo_content_reviews.content_fingerprint IS NOT NULL
+              AND EXCLUDED.content_fingerprint IS NOT NULL
+              AND geo_content_reviews.content_fingerprint <> EXCLUDED.content_fingerprint)
+        OR (EXCLUDED.content_fingerprint IS NULL
+              AND geo_content_reviews.content_version <> EXCLUDED.content_version)
+      THEN NULL
       ELSE geo_content_reviews.reviewed_by
     END,
     reviewed_at = CASE
-      WHEN geo_content_reviews.content_version <> EXCLUDED.content_version THEN NULL
+      WHEN (geo_content_reviews.content_fingerprint IS NOT NULL
+              AND EXCLUDED.content_fingerprint IS NOT NULL
+              AND geo_content_reviews.content_fingerprint <> EXCLUDED.content_fingerprint)
+        OR (EXCLUDED.content_fingerprint IS NULL
+              AND geo_content_reviews.content_version <> EXCLUDED.content_version)
+      THEN NULL
       ELSE geo_content_reviews.reviewed_at
     END,
     updated_at = NOW()`);
@@ -564,7 +591,7 @@ export async function getInquiryFunnel(days = 30): Promise<InquiryFunnel> {
       SELECT
         COUNT(*) FILTER (WHERE status <> 'spam')::int AS inquiries,
         COUNT(*) FILTER (WHERE status IN ('qualified','quoted','sample','negotiating','won'))::int AS qualified,
-        COUNT(*) FILTER (WHERE status IN ('quoted','negotiating','won'))::int AS quoted,
+        COUNT(*) FILTER (WHERE status IN ('quoted','sample','negotiating','won'))::int AS quoted,
         COUNT(*) FILTER (WHERE status = 'won')::int AS won
       FROM crm_leads
       WHERE submitted_at >= NOW() - ($1::int * INTERVAL '1 day')

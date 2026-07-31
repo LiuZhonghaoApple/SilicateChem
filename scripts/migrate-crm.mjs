@@ -111,6 +111,9 @@ const statements = [
   // Commercial / deal fields (P1). All nullable & additive — no existing data is
   // touched. Amounts are stored as NUMERIC in USD; tonnage in metric tons.
   // payment_status is validated at the app layer (see leadPaymentStatuses).
+  // Per-page content hash so a commit to a SHARED content file no longer resets
+  // every sibling page's GEO review status (see lib/seo/content-fingerprint.ts).
+  `ALTER TABLE geo_content_reviews ADD COLUMN IF NOT EXISTS content_fingerprint TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS inquiry_tonnage NUMERIC`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS quote_amount NUMERIC`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS deal_amount NUMERIC`,
