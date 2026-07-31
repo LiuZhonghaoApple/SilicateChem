@@ -18,6 +18,14 @@ export type VisitorSession = {
   lastSeen: string;
   eventCount: number;
   actions: string[];
+  /**
+   * ISO 3166-1 alpha-2 from the edge at event time. Takes the MOST RECENT
+   * non-null reading for the visitor (an IP can change mid-session; the latest
+   * is closest to where they are now). Null for events recorded before country
+   * capture shipped — those cannot be backfilled, since only a one-way IP hash
+   * was ever stored.
+   */
+  country: string | null;
   geoSource: string | null;
   referrerHost: string | null;
   utmSource: string | null;
@@ -72,6 +80,7 @@ export async function listVisitorSessions(
     MAX(occurred_at) AS "lastSeen",
     COUNT(*)::int AS "eventCount",
     array_agg(event_name ORDER BY occurred_at) AS actions,
+    (array_agg(visitor_country ORDER BY occurred_at DESC) FILTER (WHERE visitor_country IS NOT NULL))[1] AS country,
     (array_agg(geo_source ORDER BY occurred_at) FILTER (WHERE geo_source IS NOT NULL))[1] AS "geoSource",
     (array_agg(referrer_host ORDER BY occurred_at) FILTER (WHERE referrer_host IS NOT NULL))[1] AS "referrerHost",
     (array_agg(utm_source ORDER BY occurred_at) FILTER (WHERE utm_source IS NOT NULL))[1] AS "utmSource",

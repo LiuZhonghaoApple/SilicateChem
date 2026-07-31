@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getDatabase, isDatabaseConfigured } from "@/lib/db";
 import { hashIdentifier } from "@/lib/attribution/visitor-hash";
+import { resolveVisitorCountry } from "@/lib/attribution/visitor-country";
 import {
   consumePersistentRateLimit,
   getClientIp,
@@ -90,7 +91,7 @@ export async function POST(request: Request) {
       event_id, event_name, page_path, page_source, product_interest,
       inquiry_type, event_label, visitor_id_hash, landing_page,
       referrer_host, utm_source, utm_medium, utm_campaign, geo_source,
-      client_ip_hash
+      client_ip_hash, visitor_country
     ) VALUES (
       ${event.eventId}, ${event.eventName}, ${pathOnly(event.pagePath) ?? "/"},
       ${nullable(event.pageSource)}, ${nullable(event.productInterest)},
@@ -98,7 +99,8 @@ export async function POST(request: Request) {
       ${hashIdentifier(event.visitorId)}, ${pathOnly(event.landingPage)},
       ${nullable(event.referrerHost)}, ${nullable(event.utmSource)},
       ${nullable(event.utmMedium)}, ${nullable(event.utmCampaign)},
-      ${nullable(event.geoSource)}, ${hashIdentifier(clientIp)}
+      ${nullable(event.geoSource)}, ${hashIdentifier(clientIp)},
+      ${resolveVisitorCountry(request)}
     ) ON CONFLICT (event_id) DO NOTHING`;
 
     return NextResponse.json({ accepted: true, stored: true }, { status: 202 });

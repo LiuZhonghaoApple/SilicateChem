@@ -1,5 +1,6 @@
 import { listVisitorSessions } from "@/lib/conversion/visitor-events";
 import { conversionEventLabel, formatAdminDate } from "@/lib/crm/presentation";
+import { formatCountry } from "@/lib/attribution/visitor-country";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,10 @@ export default async function VisitorsPage() {
       <div>
         <h1 className="text-2xl font-bold text-[#0B2D5B]">访客行为（近30天）</h1>
         <p className="mt-1 text-sm text-[#64748B]">
-          按访客聚合的匿名行为记录：来源、落地页、动作序列、是否最终提交询盘。数据来自站内埋点 <code>conversion_events</code>，实时。Visitor ID 存于浏览器会话，换会话/换设备会重置，故每行是「一次会话」而非跨天身份。
+          按访客聚合的匿名行为记录：国家、来源、落地页、动作序列、是否最终提交询盘。数据来自站内埋点 <code>conversion_events</code>，实时。Visitor ID 存于浏览器会话，换会话/换设备会重置，故每行是「一次会话」而非跨天身份。
+        </p>
+        <p className="mt-1 text-xs text-[#94A3B8]">
+          国家按访客 IP 在边缘节点判定（不存 IP、不存城市）；用 VPN/代理时显示的是出口节点所在国。2026-08-01 之前的历史记录没有国家数据，显示「未知」，且无法补齐。
         </p>
       </div>
 
@@ -29,6 +33,7 @@ export default async function VisitorsPage() {
           <thead className="bg-[#F1F5F9] text-xs uppercase tracking-wide text-[#64748B]">
             <tr>
               <th className="px-4 py-3">访客</th>
+              <th className="px-4 py-3">国家</th>
               <th className="px-4 py-3">来源</th>
               <th className="px-4 py-3">落地页</th>
               <th className="px-4 py-3">动作序列</th>
@@ -40,7 +45,7 @@ export default async function VisitorsPage() {
           <tbody className="divide-y divide-[#EEF2F6]">
             {sessions.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-[#64748B]">
+                <td colSpan={8} className="px-4 py-8 text-center text-[#64748B]">
                   近30天暂无访客行为记录。
                 </td>
               </tr>
@@ -49,6 +54,9 @@ export default async function VisitorsPage() {
                 <tr key={s.visitorHash} className="align-top">
                   <td className="px-4 py-3 font-mono text-xs text-[#475569]">
                     {s.visitorHash.slice(0, 10)}…
+                  </td>
+                  <td className={`whitespace-nowrap px-4 py-3 ${s.country ? "text-[#334155]" : "text-[#94A3B8]"}`}>
+                    {formatCountry(s.country)}
                   </td>
                   <td className="px-4 py-3 text-[#334155]">
                     {s.geoSource ?? s.utmSource ?? s.referrerHost ?? "直接/未知"}

@@ -111,6 +111,9 @@ const statements = [
   // Commercial / deal fields (P1). All nullable & additive — no existing data is
   // touched. Amounts are stored as NUMERIC in USD; tonnage in metric tons.
   // payment_status is validated at the app layer (see leadPaymentStatuses).
+  // Visitor country (ISO 3166-1 alpha-2) captured from the edge at event time.
+  // Cannot be backfilled: only the one-way IP hash was stored historically.
+  `ALTER TABLE conversion_events ADD COLUMN IF NOT EXISTS visitor_country TEXT`,
   // Per-page content hash so a commit to a SHARED content file no longer resets
   // every sibling page's GEO review status (see lib/seo/content-fingerprint.ts).
   `ALTER TABLE geo_content_reviews ADD COLUMN IF NOT EXISTS content_fingerprint TEXT`,
