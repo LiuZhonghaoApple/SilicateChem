@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "node scripts/generate-content-freshness.mjs",
     "build": "next build",
+    "freshness:generate": "node scripts/generate-content-freshness.mjs",
     "start": "next start",
     "db:migrate": "node scripts/migrate-crm.mjs",
     "audit:seo-geo": "node scripts/audit-seo-geo.mjs https://www.silicatechem.com --summary",

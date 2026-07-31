@@ -1,32 +1,13 @@
 import type { MetadataRoute } from "next";
-import { industryApplications } from "@/content/applications/industries";
-import { blogPosts } from "@/content/blog/posts";
-import { intentGuides } from "@/content/guides/intent-pages";
-import { products } from "@/content/products";
 import { SITE } from "@/lib/constants";
 import { SEO_KEYWORDS } from "@/lib/seo-keywords";
 import { MONEY_PAGES } from "@/lib/seo-funnel";
 import {
   assertContentFreshnessCoverage,
   getContentLastModifiedDate,
+  getIndexablePaths,
 } from "@/lib/content-freshness";
 import { assertInternalLinkGraph } from "@/lib/seo/internal-link-graph";
-
-/** Indexable static pages. */
-const INDEXABLE_STATIC = [
-  "",
-  "/about",
-  "/manufacturing",
-  "/contact",
-  "/faq",
-  "/export",
-  "/certifications",
-  "/downloads",
-  "/products",
-  "/guides",
-  "/applications",
-  "/blog",
-] as const;
 
 function priorityForPath(path: string): number {
   if (path === SEO_KEYWORDS.sodiumMetasilicate.path) return 1.0;
@@ -60,22 +41,7 @@ function changeFrequencyForPath(path: string): MetadataRoute.Sitemap[number]["ch
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const productPages = products.map((p) => `/products/${p.slug}`);
-  const categoryPage = SEO_KEYWORDS.sodiumMetasilicate.path;
-  const guidePages = intentGuides.map((g) => `/guides/${g.slug}`);
-  const applicationPages = industryApplications.map((a) => `/applications/${a.slug}`);
-  const blogPages = blogPosts.map((p) => `/blog/${p.slug}`);
-
-  const allPages = [
-    ...INDEXABLE_STATIC,
-    categoryPage,
-    ...productPages.filter((p) => p !== categoryPage),
-    ...guidePages,
-    ...applicationPages,
-    ...blogPages,
-  ];
-
-  const unique = [...new Set(allPages)];
+  const unique = getIndexablePaths();
   assertContentFreshnessCoverage(unique);
   assertInternalLinkGraph(unique);
 
