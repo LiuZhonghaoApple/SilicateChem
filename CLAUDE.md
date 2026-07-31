@@ -12,12 +12,13 @@
 后台入口：`https://www.silicatechem.com/admin`（未登录跳 `/admin/login`）。
 账号在 Vercel 环境变量：`ADMIN_USERNAME` / `ADMIN_PASSWORD_HASH` / `ADMIN_SESSION_SECRET`（不硬编码、不入库）。
 
-五个模块（均为真实功能，非占位）：
+六个模块（均为真实功能，非占位）：
 
 | 模块 | 路由 | 作用 |
 |---|---|---|
 | 数据总览 | `/admin` | 读真实库，询盘/转化概览 |
-| 询盘管理 | `/admin/inquiries` | 列表、筛选、状态、优先级、负责人、跟进、备注、详情 |
+| 询盘管理 | `/admin/inquiries` | 列表、筛选、状态、优先级、负责人、跟进、备注、详情；详情页含商业信息（吨位/报价/成交/交期/回款）与「该客户浏览轨迹」询盘360 |
+| 访客行为 | `/admin/visitors` | 按访客聚合的匿名行为面板（近30天动作序列/来源/落地页/是否转化） |
 | SEO 与流量 | `/admin/analytics` | GA4/GSC 同步、询盘漏斗、GEO/AI 引用观察 |
 | 外链管理 | `/admin/backlinks` | 基线、候选台账、状态、归因（当前 30 条） |
 | AI 物料工作台 | `/admin/media-ai` | 任务、上传、草稿、审核（Blob 存储 `silicatechem-media` 已开通，上传可用） |
@@ -60,7 +61,10 @@
 
 ## 3. 待办队列
 
-**活跃待办：无。**
+**活跃待办（2026-08-01）：**
+
+- **测试询盘待降级**：`lead_1785513906037_7u9e80r`（名称 `QA Verification (DELETE ME)`）是 2026-08-01 验证询盘链路时人工提交的真实记录，运营决定**保留不删**。但其状态仍为 `new`，会占用"新询盘/逾期跟进"等经营数字，**需运营在后台把状态改为 `spam`（垃圾询盘）** 以从各项统计中排除。改前不要直接改库。
+- IndexNow 改进已评估为 P3 暂缓，见第 4 节表格末行。
 
 **已关闭（2026-07-30）：**
 
@@ -76,6 +80,14 @@
 | ~~P1~~ 已修 | ~~AI 来源询盘未排除 spam~~ | **已完成（2026-07-30）**：`geoCount` 与 `getGeoInquiryStats` 均加 `AND status <> 'spam'`。 | `src/lib/crm/repository.ts` |
 | ~~P1~~ 已修 | ~~`BLOB_READ_WRITE_TOKEN` 缺失致物料上传 503~~ | **已完成（2026-07-30）**：创建 public Blob 存储 `silicatechem-media` 并连到项目，`BLOB_READ_WRITE_TOKEN` 已注入三环境，重新部署后上传可用。 | Vercel 环境变量、`src/app/api/admin/media-ai/upload/route.ts` |
 | ~~P2~~ 已修 | ~~Resend 邮件失败无自动重试~~ | **已完成（2026-07-30）**：发信在 429/5xx/网络错误时自动重试 3 次（指数退避）。 | `src/app/api/inquiry/route.ts` |
+| ~~P1~~ 已做 | ~~缺商业字段（吨位/报价/成交/交期/回款）~~ | **已完成（2026-08-01）**：`crm_leads` 增 5 个可空列（`inquiry_tonnage`/`quote_amount`/`deal_amount`/`expected_delivery_date`/`payment_status`），详情页可录入与展示。迁移已在 Production 执行。 | `scripts/migrate-crm.mjs`、`src/lib/crm/repository.ts`、`inquiries/[id]/page.tsx`、`inquiries/actions.ts` |
+| ~~P1~~ 已做 | ~~匿名访客行为无界面~~ | **已完成（2026-08-01）**：新增 `/admin/visitors`，按访客聚合近30天行为（动作序列/来源/落地页/是否转化）。 | `src/app/admin/(protected)/visitors/page.tsx`、`src/lib/conversion/visitor-events.ts` |
+| ~~P1~~ 已做 | ~~visitorId 无法关联浏览轨迹~~ | **已完成（2026-08-01）**：根因是 `crm_leads.visitor_id` 存明文 UUID、`conversion_events.visitor_id_hash` 存 HMAC，无法直接 JOIN。抽出唯一哈希模块供读写两端共用，详情页新增「该客户浏览轨迹」。**线上实测关联成功**。 | `src/lib/attribution/visitor-hash.ts`、`api/conversion-event/route.ts`、`inquiries/[id]/page.tsx` |
+| ~~P1~~ 已修 | ~~`rfq_submit` 埋点是死代码~~ | **已完成（2026-08-01）**：`trackRfqSubmit` 定义了但全仓库从未调用，导致漏斗"提交"环节恒为 0、无法算 start→submit 转化率。已在提交成功后调用。 | `src/components/forms/InquiryForm.tsx` |
+| ~~P2~~ 已修 | ~~两套"已报价"口径不一致~~ | **已完成（2026-08-01）**：总览只数 `status='quoted'`、漏斗数累计，客户推进到谈判中就从卡片消失。两处统一为累计口径，并补上此前遗漏的 `sample`（**已与运营确认：寄样在报价之后**）。 | `src/lib/crm/repository.ts`、`src/lib/reporting/repository.ts` |
+| ~~P2~~ 已修 | ~~产品页询盘分布未排除 spam~~ | **已完成（2026-08-01）**：`getProductInquiryStats` 加 `status <> 'spam'`。 | `src/lib/crm/repository.ts` |
+| ~~P2~~ 已修 | ~~GEO 内容审核被批量误重置~~ | **已完成（2026-08-01）**：`content_version` 取自共享数据文件的 git 时间，改一个产品会让全部产品页版本跳变、复核状态与复核人被一起清空。改为按单页真实内容算指纹（`geo_content_reviews.content_fingerprint`），仅当该页自身内容变化才重置；静态页无指纹时回退比时间戳；首次同步只回填不重置。 | `src/lib/seo/content-fingerprint.ts`、`src/lib/seo/geo-content-registry.ts`、`src/lib/reporting/repository.ts`、`scripts/migrate-crm.mjs` |
+| P3 未做 | IndexNow 覆盖窄 + 无手动按钮 | 仅每日 03:00 cron 触发（发布后最长等 24h），且只提交"时间戳最新的那一批"URL，其他改动页可能一直不被提交；后台无"立即提交"。**经评估性价比低（"已接收"≠已收录，Bing 流量占比小），运营决定暂缓。** | `src/lib/geo/indexnow.ts`、`vercel.json` |
 
 ## 5. 运营红线
 
