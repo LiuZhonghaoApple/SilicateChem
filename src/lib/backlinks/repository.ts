@@ -195,6 +195,9 @@ export async function listBacklinkOpportunities(
     WHERE ($1 = '' OR b.source_name ILIKE $2 OR b.source_domain ILIKE $2 OR b.industry_focus ILIKE $2)
       AND ($3 = '' OR b.priority = $3)
       AND ($4 = '' OR b.status = $4)
+      -- Hide excluded (paid/rejected) opportunities from the default list so they
+      -- don't clutter the page. Still viewable by explicitly filtering status='rejected'.
+      AND ($4 <> '' OR b.status <> 'rejected')
       AND ($6 = '' OR b.channel = $6)
     ORDER BY CASE b.priority WHEN 'S' THEN 1 WHEN 'A' THEN 2 ELSE 3 END, b.fit_score DESC, b.source_domain`,
     [query, search, priority, status, days, channel]
