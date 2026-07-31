@@ -5,6 +5,7 @@ import {
   getConversionEventBreakdown,
   getConversionEventFunnel,
   getGeoTrafficSources,
+  getGscIndexCoverage,
   getInquiryFunnel,
   getLatestSiteSnapshot,
   getLatestSyncStatuses,
@@ -77,6 +78,7 @@ export default async function AnalyticsDashboardPage() {
     syncStatuses,
     siteSnapshot,
     dataHealth,
+    indexCoverage,
   ] = await Promise.all([
     getReportingOverview(),
     getReportingTrend(),
@@ -91,6 +93,7 @@ export default async function AnalyticsDashboardPage() {
     getLatestSyncStatuses(),
     getLatestSiteSnapshot(),
     getReportingDataHealth(),
+    getGscIndexCoverage(),
   ]);
   const configuration = getGoogleReportingConfiguration();
   const releases = getContentReleaseTimeline();
@@ -126,8 +129,17 @@ export default async function AnalyticsDashboardPage() {
     { label: "公开页面", value: siteSnapshot ? number(siteSnapshot.publicPageCount) : "—", note: "Sitemap" },
     {
       label: "GSC 已收录",
-      value: siteSnapshot?.sitemapIndexed == null ? "—" : number(siteSnapshot.sitemapIndexed),
-      note: siteSnapshot?.sitemapSubmitted == null ? "待 GSC 同步" : `提交 ${number(siteSnapshot.sitemapSubmitted)}`,
+      // Aggregated from URL Inspection verdicts (verdict=PASS), not the deprecated
+      // Sitemaps API `indexed` field which always returns 0. Shown as
+      // 已收录 / 已检查 so the denominator is never ambiguous.
+      value:
+        indexCoverage.snapshotDate == null
+          ? "—"
+          : `${number(indexCoverage.indexedUrls)} / ${number(indexCoverage.checkedUrls)}`,
+      note:
+        indexCoverage.snapshotDate == null
+          ? "待 GSC 同步（数据延迟约 2-3 天）"
+          : `已收录 / 已检查 · Sitemap 共 ${siteSnapshot ? number(siteSnapshot.publicPageCount) : "—"} · GSC 延迟约 2-3 天`,
     },
   ];
 

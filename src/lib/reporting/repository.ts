@@ -100,7 +100,6 @@ export async function upsertGscData(params: {
   queries: GscQueryRow[];
   pages: GscPageRow[];
   sitemap: GscSitemapSnapshot;
-  inspections: GscUrlInspectionRow[];
   snapshotDate: string;
 }): Promise<number> {
   const sql = getDatabase();
@@ -150,29 +149,43 @@ export async function upsertGscData(params: {
       sitemap_errors = EXCLUDED.sitemap_errors,
       sitemap_warnings = EXCLUDED.sitemap_warnings,
       checked_at = NOW()`,
-    ...params.inspections.map((row) => sql`INSERT INTO gsc_url_inspection_snapshots (
-      snapshot_date, inspected_url, verdict, coverage_state, robots_txt_state,
-      indexing_state, last_crawl_time, page_fetch_state, google_canonical,
-      user_canonical, crawled_as, checked_at
-    ) VALUES (
-      ${params.snapshotDate}, ${row.inspectedUrl}, ${row.verdict}, ${row.coverageState},
-      ${row.robotsTxtState}, ${row.indexingState}, ${row.lastCrawlTime},
-      ${row.pageFetchState}, ${row.googleCanonical}, ${row.userCanonical},
-      ${row.crawledAs}, NOW()
-    ) ON CONFLICT (snapshot_date, inspected_url) DO UPDATE SET
-      verdict = EXCLUDED.verdict,
-      coverage_state = EXCLUDED.coverage_state,
-      robots_txt_state = EXCLUDED.robots_txt_state,
-      indexing_state = EXCLUDED.indexing_state,
-      last_crawl_time = EXCLUDED.last_crawl_time,
-      page_fetch_state = EXCLUDED.page_fetch_state,
-      google_canonical = EXCLUDED.google_canonical,
-      user_canonical = EXCLUDED.user_canonical,
-      crawled_as = EXCLUDED.crawled_as,
-      checked_at = NOW()`),
   ];
 
   if (queries.length > 0) await sql.transaction(queries);
+  return queries.length;
+}
+
+// URL Inspection snapshots are written separately from the core GSC data above,
+// because inspection is best-effort and time-bounded (see inspectGscUrls). This
+// keeps the daily GSC sync succeeding even when only some URLs get inspected.
+export async function upsertUrlInspections(params: {
+  snapshotDate: string;
+  inspections: GscUrlInspectionRow[];
+}): Promise<number> {
+  if (params.inspections.length === 0) return 0;
+  const sql = getDatabase();
+  const queries = params.inspections.map((row) => sql`INSERT INTO gsc_url_inspection_snapshots (
+    snapshot_date, inspected_url, verdict, coverage_state, robots_txt_state,
+    indexing_state, last_crawl_time, page_fetch_state, google_canonical,
+    user_canonical, crawled_as, checked_at
+  ) VALUES (
+    ${params.snapshotDate}, ${row.inspectedUrl}, ${row.verdict}, ${row.coverageState},
+    ${row.robotsTxtState}, ${row.indexingState}, ${row.lastCrawlTime},
+    ${row.pageFetchState}, ${row.googleCanonical}, ${row.userCanonical},
+    ${row.crawledAs}, NOW()
+  ) ON CONFLICT (snapshot_date, inspected_url) DO UPDATE SET
+    verdict = EXCLUDED.verdict,
+    coverage_state = EXCLUDED.coverage_state,
+    robots_txt_state = EXCLUDED.robots_txt_state,
+    indexing_state = EXCLUDED.indexing_state,
+    last_crawl_time = EXCLUDED.last_crawl_time,
+    page_fetch_state = EXCLUDED.page_fetch_state,
+    google_canonical = EXCLUDED.google_canonical,
+    user_canonical = EXCLUDED.user_canonical,
+    crawled_as = EXCLUDED.crawled_as,
+    checked_at = NOW()`);
+
+  await sql.transaction(queries);
   return queries.length;
 }
 
@@ -796,6 +809,31 @@ export async function getLatestGscInspectionStatus(): Promise<GscInspectionStatu
     CASE verdict WHEN 'PASS' THEN 1 WHEN 'NEUTRAL' THEN 2 ELSE 3 END,
     inspected_url`;
   return rows as unknown as GscInspectionStatusRow[];
+}
+
+export type GscIndexCoverageSummary = {
+  snapshotDate: string | null;
+  checkedUrls: number;
+  indexedUrls: number;
+};
+
+// Real "indexed" coverage, aggregated from the latest URL Inspection snapshot.
+// Google's Sitemaps API `indexed` field is deprecated and always returns 0, so
+// the URL Inspection verdict is the only trustworthy per-page index signal.
+export async function getGscIndexCoverage(): Promise<GscIndexCoverageSummary> {
+  const sql = getDatabase();
+  const rows = await sql`SELECT
+    MAX(snapshot_date)::text AS "snapshotDate",
+    COUNT(*) FILTER (
+      WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM gsc_url_inspection_snapshots)
+    )::int AS "checkedUrls",
+    COUNT(*) FILTER (
+      WHERE snapshot_date = (SELECT MAX(snapshot_date) FROM gsc_url_inspection_snapshots)
+        AND verdict = 'PASS'
+    )::int AS "indexedUrls"
+  FROM gsc_url_inspection_snapshots`;
+  const result = (rows as unknown as GscIndexCoverageSummary[])[0];
+  return result ?? { snapshotDate: null, checkedUrls: 0, indexedUrls: 0 };
 }
 
 export type IndexNowStatusRow = {

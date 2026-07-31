@@ -2,12 +2,13 @@ import sitemap from "@/app/sitemap";
 import { getContentReleaseTimeline } from "@/lib/content-freshness";
 import { getGoogleReportingConfiguration } from "@/lib/reporting/config";
 import { getGoogleAccessToken } from "@/lib/reporting/google-auth";
-import { fetchGa4Data, fetchGscData } from "@/lib/reporting/google-data";
+import { fetchGa4Data, fetchGscData, inspectGscUrls } from "@/lib/reporting/google-data";
 import { getGeoContentRegistry } from "@/lib/seo/geo-content-registry";
 import {
   recordReportingSyncRun,
   upsertGa4Data,
   upsertGscData,
+  upsertUrlInspections,
   upsertGeoContentRegistry,
   upsertSiteSnapshot,
 } from "@/lib/reporting/repository";
@@ -136,14 +137,37 @@ async function syncGsc(params: {
   inspectionUrls: readonly string[];
 }): Promise<ProviderSyncResult> {
   try {
-    const data = await fetchGscData(params);
+    // Core GSC data (search analytics + sitemap snapshot) is fetched and written
+    // first; this is what makes the daily GSC run count as a success.
+    const data = await fetchGscData({
+      accessToken: params.accessToken,
+      startDate: params.startDate,
+      endDate: params.endDate,
+    });
     const rowCount = await upsertGscData({ ...data, snapshotDate: params.snapshotDate });
+
+    // URL Inspection is best-effort and time-bounded so it can never fail or time
+    // out the GSC sync. Whatever gets inspected within the budget is persisted;
+    // any remaining URLs are picked up on subsequent daily runs.
+    let inspectedCount = 0;
+    try {
+      const inspections = await inspectGscUrls(params.accessToken, params.inspectionUrls, {
+        budgetMs: 30_000,
+      });
+      inspectedCount = await upsertUrlInspections({
+        snapshotDate: params.snapshotDate,
+        inspections,
+      });
+    } catch (inspectionError) {
+      console.error("[REPORTING] GSC URL inspection step failed (non-blocking)", inspectionError);
+    }
+
     return finishRun({
       trigger: params.trigger,
       result: {
         provider: "gsc",
         status: "success",
-        rowCount,
+        rowCount: rowCount + inspectedCount,
         startDate: params.startDate,
         endDate: params.endDate,
       },

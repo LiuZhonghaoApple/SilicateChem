@@ -225,26 +225,46 @@ function gscMetrics(row: GscApiRow): Omit<GscDailyRow, "date"> {
   };
 }
 
+// A single hung URL Inspection call (Google occasionally stalls) would otherwise
+// block its batch until the serverless function hits its hard 60s limit and is
+// killed before GSC ever writes to the database. Fail each call fast instead.
+const URL_INSPECTION_CALL_TIMEOUT_MS = 10_000;
+
 async function inspectGscUrl(
   accessToken: string,
   inspectedUrl: string
 ): Promise<GscUrlInspectionRow> {
-  const response = await fetch(
-    "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inspectionUrl: inspectedUrl,
-        siteUrl: GSC_SITE_URL,
-        languageCode: "en-US",
-      }),
-      cache: "no-store",
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), URL_INSPECTION_CALL_TIMEOUT_MS);
+  let response: Response;
+  try {
+    response = await fetch(
+      "https://searchconsole.googleapis.com/v1/urlInspection/index:inspect",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          inspectionUrl: inspectedUrl,
+          siteUrl: GSC_SITE_URL,
+          languageCode: "en-US",
+        }),
+        cache: "no-store",
+        signal: controller.signal,
+      }
+    );
+  } catch (error) {
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error(
+        `GSC URL Inspection timed out for ${inspectedUrl} after ${URL_INSPECTION_CALL_TIMEOUT_MS}ms`
+      );
     }
-  );
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+  }
   const data = (await response.json()) as {
     inspectionResult?: {
       indexStatusResult?: {
@@ -283,15 +303,21 @@ async function inspectGscUrl(
   };
 }
 
-async function inspectGscUrls(
+// Best-effort URL Inspection: bounded by a wall-clock budget so it can never run
+// the serverless function into its hard limit. Whatever is collected before the
+// deadline is returned; remaining URLs are simply picked up on the next daily run.
+export async function inspectGscUrls(
   accessToken: string,
-  urls: readonly string[]
+  urls: readonly string[],
+  options: { budgetMs?: number } = {}
 ): Promise<GscUrlInspectionRow[]> {
   const rows: GscUrlInspectionRow[] = [];
   const errors: Error[] = [];
-  const batchSize = 4;
+  const batchSize = 6;
+  const deadline = Date.now() + (options.budgetMs ?? 30_000);
 
   for (let index = 0; index < urls.length; index += batchSize) {
+    if (Date.now() >= deadline) break;
     const batch = await Promise.allSettled(
       urls.slice(index, index + batchSize).map((url) => inspectGscUrl(accessToken, url))
     );
@@ -307,19 +333,20 @@ async function inspectGscUrls(
   return rows;
 }
 
+// Core GSC data (search analytics + sitemap snapshot). Deliberately excludes URL
+// Inspection, which is slow and is fetched separately via inspectGscUrls so that
+// its latency can never prevent this core data from being written each day.
 export async function fetchGscData(params: {
   accessToken: string;
   startDate: string;
   endDate: string;
-  inspectionUrls: readonly string[];
 }): Promise<{
   daily: GscDailyRow[];
   queries: GscQueryRow[];
   pages: GscPageRow[];
   sitemap: GscSitemapSnapshot;
-  inspections: GscUrlInspectionRow[];
 }> {
-  const [dailyRows, queryRows, pageRows, sitemapResponse, inspections] = await Promise.all([
+  const [dailyRows, queryRows, pageRows, sitemapResponse] = await Promise.all([
     queryGsc({ ...params, dimensions: ["date"] }),
     queryGsc({ ...params, dimensions: ["date", "query"] }),
     queryGsc({ ...params, dimensions: ["date", "page"] }),
@@ -330,7 +357,6 @@ export async function fetchGscData(params: {
         cache: "no-store",
       }
     ),
-    inspectGscUrls(params.accessToken, params.inspectionUrls),
   ]);
 
   const sitemapData = (await sitemapResponse.json()) as {
@@ -376,6 +402,5 @@ export async function fetchGscData(params: {
       ...gscMetrics(row),
     })),
     sitemap,
-    inspections,
   };
 }
