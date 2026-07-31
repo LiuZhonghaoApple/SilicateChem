@@ -108,6 +108,14 @@ const statements = [
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_source TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_referrer_host TEXT`,
   `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS geo_landing_path TEXT`,
+  // Commercial / deal fields (P1). All nullable & additive — no existing data is
+  // touched. Amounts are stored as NUMERIC in USD; tonnage in metric tons.
+  // payment_status is validated at the app layer (see leadPaymentStatuses).
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS inquiry_tonnage NUMERIC`,
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS quote_amount NUMERIC`,
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS deal_amount NUMERIC`,
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS expected_delivery_date DATE`,
+  `ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS payment_status TEXT`,
   `CREATE TABLE IF NOT EXISTS geo_indexnow_submissions (
     id BIGSERIAL PRIMARY KEY,
     submitted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

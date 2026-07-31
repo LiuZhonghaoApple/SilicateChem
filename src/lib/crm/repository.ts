@@ -15,8 +15,18 @@ export const leadStatuses = [
 
 export const leadPriorities = ["low", "normal", "high", "urgent"] as const;
 
+// 回款状态 — validated at the app layer (no DB CHECK, so the column stays a plain
+// nullable TEXT and existing rows are never affected).
+export const leadPaymentStatuses = [
+  "unpaid",
+  "deposit",
+  "partial",
+  "paid",
+] as const;
+
 export type LeadStatus = (typeof leadStatuses)[number];
 export type LeadPriority = (typeof leadPriorities)[number];
+export type LeadPaymentStatus = (typeof leadPaymentStatuses)[number];
 
 export type CrmLead = {
   id: string;
@@ -55,6 +65,12 @@ export type CrmLead = {
   lostReason: string | null;
   emailDeliveryStatus: "pending" | "sent" | "failed";
   emailDeliveryError: string | null;
+  // Commercial / deal fields (P1)
+  inquiryTonnage: number | null;
+  quoteAmount: number | null;
+  dealAmount: number | null;
+  expectedDeliveryDate: string | null;
+  paymentStatus: LeadPaymentStatus | null;
 };
 
 export type LeadNote = {
@@ -109,7 +125,12 @@ const leadSelect = `
   closed_at AS "closedAt",
   lost_reason AS "lostReason",
   email_delivery_status AS "emailDeliveryStatus",
-  email_delivery_error AS "emailDeliveryError"
+  email_delivery_error AS "emailDeliveryError",
+  inquiry_tonnage::float8 AS "inquiryTonnage",
+  quote_amount::float8 AS "quoteAmount",
+  deal_amount::float8 AS "dealAmount",
+  to_char(expected_delivery_date, 'YYYY-MM-DD') AS "expectedDeliveryDate",
+  payment_status AS "paymentStatus"
 `;
 
 export async function createLeadRecord(lead: StructuredLead): Promise<void> {
@@ -362,6 +383,14 @@ export async function updateLeadRecord(params: {
   nextFollowUpAt: string | null;
   lostReason: string | null;
   actor: string;
+  // Commercial fields (P1). `undefined` = leave the column untouched (so callers
+  // that don't collect these, e.g. manual-entry, don't wipe them); an explicit
+  // `null` clears it.
+  inquiryTonnage?: number | null;
+  quoteAmount?: number | null;
+  dealAmount?: number | null;
+  expectedDeliveryDate?: string | null;
+  paymentStatus?: LeadPaymentStatus | null;
 }): Promise<void> {
   const existing = await getLeadById(params.id);
   if (!existing) throw new Error("Lead not found");
@@ -374,6 +403,16 @@ export async function updateLeadRecord(params: {
       owner = ${params.owner},
       next_follow_up_at = ${params.nextFollowUpAt},
       lost_reason = ${params.status === "lost" ? params.lostReason : null},
+      inquiry_tonnage = CASE WHEN ${params.inquiryTonnage !== undefined}
+        THEN ${params.inquiryTonnage ?? null} ELSE inquiry_tonnage END,
+      quote_amount = CASE WHEN ${params.quoteAmount !== undefined}
+        THEN ${params.quoteAmount ?? null} ELSE quote_amount END,
+      deal_amount = CASE WHEN ${params.dealAmount !== undefined}
+        THEN ${params.dealAmount ?? null} ELSE deal_amount END,
+      expected_delivery_date = CASE WHEN ${params.expectedDeliveryDate !== undefined}
+        THEN ${params.expectedDeliveryDate ?? null}::date ELSE expected_delivery_date END,
+      payment_status = CASE WHEN ${params.paymentStatus !== undefined}
+        THEN ${params.paymentStatus ?? null} ELSE payment_status END,
       first_contacted_at = CASE
         WHEN first_contacted_at IS NULL AND ${params.status} <> 'new' THEN NOW()
         ELSE first_contacted_at

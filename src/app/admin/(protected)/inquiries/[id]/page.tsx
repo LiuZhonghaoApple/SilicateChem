@@ -4,16 +4,21 @@ import {
   getLeadById,
   getLeadNotes,
   getLeadStatusHistory,
+  leadPaymentStatuses,
   leadPriorities,
   leadStatuses,
 } from "@/lib/crm/repository";
 import {
+  conversionEventLabel,
   formatAdminDate,
+  formatMoney,
+  leadPaymentStatusLabels,
   leadPriorityLabels,
   leadStatusClasses,
   leadStatusLabels,
   toChinaDateTimeLocal,
 } from "@/lib/crm/presentation";
+import { getVisitorTimelineByVisitorId } from "@/lib/conversion/visitor-events";
 import { addLeadNoteAction, updateLeadAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -33,12 +38,14 @@ export default async function InquiryDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [lead, notes, history] = await Promise.all([
-    getLeadById(id),
+  const lead = await getLeadById(id);
+  if (!lead) notFound();
+
+  const [notes, history, visitorEvents] = await Promise.all([
     getLeadNotes(id),
     getLeadStatusHistory(id),
+    getVisitorTimelineByVisitorId(lead.visitorId),
   ]);
-  if (!lead) notFound();
 
   const whatsappText = encodeURIComponent(
     `Hello ${lead.name}, thank you for your inquiry about ${lead.product ?? "sodium metasilicate"}. This is SilicateChem sales. We would like to confirm your specification, quantity, packing and destination requirements.`
@@ -94,6 +101,47 @@ export default async function InquiryDetailPage({
               <p className="text-xs font-bold uppercase tracking-wide text-[#64748B]">买家需求</p>
               <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-[#334155]">{lead.message}</p>
             </div>
+          </section>
+
+          <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+            <h2 className="font-bold text-[#0B2D5B]">商业信息（报价 / 成交 / 回款）</h2>
+            <dl className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <DetailItem label="询价吨位（吨）" value={lead.inquiryTonnage != null ? `${lead.inquiryTonnage} t` : null} />
+              <DetailItem label="报价金额" value={formatMoney(lead.quoteAmount)} />
+              <DetailItem label="成交金额" value={formatMoney(lead.dealAmount)} />
+              <DetailItem label="预计交期" value={lead.expectedDeliveryDate} />
+              <DetailItem label="回款状态" value={lead.paymentStatus ? leadPaymentStatusLabels[lead.paymentStatus] : null} />
+              <DetailItem label="报价时间" value={formatAdminDate(lead.quotedAt)} />
+            </dl>
+            <p className="mt-3 text-xs text-[#94A3B8]">金额单位为美元（USD），仅供内部管道统计，可在右侧「销售处理」中填写。</p>
+          </section>
+
+          <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
+            <h2 className="font-bold text-[#0B2D5B]">该客户浏览轨迹（询盘360）</h2>
+            {!lead.visitorId ? (
+              <p className="mt-3 text-sm text-[#64748B]">此询盘无 Visitor ID（如人工录入），无法关联匿名浏览行为。</p>
+            ) : visitorEvents.length === 0 ? (
+              <p className="mt-3 text-sm text-[#64748B]">
+                未找到该访客的行为记录。原因通常是：该访客的浏览发生在行为埋点上线之前，或其会话未产生可追踪事件（Visitor ID 存于浏览器会话，换会话会重置）。
+              </p>
+            ) : (
+              <ol className="mt-4 space-y-3 border-l-2 border-[#D7E6EF] pl-4">
+                {visitorEvents.map((ev, i) => (
+                  <li key={i}>
+                    <p className="text-sm font-semibold text-[#334155]">
+                      {conversionEventLabel(ev.eventName)}
+                      <span className="ml-2 font-normal text-[#64748B]">{ev.pagePath}</span>
+                    </p>
+                    <p className="mt-1 text-xs text-[#64748B]">
+                      {formatAdminDate(ev.occurredAt)}
+                      {ev.geoSource ? ` · 来源 ${ev.geoSource}` : ""}
+                      {ev.referrerHost ? ` · ${ev.referrerHost}` : ""}
+                      {ev.productInterest ? ` · 关注 ${ev.productInterest}` : ""}
+                    </p>
+                  </li>
+                ))}
+              </ol>
+            )}
           </section>
 
           <section className="rounded-xl border border-[#DCE4EA] bg-white p-5 shadow-sm">
@@ -169,6 +217,38 @@ export default async function InquiryDetailPage({
                 <label className="mb-1 block text-sm font-semibold text-[#475569]">丢单原因</label>
                 <textarea name="lostReason" defaultValue={lead.lostReason ?? ""} maxLength={500} rows={3} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm" />
               </div>
+
+              <div className="border-t border-dashed border-[#CBD5E1] pt-4">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-[#64748B]">商业信息（选填，金额=美元）</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-[#475569]">询价吨位（吨）</label>
+                    <input name="inquiryTonnage" inputMode="decimal" defaultValue={lead.inquiryTonnage ?? ""} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-[#475569]">报价金额（$）</label>
+                    <input name="quoteAmount" inputMode="decimal" defaultValue={lead.quoteAmount ?? ""} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-[#475569]">成交金额（$）</label>
+                    <input name="dealAmount" inputMode="decimal" defaultValue={lead.dealAmount ?? ""} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm" />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-semibold text-[#475569]">预计交期</label>
+                    <input name="expectedDeliveryDate" type="date" defaultValue={lead.expectedDeliveryDate ?? ""} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2 text-sm" />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="mb-1 block text-xs font-semibold text-[#475569]">回款状态</label>
+                    <select name="paymentStatus" defaultValue={lead.paymentStatus ?? ""} className="w-full rounded-lg border border-[#CBD5E1] px-3 py-2.5 text-sm">
+                      <option value="">未设置</option>
+                      {leadPaymentStatuses.map((s) => (
+                        <option key={s} value={s}>{leadPaymentStatusLabels[s]}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               <button className="w-full rounded-lg bg-[#0B2D5B] px-4 py-3 text-sm font-bold text-white hover:bg-[#071F3F]">
                 保存销售进度
               </button>

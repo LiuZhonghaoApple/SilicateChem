@@ -13,6 +13,54 @@
 
 本文件不包含任何密码、Token、API Key、数据库连接值或哈希值。
 
+---
+
+## 0. 老板速用指南（不懂技术也能照做）
+
+> 这一节是给日常看后台的人用的大白话说明。后面第 1 节起是给技术接管者的手册。
+> 后台地址：`https://www.silicatechem.com/admin`（用 Vercel 里配好的账号登录）。
+
+### 0.1 每天必看的 3 个数字（打开首页「数据总览」）
+
+1. **新询盘** —— 有几个客户还没处理。
+   - 正常：数字 ≥ 1，就点左边「询盘管理」进去挨个跟。
+   - 异常：连着好几天一直是 **0**。可能是表单又坏了，自己去网站发一条测试询盘，看 Gmail（`padelonesource@gmail.com`）有没有收到；没收到就是坏了，找技术。
+2. **逾期跟进** —— 有几个客户你答应跟进却拖过了时间。
+   - 正常：0 或很小。
+   - 异常：数字往上涨，说明你在积压客户，当天清掉。
+3. **近30天** —— 最近一个月询盘总量，判断整体热度。
+   - 正常：和上周差不多或上升。
+   - 异常：突然掉一半，去「SEO与流量」看是不是网站流量掉了。
+
+> ⚠️ 首页几个卡片的数字**不能相加**（同一个客户可能同时出现在「新询盘」和「逾期跟进」里）。
+
+### 0.2 每周该做的动作
+
+- **周一**：进「SEO与流量」，看「业务漏斗」和「GSC 已收录」，判断上周流量和收录趋势。
+  记住：GA4 数据延迟约 1 天，GSC 延迟约 2–3 天，看到的是几天前的情况，正常。
+- **周中**：进「SEO与流量」→「GEO 内容审核表」。凡是显示 **「需要更新 / 待复核」** 的页面，人工确认内容还准确，然后点「已复核」。
+  （偶尔一整批页面因为改了共享文件被误标待复核，扫一眼没实际变化直接点已复核即可。）
+- **每周**：进「外链管理」，有新上线的外链就登记；有展会/WhatsApp/电话来的站外询盘，用「询盘管理」右上角的「+ 人工录入」补进 CRM。
+
+### 0.3 三个新功能怎么用（2026-07-31 上线）
+
+- **访客行为**（左侧新菜单）：能看到匿名访客近30天都逛了什么——来源、落地页、点了哪些动作、最后有没有提交询盘。
+  用途：判断哪些页面/来源真的在带来意向客户。
+- **询盘 360**（在每条询盘详情页底部「该客户浏览轨迹」）：点开一条询盘，能看到这个客户在留资料之前浏览过哪些页面。
+  用途：跟进前先了解客户关注点。
+  说明：如果显示「未找到记录」，通常是客户浏览发生在埋点上线前，或换了浏览器会话（Visitor ID 会重置），属正常。
+- **商业信息**（询盘详情页右侧「销售处理」里）：现在可以给每条询盘填 **询价吨位、报价金额、成交金额、预计交期、回款状态**（金额按美元）。
+  用途：报价和成交金额沉淀到后台，管道里能看到「这单值多少钱」。以前这些只能记 Excel。
+
+### 0.4 哪些数字可以忽略
+
+- **GEO / AI 流量来源**：常年接近空——AI 工具带来的访客一般不带来源标识，认不出来，别当回事。
+- **AI Crawler 策略矩阵**：只是展示配置，不用管。
+- **IndexNow「已接收」**：只代表 ping 发出去了，**不代表** Bing 已收录，别当 KPI。
+- 首页各卡片别相加（见 0.1 末尾）。
+
+---
+
 ## 1. 后台入口与页面路由
 
 入口：`https://www.silicatechem.com/admin`。未登录时由受保护布局跳转到 `/admin/login`。
@@ -24,7 +72,8 @@
 | 登录 | `/admin/login` | `src/app/admin/login/page.tsx`、`src/app/admin/login/actions.ts` | 已实现 |
 | 数据总览 | `/admin` | `src/app/admin/(protected)/page.tsx`、`src/lib/crm/repository.ts` | 已实现，读取真实数据库 |
 | 询盘管理 | `/admin/inquiries` | `src/app/admin/(protected)/inquiries/page.tsx`、`src/app/admin/(protected)/inquiries/actions.ts` | 已实现，列表、筛选、状态、优先级、负责人、跟进、备注 |
-| 询盘详情 | `/admin/inquiries/[id]` | `src/app/admin/(protected)/inquiries/[id]/page.tsx` | 已实现 |
+| 询盘详情 | `/admin/inquiries/[id]` | `src/app/admin/(protected)/inquiries/[id]/page.tsx` | 已实现；含商业信息（吨位/报价/成交/交期/回款）+ 询盘360浏览轨迹 |
+| 访客行为 | `/admin/visitors` | `src/app/admin/(protected)/visitors/page.tsx`、`src/lib/conversion/visitor-events.ts` | 已实现，按访客聚合的匿名行为面板（近30天） |
 | SEO 与流量 | `/admin/analytics` | `src/app/admin/(protected)/analytics/page.tsx`、`analytics/actions.ts`、`analytics/GeoMonitoringPanel.tsx` | 已实现，依赖 GA4/GSC 同步数据 |
 | 外链管理 | `/admin/backlinks` | `src/app/admin/(protected)/backlinks/page.tsx`、`backlinks/actions.ts`、`src/lib/backlinks/repository.ts` | 已实现，基线、候选台账、状态、归因 |
 | AI 物料工作台 | `/admin/media-ai` | `src/app/admin/(protected)/media-ai/page.tsx`、`src/components/admin/MediaAiWorkbench.tsx` | 已实现，任务、上传、AI 草稿、预览、人工审核 |

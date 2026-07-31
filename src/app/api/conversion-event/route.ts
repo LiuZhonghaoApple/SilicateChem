@@ -1,7 +1,7 @@
-import { createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getDatabase, isDatabaseConfigured } from "@/lib/db";
+import { hashIdentifier } from "@/lib/attribution/visitor-hash";
 import {
   consumePersistentRateLimit,
   getClientIp,
@@ -35,15 +35,6 @@ const conversionEventSchema = z
     geoSource: z.string().max(80).optional(),
   })
   .strict();
-
-function hashIdentifier(value: string | undefined): string | null {
-  if (!value || value === "unknown") return null;
-  const secret =
-    process.env.ATTRIBUTION_HASH_SECRET ??
-    process.env.ADMIN_SESSION_SECRET ??
-    "silicatechem-conversion-v1";
-  return createHmac("sha256", secret).update(value).digest("hex");
-}
 
 function nullable(value: string | undefined): string | null {
   const trimmed = value?.trim();

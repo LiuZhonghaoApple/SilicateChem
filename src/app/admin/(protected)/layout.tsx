@@ -43,6 +43,9 @@ export default async function ProtectedAdminLayout({
             <Link href="/admin/inquiries" className="rounded-lg px-3 py-2.5 text-[#0B2D5B] hover:bg-[#EAF4FA]">
               询盘管理
             </Link>
+            <Link href="/admin/visitors" className="rounded-lg px-3 py-2.5 text-[#0B2D5B] hover:bg-[#EAF4FA]">
+              访客行为
+            </Link>
             <Link href="/admin/analytics" className="rounded-lg px-3 py-2.5 text-[#0B2D5B] hover:bg-[#EAF4FA]">
               SEO与流量
             </Link>

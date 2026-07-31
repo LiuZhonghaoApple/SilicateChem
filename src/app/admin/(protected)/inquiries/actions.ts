@@ -5,9 +5,11 @@ import { getAdminSession } from "@/lib/admin-auth";
 import {
   addLeadNote,
   createLeadRecord,
+  leadPaymentStatuses,
   leadPriorities,
   leadStatuses,
   updateLeadRecord,
+  type LeadPaymentStatus,
   type LeadPriority,
   type LeadStatus,
 } from "@/lib/crm/repository";
@@ -131,6 +133,26 @@ function nowNonce(): number {
   return Date.now();
 }
 
+// Parse an optional non-negative money/tonnage number from a form field.
+// Empty string => null (clear the field). Invalid/negative => throws.
+function optionalNumber(value: FormDataEntryValue | null, label: string): number | null {
+  const raw = String(value ?? "").trim().replace(/,/g, "");
+  if (!raw) return null;
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed) || parsed < 0) {
+    throw new Error(`${label}必须是非负数字`);
+  }
+  return parsed;
+}
+
+// Parse an optional YYYY-MM-DD date field. Empty => null.
+function optionalDate(value: FormDataEntryValue | null): string | null {
+  const raw = String(value ?? "").trim();
+  if (!raw) return null;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) throw new Error("交期格式应为 YYYY-MM-DD");
+  return raw;
+}
+
 export async function updateLeadAction(formData: FormData): Promise<void> {
   const actor = await adminUsername();
   const id = String(formData.get("id") ?? "").slice(0, 120);
@@ -149,6 +171,12 @@ export async function updateLeadAction(formData: FormData): Promise<void> {
     nextFollowUpAt = parsed.toISOString();
   }
 
+  const paymentRaw = optionalValue(formData.get("paymentStatus"), 20);
+  const paymentStatus =
+    paymentRaw && leadPaymentStatuses.includes(paymentRaw as LeadPaymentStatus)
+      ? (paymentRaw as LeadPaymentStatus)
+      : null;
+
   await updateLeadRecord({
     id,
     status,
@@ -157,6 +185,11 @@ export async function updateLeadAction(formData: FormData): Promise<void> {
     nextFollowUpAt,
     lostReason: optionalValue(formData.get("lostReason"), 500),
     actor,
+    inquiryTonnage: optionalNumber(formData.get("inquiryTonnage"), "询价吨位"),
+    quoteAmount: optionalNumber(formData.get("quoteAmount"), "报价金额"),
+    dealAmount: optionalNumber(formData.get("dealAmount"), "成交金额"),
+    expectedDeliveryDate: optionalDate(formData.get("expectedDeliveryDate")),
+    paymentStatus,
   });
 
   revalidatePath("/admin");

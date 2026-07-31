@@ -1,4 +1,4 @@
-import type { LeadPriority, LeadStatus } from "@/lib/crm/repository";
+import type { LeadPaymentStatus, LeadPriority, LeadStatus } from "@/lib/crm/repository";
 
 export const leadStatusLabels: Record<LeadStatus, string> = {
   new: "新询盘",
@@ -11,6 +11,39 @@ export const leadStatusLabels: Record<LeadStatus, string> = {
   lost: "丢单",
   spam: "垃圾询盘",
 };
+
+export const leadPaymentStatusLabels: Record<LeadPaymentStatus, string> = {
+  unpaid: "未回款",
+  deposit: "已付定金",
+  partial: "部分回款",
+  paid: "已全部回款",
+};
+
+// Human-readable labels for conversion_events.event_name (used by the visitor
+// timeline / anonymous-behaviour panel).
+export const conversionEventLabels: Record<string, string> = {
+  whatsapp_click: "点击WhatsApp",
+  ai_advisor_open: "打开在线咨询",
+  ai_advisor_question: "咨询提问",
+  ai_advisor_answer: "咨询回复",
+  ai_advisor_handoff: "转人工",
+  rfq_start: "开始填写询盘",
+  rfq_submit: "提交询盘",
+};
+
+export function conversionEventLabel(name: string): string {
+  return conversionEventLabels[name] ?? name;
+}
+
+/** Compact USD money formatting for CRM commercial fields. */
+export function formatMoney(value: number | null): string {
+  if (value === null || value === undefined || Number.isNaN(value)) return "—";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
 
 export const leadPriorityLabels: Record<LeadPriority, string> = {
   low: "低",
