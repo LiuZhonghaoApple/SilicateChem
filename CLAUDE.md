@@ -71,12 +71,20 @@
 - **铁律：未知永远不写成 0。** `confirmed_zero` 只允许在接口调用成功且确实返回 0 条时写入；任何失败路径一律写 `error`/`not_configured` 且数量留 NULL。
 - 卡片显示「最后登记 X · 距今 N 天」，**超过 7 天自动标黄**并提示复核（`BASELINE_STALE_AFTER_DAYS`）。
 
+### 2026-08-01 外链基线人工核查结论（重要）
+
+浏览器登录两个平台实测，结果已登记进 `backlink_baseline_snapshots`（`observed_by = claude-browser-audit`）：
+
+- **Bing = 已确认为 0**。`www.silicatechem.com` 的 Backlinks 报表返回 `No data available`，引用域与锚文本均为 `-`。**关键对照**：同一视图同一时刻加入 `pqcorp.com`，立即返回 397 个引用域 / 134 个锚文本及完整来源列表 —— 证明报表功能正常，不是权限或故障问题。故判定为真实的 0。（07-22 那条"48 小时处理中"提示已不再出现。）
+- **GSC = 仍然未知**。"链接数量"报表仍显示"正在处理数据，请过 1 天左右再来查看"，"导出外部链接"按钮禁用。**对照**：同资源"效果"报表健康（近3个月 18 次点击 / 1100 次曝光，10.5 小时前更新），说明资源本身正常，是 Google 拒绝给数。**Google 从未说过 0，因此不得代它写 0**，保持"未知"。
+- **合并解读**：Bing 已确认 0 + GSC 拒绝给数 + 我方台账 39 条候选无一条填了上线 URL，三方互证——**目前真实外链数就是 0**。第一条外链取决于 Pulp & Paper Canada 是否刊登 08-01 已投出的稿件。
+
 ## 3. 待办队列
 
 **活跃待办：**
 
-- **加 `BING_WEBMASTER_API_KEY`**（人工，约 5 分钟）：Bing Webmaster Tools → Settings → API Access 生成 Key → 加进 Vercel 三环境 → 重新部署 → 到 `/admin/backlinks` 点「立即同步」→ 与 Bing 网页版数字核对。
-- **人工复核一次 GSC 链接报告**并在后台登记（该项永远不会自动化，见上）。
+- **加 `BING_WEBMASTER_API_KEY`**（人工，约 5 分钟）：Bing Webmaster Tools → Settings → API Access 生成 Key → 加进 Vercel 三环境 → 重新部署 → 到 `/admin/backlinks` 点「立即同步」。**这只是把已确认的 0 变成每日自动复查**，不影响当前结论。
+- **GSC 侧下次复核**：卡片会在 2026-08-08 自动标黄提醒（超 7 天）。届时若"链接数量"仍在"处理中"，维持"未知"即可，不要改成 0。
 
 **已关闭（2026-08-01）：**
 
