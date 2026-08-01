@@ -48,15 +48,18 @@ const connectionLabels: Record<BacklinkConnectionStatus, string> = {
   error: "读取异常",
 };
 
-// "Unknown" is not a neutral state: it means nobody has looked. It gets the same
-// visual weight as a hard error so it cannot quietly sit on the page for weeks.
+// Only two states are allowed to look calm: we have data, or we checked and the
+// answer really is zero. "Unknown" and "not configured" both mean somebody still
+// has to act, so neither may sit quietly on the page the way "processing" did.
 const connectionClasses: Record<BacklinkConnectionStatus, string> = {
   has_data: "border-green-200 bg-green-50 text-green-900",
   confirmed_zero: "border-slate-200 bg-slate-50 text-slate-700",
   unknown: "border-amber-200 bg-amber-50 text-amber-950",
-  not_configured: "border-slate-200 bg-slate-50 text-slate-700",
+  not_configured: "border-amber-200 bg-amber-50 text-amber-950",
   error: "border-red-200 bg-red-50 text-red-900",
 };
+
+const ACTIONABLE_STATUSES: BacklinkConnectionStatus[] = ["unknown", "not_configured", "error"];
 
 const STALE_CLASS = "border-amber-300 bg-amber-50 text-amber-950";
 
@@ -105,7 +108,7 @@ export default async function BacklinkDashboardPage({
     const status: BacklinkConnectionStatus = item?.connectionStatus ?? "unknown";
     const ageDays = item ? daysSinceObservation(item.observedOn, today) : null;
     const stale = ageDays === null || ageDays > BASELINE_STALE_AFTER_DAYS;
-    return { provider, item, status, ageDays, stale, needsAttention: stale || status === "unknown" || status === "error" };
+    return { provider, item, status, ageDays, stale, needsAttention: stale || ACTIONABLE_STATUSES.includes(status) };
   });
   const anyBaselineNeedsAttention = baselineCards.some((card) => card.needsAttention);
 
@@ -145,7 +148,7 @@ export default async function BacklinkDashboardPage({
       </section>
 
       <section className="grid gap-4 lg:grid-cols-2">
-        {baselineCards.map(({ provider, item, status, ageDays, stale }) => {
+        {baselineCards.map(({ provider, item, status, ageDays, stale, needsAttention }) => {
           const isGsc = provider === "gsc";
           const reportUrl = item?.evidenceUrl || (isGsc ? GSC_LINKS_REPORT_URL : BING_BACKLINKS_URL);
           const autoSynced = !isGsc && item?.observedBy === "vercel_cron";
@@ -170,9 +173,17 @@ export default async function BacklinkDashboardPage({
                 </span>
               </div>
 
-              {stale ? (
+              {/* Every state that needs a human says so out loud, and says what to
+                  do. A card that needs action must never look like a resting state. */}
+              {needsAttention ? (
                 <p className="mt-3 rounded-lg border border-amber-300 bg-white/70 px-3 py-2 text-xs font-bold">
-                  ⚠️ 超过 {BASELINE_STALE_AFTER_DAYS} 天未复核{item ? `（距今 ${ageDays} 天）` : ""}，请重新核查并登记。
+                  {stale
+                    ? `⚠️ 超过 ${BASELINE_STALE_AFTER_DAYS} 天未复核${item ? `（距今 ${ageDays} 天）` : ""}，请重新核查并登记。`
+                    : status === "not_configured"
+                      ? "⚠️ 尚未接入，数字无法自动获取 —— 需先完成下方配置。"
+                      : status === "error"
+                        ? "⚠️ 上次读取失败，数量仍为未知，请复查。"
+                        : "⚠️ 当前为未知：尚无人核查过，请核查后登记。"}
                 </p>
               ) : null}
 
