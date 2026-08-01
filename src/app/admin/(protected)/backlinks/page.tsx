@@ -183,7 +183,11 @@ export default async function BacklinkDashboardPage({
                       ? "⚠️ 尚未接入，数字无法自动获取 —— 需先完成下方配置。"
                       : status === "error"
                         ? "⚠️ 上次读取失败，数量仍为未知，请复查。"
-                        : "⚠️ 当前为未知：尚无人核查过，请核查后登记。"}
+                        : item
+                          ? // Checked, but the platform declined to answer. Still
+                            // unknown — and still must not be written down as 0.
+                            "⚠️ 已核查，但平台未给出数字，数量仍为未知 —— 不要填 0。"
+                          : "⚠️ 尚无人核查过，请核查后登记。"}
                 </p>
               ) : null}
 
