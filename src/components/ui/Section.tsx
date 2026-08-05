@@ -3,6 +3,8 @@ type SectionProps = {
   className?: string;
   id?: string;
   background?: "white" | "grey" | "blue";
+  /** id of the heading that names this section (pairs with SectionHeader's `id`). */
+  ariaLabelledBy?: string;
 };
 
 const backgrounds = {
@@ -16,9 +18,14 @@ export function Section({
   className = "",
   id,
   background = "white",
+  ariaLabelledBy,
 }: SectionProps) {
   return (
-    <section id={id} className={`py-16 md:py-20 ${backgrounds[background]} ${className}`}>
+    <section
+      id={id}
+      aria-labelledby={ariaLabelledBy}
+      className={`py-16 md:py-20 ${backgrounds[background]} ${className}`}
+    >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">{children}</div>
     </section>
   );
@@ -29,15 +36,19 @@ export function SectionHeader({
   subtitle,
   centered = false,
   light = false,
+  id,
 }: {
   title: string;
   subtitle?: string;
   centered?: boolean;
   light?: boolean;
+  /** Exposes the heading as an aria-labelledby target for its Section. */
+  id?: string;
 }) {
   return (
     <div className={`mb-10 ${centered ? "text-center" : ""}`}>
       <h2
+        id={id}
         className={`text-2xl md:text-3xl font-bold tracking-tight ${light ? "text-white" : "text-[#0B2D5B]"}`}
       >
         {title}

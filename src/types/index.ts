@@ -3,6 +3,38 @@ export type ProductSpec = {
   value: string;
 };
 
+/**
+ * Editorial state of a content block or item.
+ *
+ * `draft`    — authored, not reviewed.
+ * `approved` — cleared for publication; the only state that renders.
+ * `hidden`   — reviewed and deliberately withheld.
+ */
+export type PublishStatus = "draft" | "approved" | "hidden";
+
+/** Envelope putting a block's publication state next to its content. */
+export type Publishable<T> = {
+  status: PublishStatus;
+  value: T;
+};
+
+/** Items may override their block's status individually. */
+export type StatusedItem = {
+  status?: PublishStatus;
+};
+
+/**
+ * Content-agnostic card payload. Deliberately says nothing about products,
+ * industries, certificates or countries — the caller decides the meaning.
+ */
+export type CardItem = StatusedItem & {
+  title: string;
+  description: string;
+  /** Internal path; rendered as a link only when the route exists. */
+  href?: string;
+  badge?: string;
+};
+
 export type ProductAdvantage = {
   title: string;
   description: string;

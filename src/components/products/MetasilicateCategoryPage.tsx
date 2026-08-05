@@ -5,6 +5,7 @@ import { ProductMainImage } from "@/components/products/ProductMainImage";
 import { FAQSchema, ProductSchema } from "@/components/seo/JsonLd";
 import { InquiryFormWrapper } from "@/components/forms/InquiryFormWrapper";
 import { ContextualInternalLinks } from "@/components/seo/ContextualInternalLinks";
+import { BuyerDecisionSection } from "@/components/products/modules/BuyerDecisionSection";
 import { sodiumMetasilicateCategory } from "@/content/sodium-metasilicate-category";
 import { SITE } from "@/lib/constants";
 import { getContentLastModified } from "@/lib/content-freshness";
@@ -69,14 +70,8 @@ const applications = [
   "Water treatment formulations",
 ] as const;
 
-const rfqItems = [
-  "Grade",
-  "Quantity",
-  "Packing",
-  "Destination port",
-  "Application",
-  "Required documents",
-] as const;
+// Single source: shared with the buyer checklist's "Typical RFQ Information".
+const rfqItems = sodiumMetasilicateCategory.rfqInformation.value;
 
 const productFaq = [
   {
@@ -255,6 +250,23 @@ export function MetasilicateCategoryPage() {
           ))}
         </div>
       </Section>
+
+      <BuyerDecisionSection
+        data={cat}
+        labels={{
+          whyChooseTitle: "Why Buy From Us",
+          whyChooseSubtitle:
+            "Manufacturing, specification control and export capability behind every quotation.",
+          industryTitle: "Supply by Industry",
+          industrySubtitle:
+            "What is supplied into each industry, and where to review the full application requirements.",
+          industryLinkLabel: "Industry details",
+          checklistTitle: "Before You Order — Buyer Checklist",
+          checklistSubtitle:
+            "Points to confirm so quotations from different suppliers can be compared on the same basis.",
+          rfqTitle: "Typical RFQ Information",
+        }}
+      />
 
       <Section>
         <div className="rounded-2xl border border-[#BFDDEB] bg-gradient-to-br from-[#F2F8FB] to-white p-6 shadow-sm md:p-8">

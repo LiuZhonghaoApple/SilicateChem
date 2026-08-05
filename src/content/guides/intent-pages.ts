@@ -4,9 +4,9 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "supplier-selection",
     title: "How to Select a Sodium Metasilicate Supplier or Distributor",
-    metaTitle: "Sodium Metasilicate Supplier & Distributor Selection Guide",
+    metaTitle: "Sodium Metasilicate Supplier — China Factory",
     metaDescription:
-      "Buyer's decision framework for choosing a sodium metasilicate supplier or distributor: how to read the COA, match grade specification to your application, verify manufacturer vs trader, and compare quotations before FCL orders.",
+      "How to verify a metasilicate supplier: COA checks (SiO₂, Na₂O, Fe ≤0.02%), manufacturer vs trader, FCL terms. ISO 9001 Shandong export factory.",
     primaryKeyword: "sodium metasilicate supplier selection",
     keywords: [
       "sodium metasilicate supplier",
@@ -110,9 +110,9 @@ export const intentGuides: IntentGuide[] = [
   {
     slug: "uses-detergent",
     title: "Sodium Metasilicate Uses in Detergent Manufacturing",
-    metaTitle: "Sodium Metasilicate for Detergent Buyers",
+    metaTitle: "Sodium Metasilicate in Detergent — Dosage",
     metaDescription:
-      "How detergent manufacturers use sodium metasilicate as an alkaline builder. Grade selection, granules, specifications, packing, and RFQ information.",
+      "Which grade for powder detergent: granules vs anhydrous, alkalinity, dosing and dissolution. Specs and FCL supply from an ISO 9001 Shandong factory.",
     primaryKeyword: "sodium metasilicate uses detergent industry",
     keywords: [
       "sodium metasilicate detergent supplier",

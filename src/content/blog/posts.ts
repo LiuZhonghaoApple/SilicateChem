@@ -11,9 +11,9 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "detergent-industry-metasilicate",
     title: "Sodium Metasilicate for Detergent Manufacturing - Buyer Guide",
-    metaTitle: "Sodium Metasilicate Detergent Buyer Guide",
+    metaTitle: "Detergent Grade Sodium Metasilicate Factory",
     excerpt:
-      "Procurement guide for detergent manufacturers reviewing sodium metasilicate grades, granules, specifications, packing, documents, and RFQ details.",
+      "Detergent-grade sodium metasilicate direct from a Shandong manufacturer: granules and anhydrous, SiO₂ ≥46%, Fe ≤0.02%, 25kg bags or FIBC, FCL export terms.",
     date: "2026-01-10",
     readTime: "8 min",
     primaryKeyword: "sodium metasilicate for detergent manufacturing",
@@ -412,9 +412,9 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "sodium-metasilicate-pentahydrate-market-buyers",
     title: "Sodium Metasilicate Pentahydrate Market — Buyer Guide",
-    metaTitle: "Sodium Metasilicate Pentahydrate Market",
+    metaTitle: "Sodium Metasilicate Pentahydrate Price Guide",
     excerpt:
-      "Buyer-focused review of the sodium metasilicate pentahydrate market, quotation drivers, specifications, supply continuity, contracts, and FCL RFQ planning.",
+      "What moves sodium metasilicate pentahydrate quotations: grade, FCL volume, packing and freight — reviewed by an experienced Shandong export manufacturer.",
     date: "2026-07-22",
     readTime: "9 min",
     primaryKeyword: "sodium metasilicate pentahydrate market",

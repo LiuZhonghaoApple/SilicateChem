@@ -62,9 +62,9 @@ export const SEO_KEYWORDS = {
   pentahydrate: {
     path: "/products/sodium-metasilicate-pentahydrate",
     primary: "sodium metasilicate pentahydrate",
-    title: "Sodium Metasilicate Pentahydrate Specs",
+    title: "Sodium Metasilicate Pentahydrate Supplier",
     description:
-      "Sodium metasilicate pentahydrate specifications: crystalline Na₂SiO₃·5H₂O grade for cleaning and water treatment applications.",
+      "Na₂SiO₃·5H₂O crystalline grade, SiO₂ ≥28.5%, Na₂O ≥29%. 25kg bags or FIBC, FCL 20–25MT from an ISO 9001 Shandong factory. COA and samples on request.",
     keywords: [
       "sodium metasilicate pentahydrate supplier",
       "sodium metasilicate pentahydrate price",
