@@ -180,6 +180,83 @@ export const intentGuides: IntentGuide[] = [
     ],
   },
   {
+    slug: "sodium-metasilicate-vs-sodium-silicate",
+    title: "Sodium Metasilicate vs Sodium Silicate — Which to Buy",
+    metaTitle: "Metasilicate vs Sodium Silicate — Buyer Guide",
+    metaDescription:
+      "Modulus, alkalinity, liquid vs solid freight and application fit compared. Specs (CAS 6834-92-0 / 1344-09-8) and FCL supply from a Shandong factory.",
+    primaryKeyword: "sodium metasilicate vs sodium silicate",
+    keywords: [
+      "difference between sodium silicate and sodium metasilicate",
+      "sodium metasilicate organic or inorganic",
+      "liquid sodium silicate vs solid metasilicate",
+      "water glass vs metasilicate",
+    ],
+    intro:
+      "Sodium metasilicate and sodium silicate are the two most frequently confused items on this product line, and buyers routinely request one when their formulation needs the other. Both are inorganic sodium silicate salts, but they differ in one decisive property — the Na₂O to SiO₂ ratio, known as modulus — and that single number determines alkalinity, function, form, packing and freight cost. This guide sets out the difference in procurement terms so the RFQ specifies the correct product the first time.",
+    sections: [
+      {
+        heading: "The Decisive Difference: Modulus",
+        paragraphs: [
+          "Sodium metasilicate (Na₂SiO₃, CAS 6834-92-0 anhydrous) carries an approximately 1:1 molar ratio of Na₂O to SiO₂ — a modulus near 1.0. Sodium silicate, commonly traded as water glass (Na₂O·nSiO₂, CAS 1344-09-8), is supplied across a modulus range of 2.0–3.5, specified per order. The higher the modulus, the more silica and the less free alkali the product carries per tonne.",
+          "This is why the two products are not interchangeable. Metasilicate's low modulus makes it a strong alkaline builder: it delivers high, immediately available alkalinity, which is what detergent, degreasing and metal-cleaning formulations are buying. Water glass at modulus 2.0–3.5 delivers comparatively more silica and less alkalinity, which is what binding, film-forming, gelling and adhesion systems are buying.",
+          "Both are inorganic compounds — a question buyers ask often enough that it is worth stating plainly. Neither is an organic chemical, and neither carries phosphate, which is why metasilicate in particular appears in phosphate-free reformulation work.",
+        ],
+      },
+      {
+        heading: "Which One Your Application Needs",
+        paragraphs: [
+          "Specify sodium metasilicate when the formulation needs alkalinity: powder and tablet detergents, industrial and institutional cleaners, degreasers, bottle-washing compounds, textile scouring and metal-surface cleaning. In these systems the buying criteria are Na₂O and SiO₂ content, iron (Fe ≤ 0.02% where product colour matters), and dissolution behaviour, and the product ships as a dry solid.",
+          "Specify sodium silicate when the formulation needs silica functionality rather than alkalinity: foundry binders and refractories, construction and cement systems, paper and pulp processing, soil stabilisation, and adhesive or coating systems. Here the governing specification is modulus and solid content, not alkalinity, and the product is usually handled as a liquid.",
+          "Detergent and water-treatment buyers sit on the boundary and should be explicit in the RFQ: liquid detergent lines frequently take liquid silicate, while powder lines almost always take solid metasilicate. Stating the process step — not just the chemical name — is the fastest way to be quoted the correct product.",
+        ],
+      },
+      {
+        heading: "Liquid vs Solid: The Freight Question Buyers Miss",
+        paragraphs: [
+          "The two products ship on fundamentally different economics. Liquid sodium silicate is supplied in 200 L drums, 1,000 L IBC tanks or bulk tanker, and a substantial proportion of that weight is water. On an international FCL shipment, freight is paid on the water as well as the active material, so the delivered cost per unit of active silicate can be considerably higher than the unit price suggests.",
+          "Solid sodium metasilicate ships as granules or powder in 25 kg bags or FIBC jumbo bags, with no carrier water. For buyers importing across long distances, this frequently makes the solid grade the lower landed-cost route whenever the formulation can accept it — and it is the reason some overseas buyers dissolve solid silicate on site rather than importing liquid.",
+          "Storage differs accordingly. Liquid silicate requires tank or drum handling and protection against evaporation and gelling; solid metasilicate is hygroscopic and requires sealed packing and dry storage to prevent caking. Both points belong in the RFQ, because they change the packing specification and therefore the quotation.",
+        ],
+      },
+      {
+        heading: "Specification Comparison for the RFQ",
+        paragraphs: [
+          "Sodium metasilicate anhydrous and granular grades are supplied at SiO₂ ≥ 46.0%, Na₂O ≥ 50.0% and Fe ≤ 0.02%, under CAS 6834-92-0. The pentahydrate grade (Na₂SiO₃·5H₂O, CAS 10213-79-3) carries SiO₂ ≥ 28.5% and Na₂O ≥ 29.0%, because roughly half its mass is water of crystallisation — comparing a pentahydrate COA against an anhydrous specification without normalising for this is the single most common buyer error on this product line.",
+          "Sodium silicate is specified by modulus (2.0–3.5, stated on inquiry) and solid content rather than by fixed actives, and is available in liquid or solid lump and granule form. Because its specification is order-defined, the RFQ must state the modulus and the intended application, otherwise quotations from different suppliers will not be comparable.",
+          "For either product, request the TDS, MSDS/SDS and a batch-specific COA before order confirmation, and confirm packing method, loading quantity, destination port and required export documents so the landed cost is fully visible at the quotation stage.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "Is sodium metasilicate the same as sodium silicate?",
+        answer:
+          "No. Sodium metasilicate (Na₂SiO₃, CAS 6834-92-0) has a modulus near 1.0 and is bought for alkalinity. Sodium silicate or water glass (Na₂O·nSiO₂, CAS 1344-09-8) is supplied at modulus 2.0–3.5 and is bought for silica functionality. They are related salts, not substitutes.",
+      },
+      {
+        question: "Is sodium metasilicate organic or inorganic?",
+        answer:
+          "Inorganic. Both sodium metasilicate and sodium silicate are inorganic sodium silicate salts, and neither contains phosphate, which is why metasilicate is widely used in phosphate-free detergent reformulation.",
+      },
+      {
+        question: "Which is cheaper to import, liquid silicate or solid metasilicate?",
+        answer:
+          "Compare landed cost, not unit price. Liquid silicate carries water that freight is paid on, while solid metasilicate ships only active material in 25 kg bags or FIBC. Over long shipping distances the solid grade is often the lower landed-cost option where the formulation allows it.",
+      },
+      {
+        question: "Can sodium silicate replace sodium metasilicate in a detergent?",
+        answer:
+          "Only where the formulation is built for it. Powder detergent lines generally require the solid, high-alkalinity metasilicate grade; liquid detergent lines can often use liquid silicate. State the process step in the RFQ so the correct grade is quoted.",
+      },
+      {
+        question: "What should the RFQ state to get a comparable quotation?",
+        answer:
+          "For metasilicate: grade (anhydrous, granular or pentahydrate), Na₂O, SiO₂, Fe, particle size, packing and destination. For sodium silicate: modulus, solid content, liquid or solid form, packing and destination. Request TDS, MSDS/SDS and batch COA in both cases.",
+      },
+    ],
+  },
+  {
     slug: "how-to-choose-china-factory",
     title: "How to Choose a Sodium Metasilicate Factory in China",
     metaTitle: "Choose a Sodium Metasilicate Factory in China",

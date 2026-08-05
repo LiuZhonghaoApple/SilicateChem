@@ -30,6 +30,12 @@ const pentahydrate: ContextualLink = {
   kind: "Product",
 };
 
+const sodiumSilicate: ContextualLink = {
+  href: "/products/sodium-silicate",
+  label: "Liquid Sodium Silicate Specifications",
+  kind: "Product",
+};
+
 const documents: ContextualLink = {
   href: "/downloads",
   label: "MSDS, Certificates & Buyer Documents",
@@ -218,6 +224,17 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
     documents,
   ],
   "/guides/sodium-metasilicate-vs-soda-ash": [hub, granules, detergentApplication, supplierGuide, detergentGuide],
+  // Routes the two product lines this comparison covers: metasilicate grades for
+  // alkalinity, and the liquid silicate page that otherwise has no editorial page
+  // feeding it.
+  "/guides/sodium-metasilicate-vs-sodium-silicate": [
+    hub,
+    sodiumSilicate,
+    pentahydrate,
+    anhydrous,
+    supplierGuide,
+    documents,
+  ],
   "/guides/pentahydrate-vs-anhydrous": [
     hub,
     anhydrous,
