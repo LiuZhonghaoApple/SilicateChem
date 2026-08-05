@@ -198,6 +198,18 @@ export const INTERNAL_LINK_GRAPH: Record<string, ContextualLink[]> = {
   "/applications/water-treatment": [hub, pentahydrate, waterArticle, supplierGuide, documents],
   "/applications/textile-industry": [hub, pentahydrate, supplierGuide, certifications, documents],
   "/applications/paper-industry": [hub, priceGuide, supplierGuide, certifications, documents],
+  // Distributors resell across accounts, so route them to the full grade range,
+  // the liquid line they are often asked for, and the document/verification pages
+  // they must pass through to their own customers.
+  "/applications/chemical-distributors": [
+    hub,
+    granules,
+    pentahydrate,
+    sodiumSilicate,
+    documents,
+    certifications,
+    supplierGuide,
+  ],
   "/guides/supplier-selection": [
     hub,
     factoryGuide,

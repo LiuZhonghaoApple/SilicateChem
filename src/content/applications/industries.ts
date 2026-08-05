@@ -124,6 +124,66 @@ export const industryApplications: IndustryApplication[] = [
       },
     ],
   },
+  {
+    slug: "chemical-distributors",
+    title: "Sodium Metasilicate for Chemical Distributors",
+    metaTitle: "Bulk Sodium Metasilicate for Distributors",
+    metaDescription:
+      "Neutral or printed bags, custom labels, multi-grade FCL consolidation and full document pass-through — direct from an ISO 9001 Shandong manufacturer.",
+    primaryKeyword: "sodium metasilicate for chemical distributors",
+    intro:
+      "Chemical distributors buy on a different basis from end users. Where a manufacturer qualifies one grade for one process, a distributor has to resell across many customers — which makes batch-to-batch consistency, packaging flexibility, document completeness and reliable lead times more important than the headline unit price. This page sets out how sodium metasilicate is supplied for distribution and repacking, and what to confirm at the RFQ stage so a container can be resold without requalification problems downstream.",
+    howUsed: [
+      "Stock supply for resale into detergent, cleaning, water treatment and textile accounts across a territory",
+      "Repacking from 1,000 kg jumbo bags (FIBC) into smaller retail or industrial units for local customers",
+      "Multi-grade consolidation — granules, anhydrous and pentahydrate in one container instead of separate shipments",
+      "Private-label or unbranded supply where the distributor sells under its own brand",
+      "Buffer stock for customers who cannot hold a full FCL themselves but order regularly",
+    ],
+    benefits: [
+      "Neutral bag, printed bag, palletized or non-palletized loading can be confirmed before quotation, and custom label, batch number and handling marks can be reviewed with the purchase order",
+      "Granules supplied at a defined mesh range (for example 8–40 mesh, customizable) so repacked material flows consistently for every downstream customer",
+      "Consistent specification actives across grades — SiO₂ ≥ 46.0%, Na₂O ≥ 50.0% and Fe ≤ 0.02% for anhydrous and granular — so a resold batch does not force customer requalification",
+      "TDS, MSDS/SDS, ISO 9001 / ISO 14001 and REACH documentation plus batch-specific COA available to pass through to your own customers",
+      "Direct from the manufacturer rather than a trading layer, so specification commitments, batch testing and document requests are handled at source",
+      "Combined shipment review is possible depending on grade availability, packing, loading method and destination — send the grade list and quantities so the loading plan can be checked before quotation",
+    ],
+    productRecommendation:
+      "Granules are the most widely resold grade — free-flowing, dust-controlled and the easiest to repack. Distributors carrying cleaning and water-treatment accounts often add the pentahydrate grade (CAS 10213-79-3), and liquid sodium silicate can be quoted alongside where the territory also buys water glass.",
+    recommendedGradeSlug: "sodium-metasilicate-granules",
+    faq: [
+      {
+        question: "Can you supply in neutral or own-brand packaging?",
+        answer:
+          "Neutral bags, printed bags, and palletized or non-palletized loading can be confirmed before quotation. Custom label, batch number and handling marks can be reviewed with the purchase order — state the requirement in the RFQ so it is priced correctly.",
+      },
+      {
+        question: "Can several grades be loaded in one container?",
+        answer:
+          "Combined shipment review is possible depending on grade availability, packing, loading method and destination. Send the requested grade list and quantities so the loading plan can be checked before quotation.",
+      },
+      {
+        question: "Which packing suits repacking operations?",
+        answer:
+          "1,000 kg jumbo bags (FIBC) are normally the most economical starting point for repacking. Standard export packing is 25 kg PP woven bags with PE liner; 50 kg bags are available by order requirement.",
+      },
+      {
+        question: "What documents can I pass on to my customers?",
+        answer:
+          "TDS, MSDS/SDS, ISO 9001 and ISO 14001 certificates, REACH documentation and batch-specific COA. Confirm at the RFQ stage that batch COA is required on every recurring shipment, not only on the first order.",
+      },
+      {
+        question: "Will the specification stay consistent between shipments?",
+        answer:
+          "Specification actives are committed per grade and verified by batch testing for SiO₂, Na₂O, iron and appearance. Request historical COA samples across batches before the first order so consistency can be checked against your customers' acceptance criteria.",
+      },
+      {
+        question: "What is the minimum order for a distributor?",
+        answer:
+          "One FCL (approximately 20–25 MT) is standard, and samples are available for pre-order testing. Recurring container contracts can be reviewed for territory stock planning.",
+      },
+    ],
+  },
 ];
 
 export function getIndustryApplicationBySlug(
