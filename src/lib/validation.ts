@@ -26,6 +26,13 @@ export const inquirySchema = z.object({
   turnstileStatus: z.string().max(40).optional(),
   website: z.string().max(200).optional(),
   formStartedAt: z.coerce.number().int().positive(),
+  /**
+   * Milliseconds the buyer spent on the form, measured on the client so that
+   * device clock skew cannot make the anti-spam age check reject a real buyer.
+   * Optional: submissions from cached older bundles omit it and fall back to
+   * the server-side subtraction.
+   */
+  formElapsedMs: z.coerce.number().int().nonnegative().optional(),
 });
 
 export type InquiryInput = z.infer<typeof inquirySchema>;

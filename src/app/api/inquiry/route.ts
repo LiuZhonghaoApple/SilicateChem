@@ -161,7 +161,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: firstError }, { status: 400 });
     }
 
-    const formAgeMs = Date.now() - result.data.formStartedAt;
+    // Prefer the client-measured elapsed time. Subtracting a CLIENT timestamp
+    // from the SERVER clock compares two different clocks, so a buyer whose
+    // device runs a few minutes fast yields a negative age and is rejected as
+    // a bot with no way to recover. Fall back to the old computation only for
+    // submissions from cached bundles that do not send formElapsedMs yet.
+    const formAgeMs =
+      result.data.formElapsedMs ?? Date.now() - result.data.formStartedAt;
     if (
       result.data.website?.trim() ||
       formAgeMs < MIN_FORM_FILL_MS ||

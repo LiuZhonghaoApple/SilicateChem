@@ -174,6 +174,11 @@ export function InquiryForm({
       ...payload,
       ...getInquiryAttributionPayload(pathname),
       formStartedAt: String(formStartedAtRef.current),
+      // Elapsed time measured entirely on THIS device. The server's anti-spam
+      // gate must not subtract a client timestamp from its own clock: a buyer
+      // whose device clock runs a few minutes fast produces a negative age and
+      // is silently rejected as a bot. Sending the delta cancels clock skew.
+      formElapsedMs: String(Math.max(0, Date.now() - formStartedAtRef.current)),
     };
 
     if (TURNSTILE_SITE_KEY) {
