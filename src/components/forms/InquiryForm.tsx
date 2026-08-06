@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { products } from "@/content/products";
-import { trackInquiryByType, trackRfqStart, trackRfqSubmit } from "@/lib/analytics";
+import { trackInquiryByType, trackRfqStart } from "@/lib/analytics";
 import { getRfqContext } from "@/lib/page-rfq-context";
 import { getInquiryAttributionPayload } from "@/lib/attribution-client";
 import {
@@ -94,21 +94,14 @@ export function InquiryForm({
         return;
       }
 
+      // Emits 'rfq_submit' internally (see trackInquiryByType) plus the
+      // type-specific event. Do NOT also call trackRfqSubmit here — that
+      // double-counts every submission in the admin conversion funnel.
       trackInquiryByType({
         requestType: submittedRequestType,
         pagePath: pathname,
         pageSource: source || pathname,
         productInterest: submittedProduct || undefined,
-      });
-
-      // Close the funnel: rfq_start fires on first focus, so without this the
-      // 'rfq_submit' stage was structurally always 0 and the admin conversion
-      // funnel could never show a real start→submit rate.
-      trackRfqSubmit({
-        pagePath: pathname,
-        pageSource: source || pathname,
-        productInterest: submittedProduct || undefined,
-        inquiryType: submittedRequestType,
       });
 
       setState("success");
